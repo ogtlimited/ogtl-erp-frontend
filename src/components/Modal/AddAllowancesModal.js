@@ -12,8 +12,6 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
         selectTeams,
         showAlert,
         loadingSelect,
-        selectAllowanceTypes,
-        fetchAllowanceTypes
     } = useAppContext();
     const selectAllowanceTypeRef = useRef();
     const [data, setData] = useState(HR_ADD_ALLOWANCE);
@@ -30,12 +28,12 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
     // }, [fetchAllowanceTypes]);
 
     useEffect(() => {
-        if (data?.hr_user_id && data?.hr_allowance_type_id) {
+        if (data?.hr_user_id && data?.hr_allowance_title) {
             setIsFormValid(true);
         } else {
             setIsFormValid(false);
         }
-    }, [data?.hr_allowance_type_id, data?.hr_user_id]);
+    }, [data?.hr_allowance_title, data?.hr_user_id]);
 
     const cancelEvent = () => {
         setData(HR_ADD_ALLOWANCE);
@@ -178,9 +176,10 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
         e.preventDefault();
 
         const dataPayload = {
-            hr_user_id: data?.hr_user_id,
-            hr_allowance_type_id: data?.hr_allowance_type_id, // update to allowance amount when integrating api
-            date_processed: data?.date_processed
+            og_id: data?.hr_user_id,
+            allowance_type: data?.hr_allowance_title,
+            effective_date: data?.start_date,
+            amount: data?.amount,
         };
 
         setLoading(true);
@@ -193,23 +192,25 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                     "ngrok-skip-browser-warning": "69420"
                 },
                 payload: {
-                    ...dataPayload
+                    allowances: [
+                        dataPayload
+                    ]
                 }
             });
-
             showAlert(
                 true,
                 `${data?.employeeName} has been added to Allowances.`,
                 "alert alert-success"
             );
             fetchAllowances();
-            $("#AddAllowanceModal").modal("toggle");
             cancelEvent();
         } catch (error) {
-            $("#AddAllowanceModal").modal("toggle");
             showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        } finally {
+            $("#AddAllowanceModal").modal("toggle");
+
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     return (
@@ -243,11 +244,11 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <div className="form-group">
-                                                <label htmlFor="date_processed">Start Date</label>
+                                                <label htmlFor="">Start Date</label>
                                                 <input
                                                     type="date"
-                                                    name="date_processed"
-                                                    value={data?.date_processed}
+                                                    name="start_date"
+                                                    value={data?.start_date}
                                                     onChange={handleDateChange}
                                                     className="form-control "
                                                     id="dateInput"
@@ -257,11 +258,11 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
-                                                <label htmlFor="date_processed">End Date</label>
+                                                <label htmlFor="">End Date</label>
                                                 <input
                                                     type="date"
-                                                    name="date_processed"
-                                                    value={data?.date_processed}
+                                                    name="end_date"
+                                                    value={data?.end_date}
                                                     onChange={handleDateChange}
                                                     className="form-control "
                                                     id="dateInput"
@@ -336,9 +337,51 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                                 </div>
                                             </div>
                                         )}
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="hr_allowance_title">
+                                                    Allowance Title
+                                                </label>
+                                                <input
+                                                    name="hr_allowance_title"
+                                                    type="text"
+                                                    placeholder="enter allownace title"
+                                                    className="form-control"
+                                                    onChange={(e) =>
+                                                        setData({
+                                                            ...data,
+                                                            hr_allowance_title: e?.target.value
+                                                        })
+                                                    }
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="hr_deduction_type_id">
+                                                    Allowance Amount
+                                                </label>
+                                                <input
+                                                    name="duration"
+                                                    type="number"
+                                                    placeholder="Enter Allowance Amount"
+                                                    className="form-control"
+                                                    onChange={(e) =>
+                                                        setData({
+                                                            ...data,
+                                                            amount: e?.target.value
+                                                        })
+                                                    }
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
 
                                         {/* Allowance Type */}
-                                        <div className="col-md-6">
+                                        {/* <div className="col-md-6">
                                             <div className="form-group">
                                                 <label htmlFor="employee_info.operation_office_id">
                                                     Allowance Type
@@ -360,7 +403,7 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                                     }}
                                                 />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="form-group">
