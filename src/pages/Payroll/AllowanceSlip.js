@@ -24,7 +24,7 @@ const AllowanceSlip = () => {
 
     const fetchAllowanceSlip = useCallback(async () => {
         try {
-            const res = await axiosInstance.get(`/api/v1/allowances/${id}.json`, {
+            const res = await axiosInstance.get(`/api/v1/employee_allowances/${id}.json`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
