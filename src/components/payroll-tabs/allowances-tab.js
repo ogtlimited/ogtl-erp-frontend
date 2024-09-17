@@ -83,7 +83,7 @@ const AllowancesTab = () => {
 
     const handleViewAllBreakdown = (row) => {
         navigate(
-            `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}`
+            `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}?employee=${row.employee}`
         );
     };
 
