@@ -345,7 +345,7 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                                 <input
                                                     name="hr_allowance_title"
                                                     type="text"
-                                                    placeholder="enter allownace title"
+                                                    placeholder="enter allowance title"
                                                     className="form-control"
                                                     onChange={(e) =>
                                                         setData({
