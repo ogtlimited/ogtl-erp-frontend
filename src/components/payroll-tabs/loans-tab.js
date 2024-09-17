@@ -143,14 +143,14 @@ const LoansTab = () => {
             text: "Start Date",
             sort: true,
             headerStyle: { width: "10%" },
-            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+            formatter: (val, row) => <span>{val? new Date(val).toLocaleDateString() : '-'}</span>
         },
         {
             dataField: "end_date",
             text: "End Date",
             sort: true,
             headerStyle: { width: "10%" },
-            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+            formatter: (val, row) => <span>{val? new Date(val).toLocaleDateString() : '-'}</span>
         },
         // CurrentUserCanCreateAndEdit && {
         //     dataField: "",
