@@ -4,7 +4,7 @@ import TaskAssignmentModal from "../../../components/Modal/TaskAssignmentModal";
 
 const TaskManagementConfigForm = () => {
     const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState("");  // Configuration title
+    const [title, setTitle] = useState(""); // Configuration title
     const [tasksByUser, setTasksByUser] = useState({}); // Tasks mapped to users
     const [selectedUser, setSelectedUser] = useState(null); // Currently selected user
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
@@ -96,19 +96,33 @@ const TaskManagementConfigForm = () => {
 
             {/* Display Tasks Assigned to Each User */}
             {Object.entries(tasksByUser).map(([userId, tasks]) => (
-                <div key={userId} className="assigned-tasks">
-                    <h4>
-                        Tasks for {dummyUsers.find((user) => user.value === userId)?.label}:
-                    </h4>
-                    <ul>
-                        {tasks.map((task, index) => (
-                            <li key={index}>
-                                <strong>Task Title:</strong> {task.title},
-                                <strong> Report Time:</strong> {task.reportTime},
-                                <strong> Leave Note:</strong> {task.leaveNote ? "Yes" : "No"}
-                            </li>
-                        ))}
-                    </ul>
+                <div key={userId} className="card mb-3">
+                    <div className="card-header">
+                        <h4 className="mb-0">
+                            Tasks for {dummyUsers.find((user) => user.value === userId)?.label}:
+                        </h4>
+                    </div>
+                    <div className="card-body">
+                        <ul className="list-group">
+                            {tasks.map((task, index) => (
+                                <li key={index} className="list-group-item">
+                                    <strong>Task Title:</strong> {task.title}, <strong>Report
+                                        Time:</strong> {task.reportTime}, <strong>Leave Note:</strong>{" "}
+                                    {task.leaveNote ? "Yes" : "No"}
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Button to Add More Tasks to this User */}
+                        <button
+                            className="btn btn-secondary mt-3"
+                            onClick={() =>
+                                openModal(dummyUsers.find((user) => user.value === userId))
+                            }
+                        >
+                            Add More Tasks
+                        </button>
+                    </div>
                 </div>
             ))}
 
