@@ -2,11 +2,13 @@
 export const HR_ADD_ALLOWANCE = {
     hr_user_id: "",
     hr_allowance_type_id: "",
-    date_processed: "",
+    start_date: "",
+    end_date: "",
 
     officeName: "",
     employeeName: "",
-    allowanceTitle: "",
+    hr_allowance_title: "",
+    amount: "",
     operation_office_id: "",
 };
 

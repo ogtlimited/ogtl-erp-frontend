@@ -81,6 +81,8 @@ const AppProvider = (props) => {
 
   const [loanFromDate, setLoanFromDate] = useState(loanFrom);
   const [loanToDate, setLoanToDate] = useState(loanTo);
+  const [allowanceFromDate, setAllowanceFromDate] = useState(deductionFrom);
+  const [allowanceToDate, setAllowanceToDate] = useState(deductionTo);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -562,6 +564,9 @@ const AppProvider = (props) => {
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
       setLoanFromDate(deductionFrom.format("yyyy-MM"));
       setLoanToDate(deductionTo.format("yyyy-MM"));
+
+      setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));
 
       setAllPayDates(formatted);
       setPayday(currentPaydayRange);
@@ -1326,6 +1331,10 @@ const AppProvider = (props) => {
         setLoanFromDate,
         loanToDate,
         setLoanToDate,
+        allowanceFromDate,
+        setAllowanceFromDate,
+        allowanceToDate,
+        setAllowanceToDate,
 
         userDp,
         generateOrdinal,
