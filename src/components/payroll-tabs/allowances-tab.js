@@ -81,11 +81,11 @@ const AllowancesTab = () => {
         fetchAllowances();
     }, [fetchAllowances]);
 
-    // const handleViewAllBreakdown = (row) => {
-    //     navigate(
-    //         `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}`
-    //     );
-    // };
+    const handleViewAllBreakdown = (row) => {
+        navigate(
+            `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}`
+        );
+    };
 
     const columns = [
         {
@@ -125,28 +125,28 @@ const AllowancesTab = () => {
             dataField: "effective_date", // Updated from totalDeductions to totalAllowances
             text: "Effective Date",
             sort: true,
-            headerStyle: { width: "20%" }
+            headerStyle: { width: "25%" }
         },
-        // CurrentUserCanCreateAndEdit && {
-        //     dataField: "",
-        //     text: "Action",
-        //     headerStyle: { width: "15%" },
-        //     formatter: (value, row) => (
-        //         <div className="text-center">
-        //             <div className="leave-user-action-btns">
-        //                 <button
-        //                     className="btn btn-sm btn-primary"
-        //                     data-toggle="modal"
-        //                     onClick={() =>
-        //                         handleViewAllBreakdown(row)
-        //                     }
-        //                 >
-        //                     View Allowances
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     )
-        // }
+        CurrentUserCanCreateAndEdit && {
+            dataField: "",
+            text: "Action",
+            headerStyle: { width: "25%" },
+            formatter: (value, row) => (
+                <div className="text-center">
+                    <div className="leave-user-action-btns">
+                        <button
+                            className="btn btn-sm btn-primary"
+                            data-toggle="modal"
+                            onClick={() =>
+                                handleViewAllBreakdown(row)
+                            }
+                        >
+                            View Allowances
+                        </button>
+                    </div>
+                </div>
+            )
+        }
     ];
 
     return (
