@@ -1,5 +1,4 @@
 // *IN USE
-
 import React, {
   createContext,
   useCallback,
@@ -77,6 +76,11 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+  const loanFrom = moment().startOf("month").format("yyyy-MM");
+  const loanTo = moment().endOf("month").format("yyyy-MM");
+
+  const [loanFromDate, setLoanFromDate] = useState(loanFrom);
+  const [loanToDate, setLoanToDate] = useState(loanTo);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -545,8 +549,19 @@ const AppProvider = (props) => {
         "Do MMMM YYYY"
       );
 
+      // const loanFrom = moment(
+      //   `${rangeParts[0]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+      // const loanTo = moment(
+      //   `${rangeParts[1]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+      setLoanFromDate(deductionFrom.format("yyyy-MM"));
+      setLoanToDate(deductionTo.format("yyyy-MM"));
 
       setAllPayDates(formatted);
       setPayday(currentPaydayRange);
@@ -1307,6 +1322,10 @@ const AppProvider = (props) => {
         setDeductionFromDate,
         deductionToDate,
         setDeductionToDate,
+        loanFromDate,
+        setLoanFromDate,
+        loanToDate,
+        setLoanToDate,
 
         userDp,
         generateOrdinal,
