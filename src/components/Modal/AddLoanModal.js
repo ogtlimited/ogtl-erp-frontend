@@ -6,6 +6,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
+import { addMonths, differenceInMonths } from 'date-fns';
 
 export const AddLoanModal = ({ fetchLoans }) => {
   const {
@@ -32,12 +33,13 @@ export const AddLoanModal = ({ fetchLoans }) => {
   }, [fetchLoanTypes]);
 
   useEffect(() => {
-    if (data?.hr_user_id && data?.hr_loan_type_id && data.number_of_installment === data.duration) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
-  }, [data?.hr_loan_type_id, data?.hr_user_id, data?.number_of_installment, data?.duration]);
+    const isFormReady = data?.hr_user_id && data?.hr_loan_type_id 
+      && parseInt(data.number_of_installment) === data.duration 
+      && data?.loanAmount > 0;
+  
+    setIsFormValid(isFormReady);
+  }, [data?.hr_loan_type_id, data?.hr_user_id, data?.number_of_installment, data?.duration, data?.loanAmount]);
+  
 
   const cancelEvent = () => {
     setData(HR_ADD_LOAN);
@@ -50,9 +52,27 @@ export const AddLoanModal = ({ fetchLoans }) => {
   const handleDateChange = (e) => {
     e.preventDefault();
     const selectedDate = e.target.value;
-
-    setData({ ...data, [e.target.name]: selectedDate });
+  
+    // Set the start_date or end_date in the state
+    setData((prevData) => ({
+      ...prevData,
+      [e.target.name]: selectedDate,
+    }));
   };
+
+  useEffect(() => {
+    // Only calculate the duration if both start_date and end_date are set
+    if (data.start_date && data.end_date) {
+      const duration = differenceInMonths(new Date(data.end_date), new Date(data.start_date));
+  
+      // Log the calculated duration for debugging
+      console.log("Calculated Duration (in months):", duration);
+  
+      // Update the duration in the state
+      setData((prevData) => ({ ...prevData, duration }));
+    }
+  }, [data.start_date, data.end_date]);
+  
 
   const handleOfficeTypeChange = (e) => {
     setData({
@@ -253,7 +273,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
                       <div className="form-group">
                         <label htmlFor="start_date">Start Date</label>
                         <input
-                          type="date"
+                          type="month"
                           name="start_date"
                           value={data?.start_date}
                           onChange={handleDateChange}
@@ -268,7 +288,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
                       <div className="form-group">
                         <label htmlFor="end_date">End Date</label>
                         <input
-                          type="date"
+                          type="month"
                           name="end_date"
                           value={data?.end_date}
                           onChange={handleDateChange}
@@ -413,28 +433,21 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           required
                         />
                       </div>
+                      {data.number_of_installment && data.duration && +data.number_of_installment !== +data?.duration && <p style={{color: 'red', fontSize: '10px'}}>Number of installments must me equal to duration</p>}
                     </div> 
 
                     <div className="col-md-6">
-                      <div className="form-group">
-                        <label htmlFor="hr_deduction_type_id">
-                          Duration
-                        </label>
-                        <input
-                          name="duration"
-                          type="number"
-                          placeholder="enter number of duration"
-                          className="form-control"
-                          onChange={(e) =>
-                            setData({
-                              ...data,
-                              duration: e?.target.value
-                            })
-                          }
-                          required
-                        />
-                      </div>
-                    </div> 
+                    <div className="form-group">
+                      <label htmlFor="duration">Duration (in months)</label>
+                      <input
+                        name="duration"
+                        type="number"
+                        className="form-control"
+                        value={data?.duration || 0}
+                        readOnly
+                      />
+                    </div>
+                  </div>
                   </div>
 
                   <div className="modal-footer">
