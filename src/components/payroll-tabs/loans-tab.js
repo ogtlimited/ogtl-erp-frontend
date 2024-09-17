@@ -124,7 +124,13 @@ const LoansTab = () => {
             dataField: "loan_amount",// update when integrating with API
             text: "Loan Amount",
             sort: true,
-            headerStyle: { width: "15%" }
+            headerStyle: { width: "10%" }
+        },
+        {
+            dataField: "is_active",// update when integrating with API
+            text: "Status",
+            sort: true,
+            headerStyle: { width: "5%" }
         },
         {
             dataField: "duration",// update when integrating with API
