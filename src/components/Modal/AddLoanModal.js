@@ -6,7 +6,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
-import { addMonths, differenceInMonths } from 'date-fns';
+import { differenceInMonths } from 'date-fns';
 
 export const AddLoanModal = ({ fetchLoans }) => {
   const {
@@ -33,13 +33,13 @@ export const AddLoanModal = ({ fetchLoans }) => {
   }, [fetchLoanTypes]);
 
   useEffect(() => {
-    const isFormReady = data?.hr_user_id && data?.hr_loan_type_id 
-      && parseInt(data.number_of_installment) === data.duration 
+    const isFormReady = data?.hr_user_id && data?.hr_loan_type_id
+      && parseInt(data.number_of_installment) === data.duration
       && data?.loanAmount > 0;
-  
+
     setIsFormValid(isFormReady);
   }, [data?.hr_loan_type_id, data?.hr_user_id, data?.number_of_installment, data?.duration, data?.loanAmount]);
-  
+
 
   const cancelEvent = () => {
     setData(HR_ADD_LOAN);
@@ -52,7 +52,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
   const handleDateChange = (e) => {
     e.preventDefault();
     const selectedDate = e.target.value;
-  
+
     // Set the start_date or end_date in the state
     setData((prevData) => ({
       ...prevData,
@@ -61,18 +61,13 @@ export const AddLoanModal = ({ fetchLoans }) => {
   };
 
   useEffect(() => {
-    // Only calculate the duration if both start_date and end_date are set
     if (data.start_date && data.end_date) {
       const duration = differenceInMonths(new Date(data.end_date), new Date(data.start_date));
-  
-      // Log the calculated duration for debugging
-      console.log("Calculated Duration (in months):", duration);
-  
-      // Update the duration in the state
+
       setData((prevData) => ({ ...prevData, duration }));
     }
   }, [data.start_date, data.end_date]);
-  
+
 
   const handleOfficeTypeChange = (e) => {
     setData({
@@ -198,13 +193,26 @@ export const AddLoanModal = ({ fetchLoans }) => {
     }
   };
 
+  function formatToFirstOfMonth(dateStr) {
+    const [year, month] = dateStr.split('-');
+
+    const firstDayOfMonth = new Date(`${year}/${month}/01`);
+
+    const formattedDate = firstDayOfMonth.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+    });
+
+    return formattedDate;
+  }
+
   const handleAddDeduction = async (e) => {
     e.preventDefault();
-    console.log(data);
 
     const dataPayload = {
-      start_date: data?.start_date,
-      end_date: data?.end_date,
+      start_date: formatToFirstOfMonth(data?.start_date),
+      end_date: formatToFirstOfMonth(data?.end_date),
       number_of_installment: data?.number_of_installment,
       ogid: data?.hr_user_id,
       amount: data?.loanAmount,
@@ -326,8 +334,8 @@ export const AddLoanModal = ({ fetchLoans }) => {
                               officeType === "Department"
                                 ? selectDepartments
                                 : officeType === "Campaign"
-                                ? selectCampaigns
-                                : selectTeams
+                                  ? selectCampaigns
+                                  : selectTeams
                             }
                             isSearchable={true}
                             value={{
@@ -390,9 +398,9 @@ export const AddLoanModal = ({ fetchLoans }) => {
                         />
 
                       </div>
-                    </div> 
+                    </div>
 
-                     <div className="col-md-6">
+                    <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="hr_deduction_type_id">
                           Loan Amount
@@ -412,7 +420,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           required
                         />
                       </div>
-                    </div>  
+                    </div>
 
                     <div className="col-md-6">
                       <div className="form-group">
@@ -433,21 +441,21 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           required
                         />
                       </div>
-                      {data.number_of_installment && data.duration && +data.number_of_installment !== +data?.duration && <p style={{color: 'red', fontSize: '10px'}}>Number of installments must me equal to duration</p>}
-                    </div> 
+                      {data.number_of_installment && data.duration && +data.number_of_installment !== +data?.duration && <p style={{ color: 'red', fontSize: '10px' }}>Number of installments must be equal to duration</p>}
+                    </div>
 
                     <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="duration">Duration (in months)</label>
-                      <input
-                        name="duration"
-                        type="number"
-                        className="form-control"
-                        value={data?.duration || 0}
-                        readOnly
-                      />
+                      <div className="form-group">
+                        <label htmlFor="duration">Duration (in months)</label>
+                        <input
+                          name="duration"
+                          type="number"
+                          className="form-control"
+                          value={data?.duration || 0}
+                          readOnly
+                        />
+                      </div>
                     </div>
-                  </div>
                   </div>
 
                   <div className="modal-footer">
@@ -495,4 +503,3 @@ export const AddLoanModal = ({ fetchLoans }) => {
 };
 
 
- 
