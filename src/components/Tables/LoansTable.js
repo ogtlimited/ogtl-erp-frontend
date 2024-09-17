@@ -78,22 +78,16 @@ const DeductionTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
 
               <div className="row">
-                <SearchBar
+                {/* <SearchBar
                   {...props.searchProps}
                   style={{
                     paddingLeft: "12%",
                     margin: "2rem 1rem 0 0",
                   }}
                   className="inputSearch"
-                />
+                /> */}
 
                 {/* <div className="col-md-4">
                   <div className="form-group">
@@ -116,7 +110,7 @@ const DeductionTable = ({
                   <div className="form-group">
                     <label htmlFor="fromDate">From</label>
                     <input
-                      type="date"
+                      type="month"
                       name="fromDate"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
@@ -130,7 +124,7 @@ const DeductionTable = ({
                   <div className="form-group">
                     <label htmlFor="toDate">To</label>
                     <input
-                      type="date"
+                      type="month"
                       name="toDate"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}

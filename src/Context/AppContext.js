@@ -1,5 +1,4 @@
 // *IN USE
-
 import React, {
   createContext,
   useCallback,
@@ -77,6 +76,11 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+  const loanFrom = moment().startOf("month").format("yyyy-MM");
+  const loanTo = moment().endOf("month").format("yyyy-MM");
+
+  const [loanFromDate, setLoanFromDate] = useState(loanFrom);
+  const [loanToDate, setLoanToDate] = useState(loanTo);
   const [allowanceFromDate, setAllowanceFromDate] = useState(deductionFrom);
   const [allowanceToDate, setAllowanceToDate] = useState(deductionTo);
 
@@ -547,8 +551,19 @@ const AppProvider = (props) => {
         "Do MMMM YYYY"
       );
 
+      // const loanFrom = moment(
+      //   `${rangeParts[0]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+      // const loanTo = moment(
+      //   `${rangeParts[1]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+      setLoanFromDate(deductionFrom.format("yyyy-MM"));
+      setLoanToDate(deductionTo.format("yyyy-MM"));
 
       setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
       setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));
@@ -1312,6 +1327,10 @@ const AppProvider = (props) => {
         setDeductionFromDate,
         deductionToDate,
         setDeductionToDate,
+        loanFromDate,
+        setLoanFromDate,
+        loanToDate,
+        setLoanToDate,
         allowanceFromDate,
         setAllowanceFromDate,
         allowanceToDate,

@@ -6,34 +6,32 @@ import LoansTable from "../Tables/LoansTable";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddLoanModal } from "../Modal/AddLoanModal";
-import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
 
 const LoansTab = () => {
-    const navigate = useNavigate();
     const {
         ErrorHandler,
         user,
         getAvatarColor,
         loadingPayday,
-        deductionFromDate,
-        setDeductionFromDate,
-        deductionToDate,
-        setDeductionToDate,
+        loanFromDate,
+        setLoanFromDate,
+        loanToDate,
+        setLoanToDate,
     } = useAppContext();
     const [deductions, setDeductions] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const deductionFromDateRef = useRef(deductionFromDate);
-    const deductionToDateRef = useRef(deductionToDate);
+    const deductionFromDateRef = useRef(loanFromDate);
+    const deductionToDateRef = useRef(loanToDate);
 
     useEffect(() => {
-        deductionFromDateRef.current = deductionFromDate;
-    }, [deductionFromDate]);
+        deductionFromDateRef.current = loanFromDate;
+    }, [loanFromDate]);
 
     useEffect(() => {
-        deductionToDateRef.current = deductionToDate;
-    }, [deductionToDate]);
+        deductionToDateRef.current = loanToDate;
+    }, [loanToDate]);
 
     const CurrentUserRoles = user?.employee_info?.roles;
     const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -52,8 +50,8 @@ const LoansTab = () => {
                     "ngrok-skip-browser-warning": "69420"
                 },
                 params: {
-                    start_date: deductionFromDate,
-                    end_date: deductionToDate
+                    start_date: loanFromDate,
+                    end_date: loanToDate
                 }
             });
 
@@ -81,17 +79,12 @@ const LoansTab = () => {
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [deductionFromDate, deductionToDate]);
+    }, [loanFromDate, loanToDate]);
 
     useEffect(() => {
         fetchLoans();
     }, [fetchLoans]);
 
-    const handleViewAllBreakdown = (row) => {
-        navigate(
-            `/dashboard/payroll/staff-loans/${row.employeeId}/${deductionFromDateRef.current}/${deductionToDateRef.current}`
-        );
-    };
 
     const columns = [
         {
@@ -134,8 +127,8 @@ const LoansTab = () => {
             headerStyle: { width: "15%" }
         },
         {
-            dataField: "installments",// update when integrating with API
-            text: "Installments",
+            dataField: "duration",// update when integrating with API
+            text: "Loan Duration",
             sort: true,
             headerStyle: { width: "10%" }
         },
@@ -201,10 +194,10 @@ const LoansTab = () => {
                     columns={columns}
                     loading={loading}
                     setLoading={setLoading}
-                    fromDate={deductionFromDate}
-                    toDate={deductionToDate}
-                    setFromDate={setDeductionFromDate}
-                    setToDate={setDeductionToDate}
+                    fromDate={loanFromDate}
+                    toDate={loanToDate}
+                    setFromDate={setLoanFromDate}
+                    setToDate={setLoanToDate}
                     loadingPayday={loadingPayday}
                 // date={date}
                 // setDate={setDate}
