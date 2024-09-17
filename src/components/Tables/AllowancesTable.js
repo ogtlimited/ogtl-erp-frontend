@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, {
-    Search,
-    CSVExport,
-} from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
@@ -25,8 +22,7 @@ const AllowancesTable = ({
     date,
     setDate,
 }) => {
-    const { SearchBar } = Search;
-    const { ExportCSVButton } = CSVExport;
+
     const [mobileView, setmobileView] = useState(false);
     const [show, setShow] = useState(false);
 
@@ -78,22 +74,22 @@ const AllowancesTable = ({
                 >
                     {(props) => (
                         <div className="col-12">
-                            <ExportCSVButton
+                            {/* <ExportCSVButton
                                 className="float-right btn export-csv"
                                 {...props.csvProps}
                             >
                                 Export CSV
-                            </ExportCSVButton>
+                            </ExportCSVButton> */}
 
                             <div className="row">
-                                <SearchBar
+                                {/* <SearchBar
                                     {...props.searchProps}
                                     style={{
                                         paddingLeft: "12%",
                                         margin: "2rem 1rem 0 0",
                                     }}
                                     className="inputSearch"
-                                />
+                                /> */}
 
                                 <div
                                     className="col-md-3"
