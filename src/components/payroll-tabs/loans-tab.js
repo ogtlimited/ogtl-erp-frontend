@@ -42,10 +42,10 @@ const LoansTab = () => {
         canCreateAndEdit.includes(role)
     );
 
-    const fetchDeductions = useCallback(async () => {
+    const fetchLoans = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`/api/v1/deductions.json`, {
+            const response = await axiosInstance.get(`/api/v1/loans.json`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
@@ -57,7 +57,9 @@ const LoansTab = () => {
                 }
             });
 
-            const resData = response?.data?.data?.deductions;
+            const resData = response?.data?.data?.loan;
+
+            console.log(response);
 
             const formattedData = resData.map((item) => {
                 return {
@@ -65,15 +67,16 @@ const LoansTab = () => {
                     employeeName: item?.name || "N/A",
                     employeeId: item?.ogid,
                     office: item?.office,
-                    totalDeductions:
-                        helper.handleMoneyFormat(item?.total_deductions) || "-"
+                    loan_amount:
+                        helper.handleMoneyFormat(item?.amount) || "-",
+                    installments: item?.number_of_installment
                 };
             });
 
             setDeductions(formattedData);
             setLoading(false);
         } catch (error) {
-            const component = "Deduction Error | ";
+            const component = "Loan Error | ";
             ErrorHandler(error, component);
             setLoading(false);
         }
@@ -81,12 +84,12 @@ const LoansTab = () => {
     }, [deductionFromDate, deductionToDate]);
 
     useEffect(() => {
-        fetchDeductions();
-    }, [fetchDeductions]);
+        fetchLoans();
+    }, [fetchLoans]);
 
     const handleViewAllBreakdown = (row) => {
         navigate(
-            `/dashboard/payroll/staff-loans/${row.ogid}/${deductionFromDateRef.current}/${deductionToDateRef.current}`
+            `/dashboard/payroll/staff-loans/${row.employeeId}/${deductionFromDateRef.current}/${deductionToDateRef.current}`
         );
     };
 
@@ -95,7 +98,7 @@ const LoansTab = () => {
             dataField: "employeeName",
             text: "Employee",
             sort: true,
-            headerStyle: { width: "30%" },
+            headerStyle: { width: "25%" },
             formatter: (value, row) => (
                 <h2 className="table-avatar">
                     <span
@@ -114,7 +117,7 @@ const LoansTab = () => {
             dataField: "employeeId",
             text: "OGID",
             sort: true,
-            headerStyle: { width: "15%" },
+            headerStyle: { width: "10%" },
             formatter: (val, row) => <span>{val?.toUpperCase()}</span>
         },
         {
@@ -125,31 +128,51 @@ const LoansTab = () => {
             formatter: (val, row) => <span>{val?.toUpperCase()}</span>
         },
         {
-            dataField: "totalDeductions",// update when integrating with API
+            dataField: "loan_amount",// update when integrating with API
             text: "Loan Amount",
             sort: true,
-            headerStyle: { width: "20%" }
+            headerStyle: { width: "15%" }
         },
-        CurrentUserCanCreateAndEdit && {
-            dataField: "",
-            text: "Action",
-            headerStyle: { width: "15%" },
-            formatter: (value, row) => (
-                <div className="text-center">
-                    <div className="leave-user-action-btns">
-                        <button
-                            className="btn btn-sm btn-primary"
-                            data-toggle="modal"
-                            onClick={() =>
-                                handleViewAllBreakdown(row)
-                            }
-                        >
-                            View Loans
-                        </button>
-                    </div>
-                </div>
-            )
-        }
+        {
+            dataField: "installments",// update when integrating with API
+            text: "Installments",
+            sort: true,
+            headerStyle: { width: "10%" }
+        },
+        {
+            dataField: "start_date",
+            text: "Start Date",
+            sort: true,
+            headerStyle: { width: "10%" },
+            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+        },
+        {
+            dataField: "end_date",
+            text: "End Date",
+            sort: true,
+            headerStyle: { width: "10%" },
+            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+        },
+        // CurrentUserCanCreateAndEdit && {
+        //     dataField: "",
+        //     text: "Action",
+        //     headerStyle: { width: "15%" },
+        //     formatter: (value, row) => (
+        //         <div className="text-center">
+        //             <div className="leave-user-action-btns">
+        //                 <button
+        //                     className="btn btn-sm btn-primary"
+        //                     data-toggle="modal"
+        //                     onClick={() =>
+        //                         handleViewAllBreakdown(row)
+        //                     }
+        //                 >
+        //                     View Loans
+        //                 </button>
+        //             </div>
+        //         </div>
+        //     )
+        // }
     ];
 
     return (
@@ -162,7 +185,7 @@ const LoansTab = () => {
                                 href="#"
                                 className="btn add-btn m-r-5"
                                 data-toggle="modal"
-                                data-target="#AddDeductionModal"
+                                data-target="#AddLoanModal"
                             >
                                 Add Loans
                             </a>
@@ -188,7 +211,7 @@ const LoansTab = () => {
                 />
             </div>
 
-            <AddLoanModal fetchDeductions={fetchDeductions} />
+            <AddLoanModal fetchLoans={fetchLoans} />
         </div>
     );
 };

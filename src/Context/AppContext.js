@@ -58,6 +58,7 @@ const AppProvider = (props) => {
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
+  const [selectLoanTypes, setSelectLoanTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
   const [selectPublicHoliday, setSelectPublicHoliday] = useState([]);
   const [selectSurvey, setSelectSurvey] = useState([]);
@@ -76,6 +77,8 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+  const [allowanceFromDate, setAllowanceFromDate] = useState(deductionFrom);
+  const [allowanceToDate, setAllowanceToDate] = useState(deductionTo);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -460,17 +463,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const formattedCampaignHolidays = campaign_holidays.map((e) => ({
@@ -480,17 +483,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const allOffice = [
@@ -546,6 +549,9 @@ const AppProvider = (props) => {
 
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+
+      setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));
 
       setAllPayDates(formatted);
       setPayday(currentPaydayRange);
@@ -965,8 +971,8 @@ const AppProvider = (props) => {
           item?.deduction?.deduction_mode === "percentage"
             ? item?.deduction?.value + "%"
             : item?.deduction?.deduction_mode === "flat_rate"
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
-            : "-";
+              ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+              : "-";
 
         return {
           label:
@@ -983,6 +989,47 @@ const AppProvider = (props) => {
       });
 
       setSelectDeductionTypes(formattedData);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
+
+  // All Deduction Types:
+  const fetchLoanTypes = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("api/v1/loan_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        }
+      });
+
+      // const response = await axiosInstance.post("api/v1/loan_types.json", {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //     "ngrok-skip-browser-warning": "69420"
+      //   },
+      //   body: {"payload":
+      //     {
+      //         "title": "Housing Loan"
+      //     }
+      //  }
+      // });
+
+      const resData = response?.data?.data?.loan_types;
+      const formattedData = resData.map((item) => {
+        return {
+          label: item?.title,
+          value: item?.id
+        };
+      });
+
+      setSelectLoanTypes(formattedData);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -1083,6 +1130,7 @@ const AppProvider = (props) => {
         fetchAllDesignations();
         fetchAllBranches();
         fetchDeductionTypes();
+        fetchLoanTypes();
         fetchJobOpenings();
         fetchAllSurveys();
         fetchAllPublicHolidays();
@@ -1130,6 +1178,7 @@ const AppProvider = (props) => {
     fetchAllLeaveTypes,
     fetchAllTeams,
     fetchDeductionTypes,
+    fetchLoanTypes,
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
@@ -1189,6 +1238,11 @@ const AppProvider = (props) => {
         selectDeductionTypes,
         setSelectDeductionTypes,
         fetchDeductionTypes,
+
+        selectLoanTypes,
+        setSelectLoanTypes,
+        fetchLoanTypes,
+
 
         selectJobOpenings,
         setSelectJobOpenings,
@@ -1258,6 +1312,10 @@ const AppProvider = (props) => {
         setDeductionFromDate,
         deductionToDate,
         setDeductionToDate,
+        allowanceFromDate,
+        setAllowanceFromDate,
+        allowanceToDate,
+        setAllowanceToDate,
 
         userDp,
         generateOrdinal,
