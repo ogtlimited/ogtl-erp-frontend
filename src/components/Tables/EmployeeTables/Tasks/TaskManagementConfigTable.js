@@ -3,6 +3,11 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import Select from "react-select";
+import axiosInstance from "../../../../services/api";
+import { useAppContext } from "../../../../Context/AppContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
@@ -18,6 +23,59 @@ const TaskManagementConfigTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [info, setInfo] = useState({ sizePerPage: 10 });
     const [mobileView, setMobileView] = useState(false);
+    const [selectedOffice, setSelectedOffice] = useState(null);
+    const [offices, setOffices] = useState([]);
+    const [officeType, setOfficeType] = useState(null);
+    const [loadingOfficeType, setLoadingOfficeType] = useState(false);
+    const { ErrorHandler, getAvatarColor } = useAppContext();
+
+
+    const fetchLoggedInUserOffices = useCallback(async () => {
+        setLoadingOfficeType(true);
+        try {
+            const response = await axiosInstance.get("/api/v1/leaders_offices.json", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": "69420",
+                },
+            });
+
+            const resData = response?.data?.data?.office_details;
+
+            if (resData?.office_type === "campaign") {
+                setOfficeType(resData?.office_type);
+
+                const formattedOffice = resData?.offices.map((office) => ({
+                    label: office?.title?.toUpperCase(),
+                    value: office?.id,
+                }));
+
+                setOffices(formattedOffice);
+            } else if (resData?.office_type === "department") {
+                setOfficeType(resData?.office_type);
+                setSelectedOffice({
+                    id: resData?.office?.id,
+                    title: resData?.office?.title,
+                    office_type: resData?.office_type,
+                });
+            } else {
+                return null;
+            }
+
+            setLoadingOfficeType(false);
+        } catch (error) {
+            const component = "Staff Offices Error | ";
+            ErrorHandler(error, component);
+            setLoadingOfficeType(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    useEffect(() => {
+        fetchLoggedInUserOffices();
+    }, [fetchLoggedInUserOffices]);
 
     const columns = [
         { dataField: "name", text: "Task Config Name", sort: true },
@@ -25,7 +83,7 @@ const TaskManagementConfigTable = () => {
             dataField: "active",
             text: "Status",
             formatter: (cell) => (
-                <span className={`badge ${cell ? "bg-success" : "bg-danger"}`}>
+                <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger "}`}>
                     {cell ? "Active" : "Inactive"}
                 </span>
             ),
@@ -119,12 +177,50 @@ const TaskManagementConfigTable = () => {
             >
                 {(props) => (
                     <div className="col-12">
-                        {/* <div className="col-12 p-0" style={{ marginTop: 30 }}>
-                            <ExportCSVButton className="float-right btn export-csv" {...props.csvProps}>
+                        <div className="col-12 p-0" style={{ marginTop: 30 }}>
+                            {/* <ExportCSVButton className="float-right btn export-csv" {...props.csvProps}>
                                 Export CSV
-                            </ExportCSVButton>
-                            <MySearch {...props.searchProps} className="inputSearch" />
-                        </div> */}
+                            </ExportCSVButton> */}
+
+                            {/* Office Type */}
+                            <div className="col-md-4">
+                                {!loadingOfficeType ? (
+                                    <label htmlFor="officeType">
+                                        {officeType?.replace(/\b\w/g, (char) =>
+                                            char.toUpperCase()
+                                        ) || "Office"}
+                                    </label>
+                                ) : (
+                                    <label htmlFor="officeType">
+                                        <>
+                                            <FontAwesomeIcon
+                                                icon={faSpinner}
+                                                spin
+                                                pulse
+                                                style={{ marginRight: "10px" }}
+                                            />{" "}
+                                            Fetching offices...
+                                        </>
+                                    </label>
+                                )}
+                                <Select
+                                    options={offices}
+                                    isSearchable={true}
+                                    value={{
+                                        value: selectedOffice?.id,
+                                        label: selectedOffice?.title.toUpperCase(),
+                                    }}
+                                    onChange={(e) =>
+                                        setSelectedOffice({
+                                            id: e?.value,
+                                            title: e?.label,
+                                            office_type: officeType,
+                                        })
+                                    }
+                                    style={{ display: "inline-block" }}
+                                />
+                            </div>
+                        </div>
 
                         <div className="custom-table-div" style={{ marginTop: 30 }}>
                             <BootstrapTable

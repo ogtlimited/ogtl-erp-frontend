@@ -32,7 +32,7 @@ const EvaluationAdmin = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/v1/evaluations.json", {
+      const response = await axiosInstance.get("/api/v1/evaluation_config.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
