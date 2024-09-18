@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import moment from "moment";
@@ -9,22 +9,25 @@ import UniversalTable from "../../components/Tables/UniversalTable";
 
 const AllowanceSlip = () => {
     const { id, start, end } = useParams();
-    const { user, ErrorHandler } = useAppContext();
+    const [searchParams] = useSearchParams();
+    const { user, ErrorHandler, getAvatarColor } = useAppContext();
     const [owner, setOwner] = useState({});
     const [allAllowances, setAllAllowances] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedRow, setSelectedRow] = useState(null);
+    // const [selectedRow, setSelectedRow] = useState(null);
 
-    const CurrentUserRoles = user?.employee_info?.roles;
-    const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+    // const CurrentUserRoles = user?.employee_info?.roles;
+    // const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
-    const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-        canCreateAndEdit.includes(role)
-    );
+    // const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    //     canCreateAndEdit.includes(role)
+    // );
+    const employee = searchParams.get('employee')?.replace(/['"]/g, "");
+
 
     const fetchAllowanceSlip = useCallback(async () => {
         try {
-            const res = await axiosInstance.get(`/api/v1/allowances/${id}.json`, {
+            const res = await axiosInstance.get(`/api/v1/employee_allowances/${id}.json`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
@@ -36,31 +39,22 @@ const AllowanceSlip = () => {
                 }
             });
 
-            const resData = res?.data?.data;
+            const resData = res?.data;
 
             const formattedData = resData.map((item) => {
                 return {
                     ...item,
-                    allowanceDate: moment(item?.allowance?.date_processed)
-                        .utc()
-                        .format("YYYY-MM-DD (Do MMM.) - h:mma"),
-                    allowanceType: item?.allowance_type[0].title
-                        ?.replace(/_/g, " ")
-                        ?.replace(/^./, (str) => str.toUpperCase())
-                        ?.replace(/\b\w/g, (char) => char.toUpperCase()),
+                    employee,
+                    ogid: id,
+                    effective_date: item.effective_date,
+                    amount: item.amount,
 
-                    allowanceDescription:
-                        item?.allowance?.category === "performance"
-                            ? item?.allowance_type[0]?.description
-                            : item?.allowance?.description ||
-                            item?.allowance_type[0]?.description,
-
-                    allowanceCategory: item?.allowance?.category?.replace(
-                        /\b\w/g,
-                        (char) => char.toUpperCase()
-                    ),
-                    allowanceStatus: item?.allowance?.status ? "Active" : "Inactive",
-                    allowanceAmount: helper.handleMoneyFormat(item?.allowance?.amount)
+                    // allowanceCategory: item?.allowance?.category?.replace(
+                    //     /\b\w/g,
+                    //     (char) => char.toUpperCase()
+                    // ),
+                    // allowanceStatus: item?.allowance?.status ? "Active" : "Inactive",
+                    // allowanceAmount: helper.handleMoneyFormat(item?.allowance?.amount)
                 };
             });
 
@@ -84,75 +78,44 @@ const AllowanceSlip = () => {
 
     const columns = [
         {
-            dataField: "allowanceDate",
-            text: "Date Processed",
+            dataField: "employee",
+            text: "Employee",
+            sort: true,
+            headerStyle: { width: "30%" },
+            formatter: (value, row) => (
+                <h2 className="table-avatar">
+                    <span
+                        className="avatar-span"
+                        style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+                    >
+                        {value?.charAt(0)}
+                    </span>
+                    <div>
+                        {value} <span>{row?.employeeId}</span>
+                    </div>
+                </h2>
+            )
+        },
+        {
+            dataField: "ogid",
+            text: "OGID",
             sort: true,
             headerStyle: { width: "25%" }
         },
         {
-            dataField: "allowanceType",
-            text: "Title",
+            dataField: "effective_date",
+            text: "Effective Date",
             sort: true,
-            headerStyle: { width: "15%" }
+            headerStyle: { width: "25%" },
         },
+        
         {
-            dataField: "allowanceDescription",
-            text: "Description",
-            sort: true,
-            headerStyle: { width: "25%" }
-        },
-        {
-            dataField: "allowanceCategory",
-            text: "Category",
-            sort: true,
-            headerStyle: { width: "10%" }
-        },
-        {
-            dataField: "allowanceAmount",
+            dataField: "amount",
             text: "Amount",
             sort: true,
             headerStyle: { width: "10%" }
-        },
-        {
-            dataField: "allowanceStatus",
-            text: "Status",
-            sort: true,
-            headerStyle: { width: "10%" },
-            formatter: (value, row) => (
-                <>
-                    {value === "Active" ? (
-                        <span className="btn btn-gray btn-sm btn-rounded">
-                            <i className="fa fa-dot-circle-o text-success"></i> {value}
-                        </span>
-                    ) : (
-                        <span className="btn btn-gray btn-sm btn-rounded">
-                            <i className="fa fa-dot-circle-o text-secondary"></i> {value}
-                        </span>
-                    )}
-                </>
-            )
-        },
-        // CurrentUserCanCreateAndEdit && {
-        //   dataField: "",
-        //   text: "Action",
-        //   headerStyle: { width: "15%" },
-        //   formatter: (value, row) => (
-        //     <div className="text-center">
-        //       {row?.allowanceStatus === "Active" ? (
-        //         <div className="leave-user-action-btns">
-        //           <button
-        //             className="btn btn-sm btn-primary"
-        //             data-toggle="modal"
-        //             data-target="#AllowanceReversalFormModal"
-        //             onClick={() => setSelectedRow(row)}
-        //           >
-        //             Reverse Allowance
-        //           </button>
-        //         </div>
-        //       ) : null}
-        //     </div>
-        //   )
-        // }
+        }
+        
     ];
 
     return (
@@ -160,13 +123,13 @@ const AllowanceSlip = () => {
             {allAllowances.length ? (
                 <div className="col" style={{ marginBottom: "50px" }}>
                     <h4 className="page-title">
-                        {owner?.full_name} |{" "}
+                        {employee} |{" "}
                         <span className="payroll_month_indicator">Allowance Breakdown</span>
                     </h4>
                     <ul className="breadcrumb">
-                        <li className="">{owner?.ogid}</li>{" "}
-                        <span style={{ marginLeft: "10px", marginRight: "10px" }}>|</span>
-                        <li className="breadcrumb-item active">{owner?.designation}</li>
+                        <li className="">{id}</li>{" "}
+                        <span style={{ marginLeft: "10px", marginRight: "10px" }}></span>
+                        {/* <li className="breadcrumb-item active">{owner?.designation}</li> */}
                     </ul>
                 </div>
             ) : null}
