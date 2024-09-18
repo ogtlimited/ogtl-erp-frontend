@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import TaskAssignmentModal from "../../../components/Modal/TaskAssignmentModal";
-// import TaskAssignmentModal from "./TaskAssignmentModal";
 
 const TaskManagementConfigForm = () => {
     const [loading, setLoading] = useState(false);
@@ -8,6 +8,8 @@ const TaskManagementConfigForm = () => {
     const [tasksByUser, setTasksByUser] = useState({}); // Tasks mapped to users
     const [selectedUser, setSelectedUser] = useState(null); // Currently selected user
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+    const [selectedUsers, setSelectedUsers] = useState([]); // Store selected users
+    const [currentTask, setCurrentTask] = useState(null); // For editing a task
 
     // Dummy user data
     const dummyUsers = [
@@ -16,22 +18,28 @@ const TaskManagementConfigForm = () => {
         { label: "Michael Brown", value: "user_3" },
     ];
 
-    // Open modal to assign tasks to a selected user
-    const openModal = (user) => {
+    // Open modal to assign/edit tasks for a selected user
+    const openModal = (user, task = null) => {
         setSelectedUser(user);
+        setCurrentTask(task); // If editing a task, set it as the current task
         setIsModalOpen(true);
     };
 
     // Close the modal
     const closeModal = () => {
         setIsModalOpen(false);
+        setCurrentTask(null); // Reset task after closing modal
     };
 
-    // Add task for the selected user
+    // Add or edit task for the selected user
     const handleAddTask = (userId, newTask) => {
         setTasksByUser((prevTasks) => ({
             ...prevTasks,
-            [userId]: [...(prevTasks[userId] || []), newTask],
+            [userId]: currentTask
+                ? prevTasks[userId].map((task) =>
+                    task === currentTask ? newTask : task
+                ) // Edit existing task
+                : [...(prevTasks[userId] || []), newTask], // Add new task
         }));
         closeModal();
     };
@@ -47,6 +55,7 @@ const TaskManagementConfigForm = () => {
             setLoading(false);
             setTitle("");
             setTasksByUser({});
+            setSelectedUsers([]);
         }, 1000);
     };
 
@@ -61,7 +70,7 @@ const TaskManagementConfigForm = () => {
             </div>
 
             {/* Configuration Title Input */}
-            <div className="form-group">
+            <div className="form-group col-md-6">
                 <label htmlFor="title">Config Title</label>
                 <input
                     className="form-control"
@@ -73,72 +82,77 @@ const TaskManagementConfigForm = () => {
                 />
             </div>
 
-            {/* User Dropdown to Select and Assign Task */}
-            <div className="form-group">
-                <label>Select User to Assign Tasks</label>
-                <select
-                    className="form-control"
-                    onChange={(e) => {
-                        const selectedUser = dummyUsers.find(
-                            (user) => user.value === e.target.value
-                        );
-                        if (selectedUser) openModal(selectedUser);
-                    }}
-                >
-                    <option value="">-- Select a User --</option>
-                    {dummyUsers.map((user) => (
-                        <option key={user.value} value={user.value}>
-                            {user.label}
-                        </option>
-                    ))}
-                </select>
+            {/* Multi-Select Dropdown to Select Users */}
+            <div className="form-group col-md-6">
+                <label>Select Actors</label>
+                <Select
+                    isMulti
+                    options={dummyUsers}
+                    value={selectedUsers}
+                    onChange={setSelectedUsers}
+                    placeholder="Select Users..."
+                />
             </div>
 
-            {/* Display Tasks Assigned to Each User */}
-            {Object.entries(tasksByUser).map(([userId, tasks]) => (
-                <div key={userId} className="card mb-3">
-                    <div className="card-header">
-                        <h4 className="mb-0">
-                            Tasks for {dummyUsers.find((user) => user.value === userId)?.label}:
-                        </h4>
-                    </div>
-                    <div className="card-body">
-                        <ul className="list-group">
-                            {tasks.map((task, index) => (
-                                <li key={index} className="list-group-item">
-                                    <strong>Task Title:</strong> {task.title}, <strong>Report
-                                        Time:</strong> {task.reportTime}, <strong>Leave Note:</strong>{" "}
-                                    {task.leaveNote ? "Yes" : "No"}
-                                </li>
-                            ))}
-                        </ul>
+            {/* Button to Assign Tasks to Each Selected User */}
+            {selectedUsers.length > 0 && (
+                <div className="mb-3 col-md-12">
+                    {selectedUsers.map((selectedUserOption) => {
+                        const userId = selectedUserOption.value;
+                        const user = dummyUsers.find((user) => user.value === userId);
+                        return (
+                            <div key={userId} className="card mb-3">
+                                <div className="card-header">
+                                    <h4 className="mb-0">Tasks for {user.label}:</h4>
+                                </div>
+                                <div className="card-body">
+                                    <ul className="list-group">
+                                        {(tasksByUser[userId] || []).map((task, index) => (
+                                            <li key={index} className="list-group-item">
+                                                <strong>Task Title:</strong> {task.title}, <strong>Report
+                                                    Time:</strong> {task.reportTime}, <strong>Leave Note:</strong>{" "}
+                                                {task.leaveNote ? "Yes" : "No"}
+                                                <button
+                                                    className="btn btn-sm btn-link"
+                                                    onClick={() => openModal(user, task)}
+                                                >
+                                                    Edit
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
 
-                        {/* Button to Add More Tasks to this User */}
-                        <button
-                            className="btn btn-secondary mt-3"
-                            onClick={() =>
-                                openModal(dummyUsers.find((user) => user.value === userId))
-                            }
-                        >
-                            Add More Tasks
-                        </button>
-                    </div>
+                                    {/* Button to Add More Tasks to this User */}
+                                    <button
+                                        className="btn btn-secondary mt-3"
+                                        onClick={() => openModal(user)}
+                                    >
+                                        Add More Tasks
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
-            ))}
+            )}
 
             {/* Submit Button */}
-            <button
-                className="btn btn-primary"
-                disabled={loading}
-                onClick={handleSubmitTaskConfig}
-            >
-                {loading ? "Saving..." : "Submit Task Configuration"}
-            </button>
+            <div className="px-3">
+                <button
+                    className="btn btn-primary col-md-4"
+                    disabled={loading}
+                    onClick={handleSubmitTaskConfig}
+                >
+                    {loading ? "Saving..." : "Submit Task Configuration"}
+                </button>
+            </div>
+
 
             {/* Modal for Task Assignment */}
             {isModalOpen && selectedUser && (
                 <TaskAssignmentModal
                     user={selectedUser}
+                    task={currentTask} // Pass the current task for editing
                     onAddTask={handleAddTask}
                     closeModal={closeModal}
                 />

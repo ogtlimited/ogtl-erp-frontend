@@ -85,9 +85,8 @@ function DropdownCheckbox({
       </button>
       {isOpen && (
         <div
-          className={`checkbox_options ${
-            !selectedOptions.length ? errorIndicator : undefined
-          }`}
+          className={`checkbox_options ${!selectedOptions.length ? errorIndicator : undefined
+            }`}
         >
           {options.map((option) => (
             <label key={option.value} className="checkbox_input">
