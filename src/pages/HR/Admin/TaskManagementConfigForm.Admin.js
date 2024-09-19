@@ -127,7 +127,7 @@ const TaskManagementConfigForm = () => {
                                         className="btn btn-secondary mt-3"
                                         onClick={() => openModal(user)}
                                     >
-                                        Add More Tasks
+                                        Add Task
                                     </button>
                                 </div>
                             </div>

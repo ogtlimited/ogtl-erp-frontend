@@ -17,7 +17,7 @@ import BadGateway from "../pages/Error/BadGateway";
 import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
-import TaskManagementConfigForm from "../pages/HR/Admin/TaskManagementConfigForm.Admin.js";
+
 
 const user = tokenService.getUser();
 const CurrentUserIsCOO = user?.employee_info?.roles.includes("coo");
@@ -799,6 +799,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="super">
                   <TaskManagementConfigForm />
+                </GuardedRoute>
+              )
+            },
+            {
+              path: "operation-team-task-management/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TasksTableView />
                 </GuardedRoute>
               )
             },
@@ -1614,6 +1622,12 @@ const OperationsTeamLeaveApplications = Loadable(
 const OperationsTeamTaskManagement = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTeamTaskManagement.js"))
 );
+const TaskManagementConfigForm = Loadable(
+  lazy(() => import("../pages/HR/Admin/TaskManagementConfigForm.Admin.js"))
+);
+const TasksTableView = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationTasksView.js"))
+)
 const ResignationStatusAnalytics = Loadable(
   lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))
 );
