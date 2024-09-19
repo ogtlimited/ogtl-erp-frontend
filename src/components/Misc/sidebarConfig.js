@@ -770,6 +770,11 @@ const sidebarConfig = [
             canView: "operations",
             title: "Task Management",
             path: PATH_DASHBOARD.operations.operationTeamTaskManagement
+          },
+          {
+            canView: "operations",
+            title: "Tasks",
+            path: PATH_DASHBOARD.operations.operationsTasks
           }
         ]
       },

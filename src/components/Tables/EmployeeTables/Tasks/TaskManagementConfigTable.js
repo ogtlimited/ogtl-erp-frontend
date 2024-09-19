@@ -8,6 +8,8 @@ import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import Switch from "@mui/material/Switch";
+import { Link } from "react-router-dom";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
@@ -78,14 +80,38 @@ const TaskManagementConfigTable = () => {
     }, [fetchLoggedInUserOffices]);
 
     const columns = [
-        { dataField: "name", text: "Task Config Name", sort: true },
+        {
+            dataField: "name", text: "Task Config Name", sort: true,
+            formatter: (val, row) => (
+                <p>
+                    <Link
+                        to={`/dashboard/operations/operation-team-task-management/1`}
+                        className="attendance-record-for-office"
+                    >
+                        {val?.toUpperCase()}
+                    </Link>
+                </p>
+            ),
+
+
+        },
         {
             dataField: "active",
             text: "Status",
-            formatter: (cell) => (
-                <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger "}`}>
-                    {cell ? "Active" : "Inactive"}
-                </span>
+            formatter: (cell, row) => (
+                <div>
+                    <Switch
+                        checked={cell}
+                        onChange={() => handleToggle(row.id, cell)}
+                        color="primary"
+                    />
+                    <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger "}`}>
+                        {cell ? "Active" : "Inactive"}
+                    </span>
+
+
+                </div>
+
             ),
         },
         {
@@ -118,6 +144,15 @@ const TaskManagementConfigTable = () => {
         alert(`Editing task with id: ${id}`);
     };
 
+
+    const handleToggle = (id, currentStatus) => {
+        setTaskConfigs(prevConfigs =>
+            prevConfigs.map(config =>
+                config.id === id ? { ...config, active: !currentStatus } : config
+            )
+        );
+        // API call placeholder
+    };
     const MySearch = useCallback(
         (props) => {
             let input;

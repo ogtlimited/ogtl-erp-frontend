@@ -17,7 +17,7 @@ const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
     return (
         <>
             {/* Dark Backdrop */}
-            <div className="modal-backdrop fade show" style={backdropStyle}></div>
+            <div className="modal-backdrop fade show"></div>
 
             {/* Modal Content */}
             <div className="modal show" style={{ display: "block" }}>
@@ -77,15 +77,6 @@ const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
     );
 };
 
-// Backdrop style
-const backdropStyle = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark, semi-transparent background
-    zIndex: 1040, // Behind the modal (which will have a higher z-index)
-};
+
 
 export default TaskAssignmentModal;
