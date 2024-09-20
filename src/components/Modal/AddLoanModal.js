@@ -33,12 +33,12 @@ export const AddLoanModal = ({ fetchLoans }) => {
   }, [fetchLoanTypes]);
 
   useEffect(() => {
-    const isFormReady = data?.hr_user_id && data?.hr_loan_type_id
+    const isFormReady = data?.hr_user_id
       && parseInt(data.number_of_installment) === data.duration
       && data?.loanAmount > 0;
 
     setIsFormValid(isFormReady);
-  }, [data?.hr_loan_type_id, data?.hr_user_id, data?.number_of_installment, data?.duration, data?.loanAmount]);
+  }, [data?.hr_user_id, data?.number_of_installment, data?.duration, data?.loanAmount]);
 
 
   const cancelEvent = () => {
@@ -236,7 +236,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
 
       showAlert(
         true,
-        `${data?.employeeName} has been added to deductions.`,
+        `${data?.employeeName} has been added to loans.`,
         "alert alert-success"
       );
       fetchLoans();
@@ -262,7 +262,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Add Deduction
+                Add Loan
               </h4>
               <button
                 type="button"
@@ -376,29 +376,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
                     )}
 
 
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label htmlFor="hr_loan_type_id">
-                          Loan Type
-                        </label>
-                        <Select
-                          options={selectLoanTypes}
-                          isSearchable={true}
-                          onChange={(e) =>
-                            setData({
-                              ...data,
-                              hr_loan_type_id: e?.value,
-                              loanTitle: e?.label
-                            })
-                          }
-                          ref={selectLoanTypeRef}
-                          defaultValue={null}
-                          placeholder="Select Loan Type"
-                          style={{ display: "inline-block" }}
-                        />
 
-                      </div>
-                    </div>
 
                     <div className="col-md-6">
                       <div className="form-group">
