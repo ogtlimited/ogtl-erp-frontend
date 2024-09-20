@@ -119,6 +119,22 @@ const AttendanceAverageAdmin = ({
                 )}
               </div>
             </div>
+
+            <div className="percentage_average_card">
+              <p>Percentage clock-ins</p>
+              <div className="percentage_average_card_doughnutChart">
+                {loading ? (
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    spin
+                    pulse
+                    style={{ marginTop: "5px", fontSize: "20px" }}
+                  />
+                ) : (
+                  <VictoryDougnutChart percent={data?.percentage_clock_ins || 0} />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
