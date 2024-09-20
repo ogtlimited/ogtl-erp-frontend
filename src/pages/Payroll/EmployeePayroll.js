@@ -215,6 +215,8 @@ const EmployeePayroll = () => {
           medical: +e?.slip?.medical || e?.slip?.medical,
           housing: +e?.slip?.housing || e?.slip?.housing,
           transport: +e?.slip?.transport || e?.slip?.transport,
+          allowances: +e?.slip?.allowances || e?.slip?.allowances,
+          loans: +e?.slip?.lons || e?.slip.loan,   
           otherAllowances:
             +e?.slip?.other_allowances || e?.slip?.other_allowances,
           monthlySalary: +e?.slip?.monthly_salary || e?.slip?.monthly_salary,
@@ -510,7 +512,7 @@ const EmployeePayroll = () => {
       text: "Transport"
     },
     {
-      dataField: "bonuses",
+      dataField: "allowances",
       text: "Bonuses"
     },
     {
