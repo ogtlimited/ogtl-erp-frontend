@@ -1,5 +1,3 @@
-// *IN USE
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import LoansTable from "../Tables/LoansTable";
@@ -19,18 +17,18 @@ const LoansTab = () => {
         loanToDate,
         setLoanToDate,
     } = useAppContext();
-    const [deductions, setDeductions] = useState([]);
+    const [loans, setLoans] = useState([]);  // Renamed from 'deductions' to 'loans'
     const [loading, setLoading] = useState(false);
 
-    const deductionFromDateRef = useRef(loanFromDate);
-    const deductionToDateRef = useRef(loanToDate);
+    const loanFromDateRef = useRef(loanFromDate);
+    const loanToDateRef = useRef(loanToDate);
 
     useEffect(() => {
-        deductionFromDateRef.current = loanFromDate;
+        loanFromDateRef.current = loanFromDate;
     }, [loanFromDate]);
 
     useEffect(() => {
-        deductionToDateRef.current = loanToDate;
+        loanToDateRef.current = loanToDate;
     }, [loanToDate]);
 
     const CurrentUserRoles = user?.employee_info?.roles;
@@ -60,6 +58,10 @@ const LoansTab = () => {
             console.log(response);
 
             const formattedData = resData.map((item) => {
+                const startDate = item?.start_date;
+                const endDate = item?.end_date;
+                const duration = calculateLoanDuration(startDate, endDate); // Calculate loan duration
+
                 return {
                     ...item,
                     employeeName: item?.name || "N/A",
@@ -67,11 +69,12 @@ const LoansTab = () => {
                     office: item?.office,
                     loan_amount:
                         helper.handleMoneyFormat(item?.amount) || "-",
-                    installments: item?.number_of_installment
+                    installments: item?.number_of_installment,
+                    duration, // Add loan duration to the data
                 };
             });
 
-            setDeductions(formattedData);
+            setLoans(formattedData);  // Renamed to 'loans'
             setLoading(false);
         } catch (error) {
             const component = "Loan Error | ";
@@ -85,6 +88,18 @@ const LoansTab = () => {
         fetchLoans();
     }, [fetchLoans]);
 
+    // Function to calculate the loan duration in months
+    const calculateLoanDuration = (startDate, endDate) => {
+        if (!startDate || !endDate) return "-";
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        const years = end.getFullYear() - start.getFullYear();
+        const months = end.getMonth() - start.getMonth() + 1 + years * 12;
+
+        return months > 0 ? `${months} month(s)` : "-";
+    };
 
     const columns = [
         {
@@ -121,19 +136,19 @@ const LoansTab = () => {
             formatter: (val, row) => <span>{val?.toUpperCase()}</span>
         },
         {
-            dataField: "loan_amount",// update when integrating with API
+            dataField: "loan_amount",
             text: "Loan Amount",
             sort: true,
             headerStyle: { width: "10%" }
         },
         {
-            dataField: "is_active",// update when integrating with API
+            dataField: "is_active",
             text: "Status",
             sort: true,
             headerStyle: { width: "5%" }
         },
         {
-            dataField: "duration",// update when integrating with API
+            dataField: "duration", // Display calculated loan duration
             text: "Loan Duration",
             sort: true,
             headerStyle: { width: "10%" }
@@ -143,39 +158,20 @@ const LoansTab = () => {
             text: "Start Date",
             sort: true,
             headerStyle: { width: "10%" },
-            formatter: (val, row) => <span>{val? new Date(val).toLocaleDateString() : '-'}</span>
+            formatter: (val, row) => <span>{val ? new Date(val).toLocaleDateString() : '-'}</span>
         },
         {
             dataField: "end_date",
             text: "End Date",
             sort: true,
             headerStyle: { width: "10%" },
-            formatter: (val, row) => <span>{val? new Date(val).toLocaleDateString() : '-'}</span>
+            formatter: (val, row) => <span>{val ? new Date(val).toLocaleDateString() : '-'}</span>
         },
-        // CurrentUserCanCreateAndEdit && {
-        //     dataField: "",
-        //     text: "Action",
-        //     headerStyle: { width: "15%" },
-        //     formatter: (value, row) => (
-        //         <div className="text-center">
-        //             <div className="leave-user-action-btns">
-        //                 <button
-        //                     className="btn btn-sm btn-primary"
-        //                     data-toggle="modal"
-        //                     onClick={() =>
-        //                         handleViewAllBreakdown(row)
-        //                     }
-        //                 >
-        //                     View Loans
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     )
-        // }
+
     ];
 
     return (
-        <div className="tab-pane" id="tab_deductions">
+        <div className="tab-pane" id="tab_loans"> {/* Renamed tab id */}
             <div style={{ marginBottom: "50px" }}>
                 <div className="row">
                     {CurrentUserCanCreateAndEdit && (
@@ -195,8 +191,8 @@ const LoansTab = () => {
 
             <div className="row">
                 <LoansTable
-                    data={deductions}
-                    setData={setDeductions}
+                    data={loans}  // Renamed to 'loans'
+                    setData={setLoans}  // Renamed to 'setLoans'
                     columns={columns}
                     loading={loading}
                     setLoading={setLoading}
@@ -205,8 +201,6 @@ const LoansTab = () => {
                     setFromDate={setLoanFromDate}
                     setToDate={setLoanToDate}
                     loadingPayday={loadingPayday}
-                // date={date}
-                // setDate={setDate}
                 />
             </div>
 
