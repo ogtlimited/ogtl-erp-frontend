@@ -74,7 +74,7 @@ const LoansTab = () => {
                 };
             });
 
-            setLoans(formattedData);  // Renamed to 'loans'
+            setLoans(formattedData);
             setLoading(false);
         } catch (error) {
             const component = "Loan Error | ";
@@ -191,8 +191,8 @@ const LoansTab = () => {
 
             <div className="row">
                 <LoansTable
-                    data={loans}  // Renamed to 'loans'
-                    setData={setLoans}  // Renamed to 'setLoans'
+                    data={loans}
+                    setData={setLoans}
                     columns={columns}
                     loading={loading}
                     setLoading={setLoading}

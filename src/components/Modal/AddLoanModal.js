@@ -15,7 +15,6 @@ export const AddLoanModal = ({ fetchLoans }) => {
     selectTeams,
     showAlert,
     loadingSelect,
-    selectLoanTypes,
     fetchLoanTypes
   } = useAppContext();
   const selectLoanTypeRef = useRef();
@@ -34,7 +33,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
 
   useEffect(() => {
     const isFormReady = data?.hr_user_id
-      && parseInt(data.number_of_installment) === data.duration
+      && (parseInt(data.number_of_installment) <= data.duration) && data?.duration > 0 && data?.number_of_installment > 0
       && data?.loanAmount > 0;
 
     setIsFormValid(isFormReady);
@@ -46,7 +45,8 @@ export const AddLoanModal = ({ fetchLoans }) => {
     setOfficeType("");
     setIsOfficeTypeSelected(false);
     setIsOfficeSelected(false);
-    selectLoanTypeRef.current.select.clearValue();
+    setIsFormValid(false);
+
   };
 
   const handleDateChange = (e) => {
@@ -236,13 +236,14 @@ export const AddLoanModal = ({ fetchLoans }) => {
 
       showAlert(
         true,
-        `${data?.employeeName} has been added to loans.`,
+        `${response.data.data.message}`,
         "alert alert-success"
       );
       fetchLoans();
       $("#AddLoanModal").modal("toggle");
       cancelEvent();
     } catch (error) {
+      console.log(error)
       $("#AddLoanModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
@@ -410,6 +411,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           type="number"
                           placeholder="enter number of installments"
                           className="form-control"
+                          min={0}
                           onChange={(e) =>
                             setData({
                               ...data,
@@ -419,7 +421,8 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           required
                         />
                       </div>
-                      {data.number_of_installment && data.duration && +data.number_of_installment !== +data?.duration && <p style={{ color: 'red', fontSize: '10px' }}>Number of installments must be equal to duration</p>}
+                      {(data.number_of_installment !== "" && (Number(data?.number_of_installment) > data?.duration || Number(data?.number_of_installment) < 1)) &&
+                        <p style={{ color: 'red', fontSize: '10px' }}>Number of installments must be equal to or less than duration and greater than 0</p>}
                     </div>
 
                     <div className="col-md-6">

@@ -76,8 +76,8 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
-  const loanFrom = moment().startOf("month").format("yyyy-MM");
-  const loanTo = moment().endOf("month").format("yyyy-MM");
+  const loanFrom = moment().startOf("month").format("yyyy-MM-DD");
+  const loanTo = moment().endOf("month").format("yyyy-MM-DD");
 
   const [loanFromDate, setLoanFromDate] = useState(loanFrom);
   const [loanToDate, setLoanToDate] = useState(loanTo);
@@ -562,8 +562,8 @@ const AppProvider = (props) => {
 
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
-      setLoanFromDate(deductionFrom.format("yyyy-MM"));
-      setLoanToDate(deductionTo.format("yyyy-MM"));
+      setLoanFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setLoanToDate(deductionTo.format("yyyy-MM-DD"));
 
       setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
       setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));

@@ -9,7 +9,7 @@ import ToolkitProvider, {
 import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-const DeductionTable = ({
+const LoansTable = ({
   data,
   columns,
   loading,
@@ -110,7 +110,7 @@ const DeductionTable = ({
                   <div className="form-group">
                     <label htmlFor="fromDate">From</label>
                     <input
-                      type="month"
+                      type="date"
                       name="fromDate"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
@@ -124,7 +124,7 @@ const DeductionTable = ({
                   <div className="form-group">
                     <label htmlFor="toDate">To</label>
                     <input
-                      type="month"
+                      type="date"
                       name="toDate"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
@@ -146,8 +146,8 @@ const DeductionTable = ({
                     !mobileView
                       ? "table "
                       : context
-                      ? "table table-responsive"
-                      : "table table-responsive"
+                        ? "table table-responsive"
+                        : "table table-responsive"
                   }
                   noDataIndication={
                     loading ? (
@@ -163,7 +163,7 @@ const DeductionTable = ({
                   }
                   pagination={paginationFactory()}
 
-                  // defaultSorted={defaultSorted}
+                // defaultSorted={defaultSorted}
                 />
               </div>
             </div>
@@ -174,4 +174,4 @@ const DeductionTable = ({
   );
 };
 
-export default DeductionTable;
+export default LoansTable;
