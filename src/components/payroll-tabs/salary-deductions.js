@@ -8,7 +8,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
-import moment from "moment";
+import moment from "moment"
 
 const Deductions = () => {
   const navigate = useNavigate();
