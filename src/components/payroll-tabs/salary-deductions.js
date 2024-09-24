@@ -8,6 +8,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
+import moment from "moment"
 
 const Deductions = () => {
   const navigate = useNavigate();
@@ -63,6 +64,9 @@ const Deductions = () => {
         return {
           ...item,
           employeeName: item?.name || "N/A",
+          deductionDate: moment(item?.date_processed)
+            .utc()
+            .format("YYYY-MM-DD (Do MMM.)"),
           employeeId: item?.ogid,
           office: item?.office,
           totalDeductions:
@@ -95,7 +99,7 @@ const Deductions = () => {
       dataField: "employeeName",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <span
@@ -111,10 +115,16 @@ const Deductions = () => {
       )
     },
     {
+      dataField: "deductionDate",
+      text: "Date Processed",
+      sort: true,
+      headerStyle: { width: "20%" }
+    },
+    {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>
     },
     {
