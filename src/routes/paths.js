@@ -24,18 +24,18 @@ export const PATH_DASHBOARD = {
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
     employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
-    outOfOffice: path(ROOTS_DASHBOARD, "/main/out-of-office"),
+    outOfOffice: path(ROOTS_DASHBOARD, "/main/absence"),
     employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
     publicHoliday: path(ROOTS_DASHBOARD, "/main/public-holiday"),
     Payslips: path(ROOTS_DASHBOARD, "/main/Payslips"),
     deductions: path(ROOTS_DASHBOARD, "/main/deductions"),
-    resignation: path(ROOTS_DASHBOARD, "/main/resignation"), 
-    survey: path(ROOTS_DASHBOARD, "/main/survey"), 
-    manualAttendance: path(ROOTS_DASHBOARD, "/main/manual-attendance"), 
+    resignation: path(ROOTS_DASHBOARD, "/main/resignation"),
+    survey: path(ROOTS_DASHBOARD, "/main/survey"),
+    manualAttendance: path(ROOTS_DASHBOARD, "/main/manual-attendance"),
     tickets: path(ROOTS_DASHBOARD, "/main/tickets"),
-    ticketManagement: path(ROOTS_DASHBOARD, "/main/ticket-management"), 
-    announcement: path(ROOTS_DASHBOARD, "/main/announcement"), 
-    IWD: path(ROOTS_DASHBOARD, "/main/international-women's-day"), 
+    ticketManagement: path(ROOTS_DASHBOARD, "/main/ticket-management"),
+    announcement: path(ROOTS_DASHBOARD, "/main/announcement"),
+    IWD: path(ROOTS_DASHBOARD, "/main/international-women's-day"),
     // valentine: path(ROOTS_DASHBOARD, "/main/valentine"), 
   },
 
@@ -55,15 +55,15 @@ export const PATH_DASHBOARD = {
     addEmployees: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/add"),
     leadership: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/leader"),
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
-    survey: path(ROOTS_DASHBOARD, "/hr/survey"),
     allSurvey: path(ROOTS_DASHBOARD, "/hr/all-survey"),
+    survey: path(ROOTS_DASHBOARD, "/hr/survey"),
     resignation: path(ROOTS_DASHBOARD, "/hr/resignation"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
     latenessTracker: path(ROOTS_DASHBOARD, "/hr/lateness-tracker"),
     remoteAttendanceAdmin: path(ROOTS_DASHBOARD, "/hr/remote-attendance"),
-    outOfOffice: path(ROOTS_DASHBOARD, "/hr/out-of-office"),
+    outOfOffice: path(ROOTS_DASHBOARD, "/hr/absence"),
     publicholiday: path(ROOTS_DASHBOARD, "/hr/public-holiday"),
     departments: path(ROOTS_DASHBOARD, "/hr/departments"),
     campaigns: path(ROOTS_DASHBOARD, "/hr/campaigns"),
@@ -96,6 +96,8 @@ export const PATH_DASHBOARD = {
     payday: path(ROOTS_DASHBOARD, "/payroll/payday"),
     payrollBatches: path(ROOTS_DASHBOARD, "/payroll/payroll-batches"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
+    loans: path(ROOTS_DASHBOARD, "/payroll/loans"),
+    allowances: path(ROOTS_DASHBOARD, "/payroll/allowances"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
   },
@@ -138,6 +140,7 @@ export const PATH_DASHBOARD = {
 
   settings: {
     root: path(ROOTS_DASHBOARD, "/settings"),
+    approvalModule: path(ROOTS_DASHBOARD, "/settings/approval-module"),
     rolesPermission: path(ROOTS_DASHBOARD, "/settings/roles-permissions"),
     rolesAssignment: path(ROOTS_DASHBOARD, "/settings/roles-assignment"),
   },
@@ -149,6 +152,12 @@ export const PATH_DASHBOARD = {
     branch: path(ROOTS_DASHBOARD, "/operations/branch"),
   },
 
+  qa: {
+    root: path(ROOTS_DASHBOARD, "/qa"),
+    allEvaluations: path(ROOTS_DASHBOARD, "/qa/all-evaluations"),
+    evaluation: path(ROOTS_DASHBOARD, "/qa/evaluation"),
+  },
+
   dataManagement: {
     root: path(ROOTS_DASHBOARD, "/data-management"),
     workforceLeaveApplications: path(ROOTS_DASHBOARD, "/data-management/workforce-leave-applications"),
@@ -157,7 +166,10 @@ export const PATH_DASHBOARD = {
   operations: {
     root: path(ROOTS_DASHBOARD, "/operations"),
     operationTeamLeaveApplications: path(ROOTS_DASHBOARD, "/operations/operation-team-leave-applications"),
+    operationTeamTaskManagement: path(ROOTS_DASHBOARD, "/operations/operation-team-task-management"),
+    operationsTasks: path(ROOTS_DASHBOARD, "/operations/operation-team-task-management/1"),
     resignation: path(ROOTS_DASHBOARD, "/operations/resignation"),
+
   },
 
   accounts: {

@@ -20,7 +20,7 @@ const Deductions = () => {
     deductionFromDate,
     setDeductionFromDate,
     deductionToDate,
-    setDeductionToDate,
+    setDeductionToDate
   } = useAppContext();
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -143,9 +143,7 @@ const Deductions = () => {
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              onClick={() =>
-                handleViewAllBreakdown(row)
-              }
+              onClick={() => handleViewAllBreakdown(row)}
             >
               View Deductions
             </button>

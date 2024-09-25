@@ -1,5 +1,4 @@
 // *IN USE
-
 import React, {
   createContext,
   useCallback,
@@ -52,11 +51,13 @@ const AppProvider = (props) => {
   const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectCampaigns, setSelectCampaigns] = useState([]);
   const [selectTeams, setSelectTeams] = useState([]);
+  const [selectRoles, setSelectRoles] = useState([]);
   const [selectLeaders, setSelectLeaders] = useState([]);
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
+  const [selectLoanTypes, setSelectLoanTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
   const [selectPublicHoliday, setSelectPublicHoliday] = useState([]);
   const [selectSurvey, setSelectSurvey] = useState([]);
@@ -75,6 +76,13 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+  const loanFrom = moment().startOf("month").format("yyyy-MM-DD");
+  const loanTo = moment().endOf("month").format("yyyy-MM-DD");
+
+  const [loanFromDate, setLoanFromDate] = useState(loanFrom);
+  const [loanToDate, setLoanToDate] = useState(loanTo);
+  const [allowanceFromDate, setAllowanceFromDate] = useState(deductionFrom);
+  const [allowanceToDate, setAllowanceToDate] = useState(deductionTo);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -83,6 +91,7 @@ const AppProvider = (props) => {
     [user?.employee_info?.ogid]
   );
   const CurrentUserRoles = user?.employee_info?.roles;
+  const isHRManager = CurrentUserRoles?.includes("hr_manager");
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
   const isPayrollProcessor = CurrentUserRoles?.includes("payroll_processor");
 
@@ -458,17 +467,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const formattedCampaignHolidays = campaign_holidays.map((e) => ({
@@ -478,17 +487,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const allOffice = [
@@ -542,8 +551,22 @@ const AppProvider = (props) => {
         "Do MMMM YYYY"
       );
 
+      // const loanFrom = moment(
+      //   `${rangeParts[0]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+      // const loanTo = moment(
+      //   `${rangeParts[1]} ${currentYear}`,
+      //   "Do MMMM YYYY"
+      // );
+
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+      setLoanFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setLoanToDate(deductionTo.format("yyyy-MM-DD"));
+
+      setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));
 
       setAllPayDates(formatted);
       setPayday(currentPaydayRange);
@@ -554,7 +577,7 @@ const AppProvider = (props) => {
       ErrorHandler(error, component);
       setLoadingPayday(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMonth, previousMonth]);
 
   // SELECT APIs
@@ -683,6 +706,40 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectTeams(formattedTeams);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
+  // All Roles:
+  const fetchAllRoles = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/roles.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        },
+        params: {
+          pages: 1,
+          limit: 1000
+        }
+      });
+      const resData = response?.data?.data?.roles;
+
+      const formattedRoles = resData
+        .map((e) => ({
+          label: e?.title
+            .toUpperCase()
+            .replace(/_/g, " ")
+            .replace(/^./, (str) => str.toUpperCase()),
+          value: e.id
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectRoles(formattedRoles);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -929,8 +986,8 @@ const AppProvider = (props) => {
           item?.deduction?.deduction_mode === "percentage"
             ? item?.deduction?.value + "%"
             : item?.deduction?.deduction_mode === "flat_rate"
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
-            : "-";
+              ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+              : "-";
 
         return {
           label:
@@ -947,6 +1004,47 @@ const AppProvider = (props) => {
       });
 
       setSelectDeductionTypes(formattedData);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
+
+  // All Deduction Types:
+  const fetchLoanTypes = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("api/v1/loan_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        }
+      });
+
+      // const response = await axiosInstance.post("api/v1/loan_types.json", {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //     "ngrok-skip-browser-warning": "69420"
+      //   },
+      //   body: {"payload":
+      //     {
+      //         "title": "Housing Loan"
+      //     }
+      //  }
+      // });
+
+      const resData = response?.data?.data?.loan_types;
+      const formattedData = resData.map((item) => {
+        return {
+          label: item?.title,
+          value: item?.id
+        };
+      });
+
+      setSelectLoanTypes(formattedData);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -1047,10 +1145,15 @@ const AppProvider = (props) => {
         fetchAllDesignations();
         fetchAllBranches();
         fetchDeductionTypes();
+        fetchLoanTypes();
         fetchJobOpenings();
         fetchAllSurveys();
         fetchAllPublicHolidays();
         fetchHRLeavesNotificationCount();
+
+        if (isHRManager) {
+          fetchAllRoles();
+        }
       }
 
       if (isTeamLead && !isHr) {
@@ -1090,6 +1193,7 @@ const AppProvider = (props) => {
     fetchAllLeaveTypes,
     fetchAllTeams,
     fetchDeductionTypes,
+    fetchLoanTypes,
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
@@ -1098,7 +1202,9 @@ const AppProvider = (props) => {
     fetchPendingSurveys,
     fetchPublicHolidays,
     fetchAllPayrollDates,
+    fetchAllRoles,
     isHr,
+    isHRManager,
     userToken,
     isTeamLead,
     isSecurity,
@@ -1148,9 +1254,17 @@ const AppProvider = (props) => {
         setSelectDeductionTypes,
         fetchDeductionTypes,
 
+        selectLoanTypes,
+        setSelectLoanTypes,
+        fetchLoanTypes,
+
+
         selectJobOpenings,
         setSelectJobOpenings,
         fetchJobOpenings,
+
+        selectRoles,
+        fetchAllRoles,
 
         selectSurvey,
         setSelectSurvey,
@@ -1213,6 +1327,14 @@ const AppProvider = (props) => {
         setDeductionFromDate,
         deductionToDate,
         setDeductionToDate,
+        loanFromDate,
+        setLoanFromDate,
+        loanToDate,
+        setLoanToDate,
+        allowanceFromDate,
+        setAllowanceFromDate,
+        allowanceToDate,
+        setAllowanceToDate,
 
         userDp,
         generateOrdinal,

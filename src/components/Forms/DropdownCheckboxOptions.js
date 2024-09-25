@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./dropdownCheckbox.css";
 
-function DropdownCheckbox({
+function DropdownCheckboxOptions({
   office,
   options,
   selectedOptions,
@@ -10,8 +10,14 @@ function DropdownCheckbox({
   setViewingOffice,
   onSelectionChange,
   errorIndicator,
+  valueIsNumber = false
 }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log({
+    options,
+    selectedOptions
+  });
 
   useEffect(() => {
     if (closeAll) {
@@ -30,7 +36,7 @@ function DropdownCheckbox({
   };
 
   const handleCheckboxChange = (event) => {
-    const { value } = event.target;
+    const value = event.target.value;
 
     let updatedSelectedOptions;
 
@@ -41,9 +47,11 @@ function DropdownCheckbox({
         updatedSelectedOptions = options.map((option) => option.value);
       }
     } else {
-      updatedSelectedOptions = selectedOptions.includes(+value)
-        ? selectedOptions.filter((item) => item !== +value)
-        : [...selectedOptions, +value];
+      const formatedValue = valueIsNumber ? +value : value
+      
+      updatedSelectedOptions = selectedOptions.includes(formatedValue)
+        ? selectedOptions.filter((item) => item !== formatedValue)
+        : [...selectedOptions, formatedValue];
 
       if (selectedOptions.includes("all")) {
         updatedSelectedOptions = updatedSelectedOptions.filter(
@@ -85,8 +93,9 @@ function DropdownCheckbox({
       </button>
       {isOpen && (
         <div
-          className={`checkbox_options ${!selectedOptions.length ? errorIndicator : undefined
-            }`}
+          className={`checkbox_options ${
+            !selectedOptions.length ? errorIndicator : undefined
+          }`}
         >
           {options.map((option) => (
             <label key={option.value} className="checkbox_input">
@@ -110,4 +119,4 @@ function DropdownCheckbox({
   );
 }
 
-export default DropdownCheckbox;
+export default DropdownCheckboxOptions;

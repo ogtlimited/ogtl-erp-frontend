@@ -98,7 +98,7 @@ const OutOfOfficeAdmin = () => {
       setAllOutOfOffice(formattedOutOffOffice);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Absence Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -229,9 +229,8 @@ const OutOfOfficeAdmin = () => {
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
             <i
-              className={`fa fa-dot-circle-o ${
-                value ? "text-success" : "text-secondary"
-              } `}
+              className={`fa fa-dot-circle-o ${value ? "text-success" : "text-secondary"
+                } `}
               style={{ marginRight: "10px" }}
             ></i>{" "}
             {value ? "Yes" : "No"}
@@ -327,7 +326,7 @@ const OutOfOfficeAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Out Of Office</h3>
+            <h3 className="page-title">Absence</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Time Off Planner</li>
@@ -342,12 +341,32 @@ const OutOfOfficeAdmin = () => {
                 data-target="#OutOfOfficeFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Create Out of Office
+                <i className="fa fa-plus"></i> Create Absence
               </a>
             ) : null}
           </div>
         </div>
       </div>
+
+      {/* <div className="hr-employee-card-group" style={{ marginBottom: "3rem" }}>
+        <div className="hr-dashboard-card">
+          <span>Total Out of Office</span>
+          <div className="card-body">
+            <span className="biometrics-widget-icon">
+              <lord-icon
+                src="https://cdn.lordicon.com/peeuicbd.json"
+                colors="primary:#00c5fb,secondary:#0253cc"
+                trigger="loop"
+                delay="2499"
+                style={{ width: "60px", height: "60px" }}
+              ></lord-icon>
+            </span>
+            <div className="card-info">
+              <h3>{0}</h3>
+            </div>
+          </div>
+        </div>
+      </div> */}
 
       <div className="page-menu" style={{ marginBottom: "2rem" }}>
         <div className="row">
@@ -359,7 +378,7 @@ const OutOfOfficeAdmin = () => {
                   data-toggle="tab"
                   href="#tab_outOfOfficeStaff"
                 >
-                  Out of Office Staff
+                  Absence
                 </a>
               </li>
 
@@ -464,7 +483,7 @@ const OutOfOfficeAdmin = () => {
 
       {modalType === "view-details" ? (
         <ViewModal
-          title="Out of Office Details"
+          title="Absence Details"
           content={<OutOfOfficeContent Content={viewRow} />}
         />
       ) : null}

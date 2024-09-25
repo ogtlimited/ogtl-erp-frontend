@@ -54,9 +54,9 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
         caller_is_employee: data?.caller_is_employee,
         caller_name: data?.caller_name,
         hr_employee_id: data?.ogid,
-        operation_office_id: data?.employee?.operation_office_id,
         office_type: data?.office_type,
         office: data?.office,
+        operation_office_id: +data?.office_id,
         employeeName: data?.employee,
         note: data?.note
       });
@@ -120,7 +120,6 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
 
   const fetchAllEmployees = useCallback(
     async (officeId) => {
-
       if (officeType === "Department") {
         const response = await axiosInstance.get(
           `/api/v1/departments_employees/${officeId}.json`,
@@ -299,11 +298,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
       caller_name: formData?.caller_name,
       hr_employee_id: formData?.hr_employee_id,
       operation_office_id:
-        from === "all"
-          ? formData?.operation_office_id
-            ? +formData?.operation_office_id
-            : null
-          : +id,
+        from === "all" ? formData?.operation_office_id : +id,
       office_type:
         from === "all" ? officeType?.toLowerCase() : office_type?.toLowerCase(),
       note: formData?.note

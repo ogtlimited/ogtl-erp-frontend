@@ -12,6 +12,7 @@ const LatenessTrackerContent = ({ Content = {} }) => {
     "designation", 
     "officeType",
     "office",
+    "dateCreated",
     "caller",
     "callerIsEmployee",
     "modeOfCommunication",

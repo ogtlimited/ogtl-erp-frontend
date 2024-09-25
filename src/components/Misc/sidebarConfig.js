@@ -41,6 +41,7 @@ const ICONS = {
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
   kpi: getIcon("la-bar-chart"),
+  qa: getIcon("la-bar-chart"),
   timeOff: getIcon("la-calendar-day"),
   leave: getIcon("la-calendar-times-o"),
   biometrics: getIcon("la-fingerprint"),
@@ -57,6 +58,7 @@ const ICONS = {
   deduction: getIcon("la-money-check-alt"),
   office: getIcon("la-building"),
   hr: getIcon("la-user-minus"),
+  approval: getIcon("la-sort-numeric-up-alt"),
 
   football: getIcon("la-futbol"),
   rugby: getIcon("la-football-ball"),
@@ -103,26 +105,26 @@ const sidebarConfig = [
     items: [
       userDept === "hr"
         ? {
-            canView: "all",
-            title: "Dashboard",
-            path: PATH_DASHBOARD.main.root,
-            icon: ICONS.dashboard,
-            navIcon: ICONS.football,
-            children: [
-              {
-                canView: "all",
-                title: "Employee Dashboard",
-                path: PATH_DASHBOARD.main.employeeDashboard
-              },
-              {
-                canView: "hr",
-                title: "HR Dashboard",
-                path: PATH_DASHBOARD.main.hrDashboard
-              }
-            ]
-          }
+          canView: "all",
+          title: "Dashboard",
+          path: PATH_DASHBOARD.main.root,
+          icon: ICONS.dashboard,
+          navIcon: ICONS.football,
+          children: [
+            {
+              canView: "all",
+              title: "Employee Dashboard",
+              path: PATH_DASHBOARD.main.employeeDashboard
+            },
+            {
+              canView: "hr",
+              title: "HR Dashboard",
+              path: PATH_DASHBOARD.main.hrDashboard
+            }
+          ]
+        }
         : userDept === "operations"
-        ? {
+          ? {
             canView: "all",
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
@@ -141,7 +143,7 @@ const sidebarConfig = [
               }
             ]
           }
-        : {
+          : {
             canView: "all",
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
@@ -197,7 +199,7 @@ const sidebarConfig = [
         children: [
           {
             canView: "all",
-            title: "Out of Office",
+            title: "Absence",
             path: PATH_DASHBOARD.main.outOfOffice,
             icon: ICONS.office
           },
@@ -341,29 +343,29 @@ const sidebarConfig = [
         children:
           CurrentUserIsLead && userDept !== "hr"
             ? [
-                {
-                  canView: "all",
-                  title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees
-                },
-                {
-                  canView: "all",
-                  title: "Departments",
-                  path: PATH_DASHBOARD.hr.departments
-                }
-              ]
+              {
+                canView: "all",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees
+              },
+              {
+                canView: "all",
+                title: "Departments",
+                path: PATH_DASHBOARD.hr.departments
+              }
+            ]
             : [
-                {
-                  canView: "hr",
-                  title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees
-                },
-                {
-                  canView: "hr",
-                  title: "Add Employee",
-                  path: PATH_DASHBOARD.hr.addEmployees
-                }
-              ]
+              {
+                canView: "hr",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees
+              },
+              {
+                canView: "hr",
+                title: "Add Employee",
+                path: PATH_DASHBOARD.hr.addEmployees
+              }
+            ]
       },
 
       // Leadership:
@@ -434,29 +436,29 @@ const sidebarConfig = [
         children:
           CurrentUserIsLead && userDept !== "hr"
             ? [
-                {
-                  canView: "all",
-                  title: "Out of Office",
-                  path: PATH_DASHBOARD.hr.outOfOffice
-                }
-                // {
-                //   canView: "all",
-                //   title: "Public Holiday",
-                //   path: PATH_DASHBOARD.hr.publicholiday
-                // }
-              ]
+              {
+                canView: "all",
+                title: "Absence",
+                path: PATH_DASHBOARD.hr.outOfOffice
+              }
+              // {
+              //   canView: "all",
+              //   title: "Public Holiday",
+              //   path: PATH_DASHBOARD.hr.publicholiday
+              // }
+            ]
             : [
-                {
-                  canView: "hr",
-                  title: "Out of Office",
-                  path: PATH_DASHBOARD.hr.outOfOffice
-                },
-                {
-                  canView: "hr",
-                  title: "Public Holiday",
-                  path: PATH_DASHBOARD.hr.publicholiday
-                }
-              ]
+              {
+                canView: "hr",
+                title: "Absence",
+                path: PATH_DASHBOARD.hr.outOfOffice
+              },
+              {
+                canView: "hr",
+                title: "Public Holiday",
+                path: PATH_DASHBOARD.hr.publicholiday
+              }
+            ]
       },
 
       // Leave:
@@ -540,7 +542,18 @@ const sidebarConfig = [
             canView: "all",
             title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions
+          },
+          {
+            canView: "all",
+            title: "loans",
+            path: PATH_DASHBOARD.payroll.loans
+          },
+          {
+            canView: "all",
+            title: "Allowances",
+            path: PATH_DASHBOARD.payroll.allowances
           }
+
         ]
       },
 
@@ -627,51 +640,51 @@ const sidebarConfig = [
     items:
       (remoteUser && CurrentUserIsLead) || CurrentUserRoles.includes("wfh_lead")
         ? [
-            {
-              canView: "lead",
-              title: "Team Members",
-              path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership
-            },
-            {
-              canView: "lead",
-              title: "Campaign Schedule",
-              path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule
-            },
-            {
-              canView: "lead",
-              title: "Team Attendance",
-              path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance
-            },
-            {
-              canView: CurrentUserRoles,
-              title: "Remote Attendance",
-              path: PATH_DASHBOARD.leadership.remoteAttendance,
-              icon: ICONS.attendance
-            }
-          ]
+          {
+            canView: "lead",
+            title: "Team Members",
+            path: PATH_DASHBOARD.leadership.supervisor,
+            icon: ICONS.leadership
+          },
+          {
+            canView: "lead",
+            title: "Campaign Schedule",
+            path: PATH_DASHBOARD.leadership.campaignSchedule,
+            icon: ICONS.schedule
+          },
+          {
+            canView: "lead",
+            title: "Team Attendance",
+            path: PATH_DASHBOARD.leadership.teamAttendance,
+            icon: ICONS.teamAttendance
+          },
+          {
+            canView: CurrentUserRoles,
+            title: "Remote Attendance",
+            path: PATH_DASHBOARD.leadership.remoteAttendance,
+            icon: ICONS.attendance
+          }
+        ]
         : [
-            {
-              canView: "lead",
-              title: "Team Members",
-              path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership
-            },
-            {
-              canView: "lead",
-              title: "Campaign Schedule",
-              path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule
-            },
-            {
-              canView: "lead",
-              title: "Team Attendance",
-              path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance
-            }
-          ]
+          {
+            canView: "lead",
+            title: "Team Members",
+            path: PATH_DASHBOARD.leadership.supervisor,
+            icon: ICONS.leadership
+          },
+          {
+            canView: "lead",
+            title: "Campaign Schedule",
+            path: PATH_DASHBOARD.leadership.campaignSchedule,
+            icon: ICONS.schedule
+          },
+          {
+            canView: "lead",
+            title: "Team Attendance",
+            path: PATH_DASHBOARD.leadership.teamAttendance,
+            icon: ICONS.teamAttendance
+          }
+        ]
   },
 
   // DATA MANAGEMENT CONFIG:
@@ -700,6 +713,37 @@ const sidebarConfig = [
     ]
   },
 
+  // QA CONFIG:
+  {
+    subheader: "QA",
+    canView: CurrentUserRoles.includes("quality_assurance")
+      ? "quality assurance"
+      : "none",
+    items: [
+      {
+        canView: CurrentUserRoles.includes("quality_assurance")
+          ? "quality assurance"
+          : "none",
+        title: "Quality Assurance",
+        path: PATH_DASHBOARD.qa.root,
+        icon: ICONS.qa,
+        navIcon: ICONS.volleyball,
+        children: [
+          {
+            canView: "hr",
+            title: "All Evaluations",
+            path: PATH_DASHBOARD.qa.allEvaluations
+          },
+          {
+            canView: "quality assurance",
+            title: "Evaluation Form",
+            path: PATH_DASHBOARD.qa.evaluation
+          }
+        ]
+      }
+    ]
+  },
+
   // OPERATIONS CONFIG:
   {
     subheader: "Operations",
@@ -721,6 +765,16 @@ const sidebarConfig = [
             canView: "operations",
             title: "Leave Applications",
             path: PATH_DASHBOARD.operations.operationTeamLeaveApplications
+          },
+          {
+            canView: "operations",
+            title: "Task Management",
+            path: PATH_DASHBOARD.operations.operationTeamTaskManagement
+          },
+          {
+            canView: "operations",
+            title: "Tasks",
+            path: PATH_DASHBOARD.operations.operationsTasks
           }
         ]
       },
@@ -935,6 +989,12 @@ const sidebarConfig = [
     subheader: "Settings",
     canView: "super",
     items: [
+      {
+        canView: "super",
+        title: "Approval Module",
+        path: PATH_DASHBOARD.settings.approvalModule,
+        icon: ICONS.approval,
+      },
       {
         canView: "super",
         title: "Roles & Permission",

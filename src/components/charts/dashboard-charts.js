@@ -4,6 +4,7 @@ import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 import DashboardStatistics from "./dashboard-statistics";
 import ResignationStatistics from "./resignation-statistics";
+import OutOfOfficeStatistics from "./outOfOffice-statistics";
 import SurveyScoreCard from "./surey-score-card";
 import { useAppContext } from "../../Context/AppContext";
 // import secureLocalStorage from "react-secure-storage";
@@ -17,21 +18,27 @@ const DashboardChart = ({
 
   leaveStatusLabel,
   leaveStatusData,
+
   leaveTypeLabel,
   leaveTypeData,
+  
   formattedLeaveType,
   formattedLeaveStatus,
 
   resignationByGenderLabel,
   resignationByGenderData,
+
   resignationStatusLabel,
   resignationStatusData,
-  resignationReasonLabel,
-  resignationReasonData,
 
-  
   surveyLabel,
   surveyData,
+
+  outOfOfficeLabel,
+  outOfOfficeData,
+
+  resignationReasonLabel,
+  resignationReasonData,
 
   fromDate,
   toDate,
@@ -156,35 +163,35 @@ const DashboardChart = ({
     ],
   };
 
-  const resignationReason = {
-    labels: resignationReasonLabel,
-    datasets: [
-      {
-        data: resignationReasonData,
-        backgroundColor: [
-          "rgba(255, 99, 132)",
-          "rgba(54, 162, 235)",
-          "rgba(255, 206, 86)",
-          "rgba(75, 192, 192)",
-          "rgba(153, 102, 255)",
-          "rgba(255, 159, 64)",
-          "rgba(205, 19, 84)",
-          "rgba(55, 159, 64)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(205, 19, 84, 1)",
-          "rgba(55, 159, 64, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  // const resignationReason = {
+  //   labels: resignationReasonLabel,
+  //   datasets: [
+  //     {
+  //       data: resignationReasonData,
+  //       backgroundColor: [
+  //         "rgba(255, 99, 132)",
+  //         "rgba(54, 162, 235)",
+  //         "rgba(255, 206, 86)",
+  //         "rgba(75, 192, 192)",
+  //         "rgba(153, 102, 255)",
+  //         "rgba(255, 159, 64)",
+  //         "rgba(205, 19, 84)",
+  //         "rgba(55, 159, 64)",
+  //       ],
+  //       borderColor: [
+  //         "rgba(255, 99, 132, 1)",
+  //         "rgba(54, 162, 235, 1)",
+  //         "rgba(255, 206, 86, 1)",
+  //         "rgba(75, 192, 192, 1)",
+  //         "rgba(153, 102, 255, 1)",
+  //         "rgba(255, 159, 64, 1)",
+  //         "rgba(205, 19, 84, 1)",
+  //         "rgba(55, 159, 64, 1)",
+  //       ],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
 
   return (
     <>
@@ -271,8 +278,16 @@ const DashboardChart = ({
             />
           </div>
 
+          {/* Out of Office */}
+          <div className="row">
+            <OutOfOfficeStatistics
+              outOfOfficeLabel={outOfOfficeLabel}
+              outOfOfficeData={outOfOfficeData}
+            />
+          </div>
+
           {/* Resignation Reason */}
-          <div className="col-md-12 text-center">
+          {/* <div className="col-md-12 text-center">
             <div className="card hr-dashboard-charts">
               <div className="card-body">
                 <h3 className="card-title">Resignation Reason</h3>
@@ -284,7 +299,7 @@ const DashboardChart = ({
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

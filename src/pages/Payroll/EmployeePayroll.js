@@ -202,19 +202,21 @@ const EmployeePayroll = () => {
           employee: e?.user?.first_name + " " + e?.user?.last_name,
           ogid: e?.user?.ogid,
           email: e?.user?.email,
-
+          branch: e?.user?.branch.title,
           designation: e?.user?.designation || "Not Available",
           office: e?.user?.office
             ?.toUpperCase()
             ?.replace(/_/g, " ")
             .replace(/^./, (str) => str.toUpperCase()),
           bank_name: e?.user?.bank_name || "No bank details",
-          bank_account_number: e?.user?.bank_account_number,
+          bank_account_number: e?.user?.bank_account_number || "No bank details",
 
           basic: +e?.slip?.basic || e?.slip?.basic,
           medical: +e?.slip?.medical || e?.slip?.medical,
           housing: +e?.slip?.housing || e?.slip?.housing,
           transport: +e?.slip?.transport || e?.slip?.transport,
+          allowances: +e?.slip?.allowances || e?.slip?.allowances,
+          loans: +e?.slip?.lons || e?.slip.loan,   
           otherAllowances:
             +e?.slip?.other_allowances || e?.slip?.other_allowances,
           monthlySalary: +e?.slip?.monthly_salary || e?.slip?.monthly_salary,
@@ -482,9 +484,16 @@ const EmployeePayroll = () => {
       text: "Email"
     },
     {
+      dataField: "branch",
+      text: "Branch",
+    },
+    {
+      dataField: "bank_name",
+      text: "Bank Name",
+    },
+    {
       dataField: "bank_account_number",
-      text: "Bank Details",
-      idDataField: "bank_name"
+      text: "Account Number",
     },
     {
       dataField: "basic",
@@ -501,6 +510,10 @@ const EmployeePayroll = () => {
     {
       dataField: "transport",
       text: "Transport"
+    },
+    {
+      dataField: "allowances",
+      text: "Bonuses"
     },
     {
       dataField: "otherAllowances",
@@ -525,6 +538,10 @@ const EmployeePayroll = () => {
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction"
+    },
+    {
+      dataField: "loans",
+      text: "Loans"
     },
     {
       dataField: "totalDeductions",

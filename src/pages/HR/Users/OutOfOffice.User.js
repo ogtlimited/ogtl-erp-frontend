@@ -74,7 +74,7 @@ const OutOfOffice = () => {
       setAllOutOfOffice(formattedOutOffOffice);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Absence Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -139,9 +139,8 @@ const OutOfOffice = () => {
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
             <i
-              className={`fa fa-dot-circle-o ${
-                value ? "text-success" : "text-secondary"
-              } `}
+              className={`fa fa-dot-circle-o ${value ? "text-success" : "text-secondary"
+                } `}
               style={{ marginRight: "10px" }}
             ></i>{" "}
             {value ? "Yes" : "No"}
@@ -162,7 +161,7 @@ const OutOfOffice = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Out Of Office</h3>
+            <h3 className="page-title">Absence</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Main</li>
               <li className="breadcrumb-item active">Time Off</li>

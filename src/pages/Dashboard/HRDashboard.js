@@ -6,6 +6,12 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import moment from "moment";
 
+const outOfOfficeJson = {
+  sick: 5,
+  fam_per_emergency: 9,
+  holiday: 19
+};
+
 const HRDashboard = () => {
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
@@ -23,10 +29,12 @@ const HRDashboard = () => {
   const [resignationByGenderData, setResignationByGenderData] = useState([]);
   const [resignationStatusLabel, setResignationStatusLabel] = useState([]);
   const [resignationStatusData, setResignationStatusData] = useState([]);
-  const [resignationReasonLabel, setResignationReasonLabel] = useState([]);
-  const [resignationReasonData, setResignationReasonData] = useState([]);
   const [surveyLabel, setSurveyLabel] = useState([]);
   const [surveyData, setSurveyData] = useState([]);
+  const [outOfOfficeLabel, setOutOfOfficeLabel] = useState([]);
+  const [outOfOfficeData, setOutOfOfficeData] = useState([]);
+  const [resignationReasonLabel, setResignationReasonLabel] = useState([]);
+  const [resignationReasonData, setResignationReasonData] = useState([]);
 
   const [hideHeadCountCard, setHideHeadCountCard] = useState(false);
   const [hideGenderDivRatioCard, setHideGenderDivRatioCard] = useState(false);
@@ -62,8 +70,8 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const resData = response?.data?.data?.head_count.active;
@@ -88,8 +96,8 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const resData = response?.data?.data?.record;
@@ -122,15 +130,15 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const offices = response?.data?.data?.employees_by_office;
 
       const formatted = offices.map((e) => ({
         labels: e.split(":")[0],
-        data: Number(e.split(":")[1].trim()),
+        data: Number(e.split(":")[1].trim())
       }));
 
       const label = [...formatted.map((e) => e.labels)];
@@ -153,8 +161,8 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -186,12 +194,14 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const { gender_count, status, reason } =
         response?.data?.data?.resignations;
+
+      console.log("resignation status:", status);
 
       // Gender:
       const genders = gender_count.map((item) => item.gender);
@@ -221,6 +231,47 @@ const HRDashboard = () => {
     }
   };
 
+  // Out Of Office Report:
+  const fetchOutOfOfficeReport = async () => {
+    try {
+      // const response = await axiosInstance.get(
+      //   "/api/v1/hr_dashboard/resignations.json",
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       "Access-Control-Allow-Origin": "*",
+      //       "ngrok-skip-browser-warning": "69420",
+      //     },
+      //   }
+      // );
+      // const { gender_count, status, reason } =
+      //   response?.data?.data?.resignations;
+
+      // Status:
+      const statusLabels = Object.keys(outOfOfficeJson).map((label) => {
+        switch (label) {
+          case "sick":
+            return "Sick";
+          case "fam_per_emergency":
+            return "FAM/PER Emergency";
+          case "holiday":
+            return "Holiday";
+          default:
+            return label;
+        }
+      });
+
+      const statusData = Object.values(outOfOfficeJson);
+
+      setOutOfOfficeLabel(statusLabels);
+      setOutOfOfficeData(statusData);
+
+    } catch (error) {
+      const component = "Resignation Report | ";
+      ErrorHandler(error, component);
+    }
+  };
+
   // Survey Report:
   const fetchSurveyReport = async () => {
     try {
@@ -230,22 +281,20 @@ const HRDashboard = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
       const resData = response?.data?.data?.survey_score_card;
 
       const sorted = resData.sort((a, b) => {
-        const gradeOrder = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'F': 5 };
+        const gradeOrder = { A: 1, B: 2, C: 3, D: 4, F: 5 };
         return gradeOrder[a.grade] - gradeOrder[b.grade];
       });
 
       const grades = sorted.map((item) => item.grade);
-      const scoreCount = sorted.map(
-        (item) => item.score_count
-      );
+      const scoreCount = sorted.map((item) => item.score_count);
 
       setSurveyLabel(grades);
       setSurveyData(scoreCount);
@@ -254,6 +303,7 @@ const HRDashboard = () => {
       ErrorHandler(error, component);
     }
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (AuthorizedHrManagerRoles) {
@@ -261,6 +311,7 @@ const HRDashboard = () => {
       fetchEmployeeGender();
       fetchEmployeeData();
       fetchLeaveReport();
+      fetchOutOfOfficeReport();
       fetchSurveyReport();
     }
     fetchResignationReport();
@@ -329,10 +380,12 @@ const HRDashboard = () => {
           resignationByGenderData={resignationByGenderData}
           resignationStatusLabel={resignationStatusLabel}
           resignationStatusData={resignationStatusData}
-          resignationReasonLabel={resignationReasonLabel}
-          resignationReasonData={resignationReasonData}
           surveyLabel={surveyLabel}
           surveyData={surveyData}
+          outOfOfficeLabel={outOfOfficeLabel}
+          outOfOfficeData={outOfOfficeData}
+          resignationReasonLabel={resignationReasonLabel}
+          resignationReasonData={resignationReasonData}
           fromDate={fromDate}
           toDate={toDate}
           setFromDate={setFromDate}
