@@ -13,11 +13,14 @@ import { Link } from "react-router-dom";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
+
+    // Initialize task configs, all inactive by default
     const [taskConfigs, setTaskConfigs] = useState([
-        { id: 1, name: "Task Config 1", active: true },
-        { id: 2, name: "Task Config 2", active: false },
-        { id: 3, name: "Task Config 3", active: true },
+        { id: 1, name: "Task Config 1", active: false },
+        { id: 2, name: "Task Config 2", active: true },
+        { id: 3, name: "Task Config 3", active: false },
     ]);
+
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sizePerPage, setSizePerPage] = useState(10);
@@ -30,7 +33,6 @@ const TaskManagementConfigTable = () => {
     const [officeType, setOfficeType] = useState(null);
     const [loadingOfficeType, setLoadingOfficeType] = useState(false);
     const { ErrorHandler, getAvatarColor } = useAppContext();
-
 
     const fetchLoggedInUserOffices = useCallback(async () => {
         setLoadingOfficeType(true);
@@ -71,17 +73,28 @@ const TaskManagementConfigTable = () => {
             ErrorHandler(error, component);
             setLoadingOfficeType(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+    }, [ErrorHandler]);
 
     useEffect(() => {
         fetchLoggedInUserOffices();
     }, [fetchLoggedInUserOffices]);
 
+    // Function to handle activation/deactivation of a task config
+    const handleToggle = (id) => {
+        setTaskConfigs(prevConfigs =>
+            prevConfigs.map(config => ({
+                ...config,
+                active: config.id === id ? true : false, // Only the selected task config becomes active
+            }))
+        );
+        // API call to update the backend can go here if necessary
+    };
+
     const columns = [
         {
-            dataField: "name", text: "Task Config Name", sort: true,
+            dataField: "name",
+            text: "Task Config Name",
+            sort: true,
             formatter: (val, row) => (
                 <p>
                     <Link
@@ -92,8 +105,6 @@ const TaskManagementConfigTable = () => {
                     </Link>
                 </p>
             ),
-
-
         },
         {
             dataField: "active",
@@ -102,16 +113,13 @@ const TaskManagementConfigTable = () => {
                 <div>
                     <Switch
                         checked={cell}
-                        onChange={() => handleToggle(row.id, cell)}
+                        onChange={() => handleToggle(row.id)}
                         color="primary"
                     />
-                    <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger "}`}>
+                    <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger"}`}>
                         {cell ? "Active" : "Inactive"}
                     </span>
-
-
                 </div>
-
             ),
         },
         {
@@ -144,53 +152,6 @@ const TaskManagementConfigTable = () => {
         alert(`Editing task with id: ${id}`);
     };
 
-
-    const handleToggle = (id, currentStatus) => {
-        setTaskConfigs(prevConfigs =>
-            prevConfigs.map(config =>
-                config.id === id ? { ...config, active: !currentStatus } : config
-            )
-        );
-        // API call placeholder
-    };
-    const MySearch = useCallback(
-        (props) => {
-            let input;
-
-            const handleKeydown = (e) => {
-                if (e.key === "Enter") {
-                    setPage(1);
-                    props.onSearch(input.value);
-                    setSearchTerm(input.value);
-                }
-            };
-
-            return (
-                <div className="custom-search">
-                    <input
-                        className="custom-search-input"
-                        style={{ backgroundColor: "#ffffff", width: "33.5%", marginRight: "20px" }}
-                        ref={(n) => (input = n)}
-                        type="search"
-                        onKeyDown={handleKeydown}
-                    />
-                    <button
-                        className="btn btn-secondary custom-search-btn"
-                        onClick={() => {
-                            input.value = "";
-                            props.onSearch("");
-                            setSearchTerm("");
-                            setPage(1);
-                        }}
-                    >
-                        Reset
-                    </button>
-                </div>
-            );
-        },
-        [setPage, setSearchTerm]
-    );
-
     const handlePageChange = (event, newPage) => {
         setPage(newPage);
     };
@@ -217,7 +178,6 @@ const TaskManagementConfigTable = () => {
                                 Export CSV
                             </ExportCSVButton> */}
 
-                            {/* Office Type */}
                             <div className="col-md-4">
                                 {!loadingOfficeType ? (
                                     <label htmlFor="officeType">

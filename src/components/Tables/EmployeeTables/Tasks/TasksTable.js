@@ -4,8 +4,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const TaskTable = () => {
     const [tasks, setTasks] = useState([
@@ -31,13 +30,26 @@ const TaskTable = () => {
             text: "Status",
             formatter: (cell, row) => (
                 <div>
-                    <span className={`badge text-white w-50 p-2 ${cell ? "bg-success" : "bg-danger"}`}>
+                    <span
+                        className={`badge text-white w-50 p-2 ${cell ? "bg-success" : "bg-danger"}`}
+                    >
                         {cell ? "Active" : "Inactive"}
                     </span>
                 </div>
             ),
         },
         { dataField: "completed", text: "Number Completed", sort: true },
+        {
+            dataField: "view",
+            text: "Actions",
+            formatter: (cell, row) => (
+                <div className="form-group">
+                    <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
+                        View Task
+                    </button>
+                </div>
+            ),
+        },
     ];
 
     const resizeTable = () => {
@@ -62,6 +74,16 @@ const TaskTable = () => {
     const handleRowClick = (task) => {
         setSelectedTask(task);
         setShowModal(true);
+    };
+
+    // Function to handle status change
+    const handleStatusChange = (taskId) => {
+        const updatedTasks = tasks.map((task) =>
+            task.id === taskId
+                ? { ...task, status: true } // Set clicked task to active
+                : { ...task, status: false } // Set other tasks to inactive
+        );
+        setTasks(updatedTasks);
     };
 
     return (
@@ -112,9 +134,6 @@ const TaskTable = () => {
                                         <span className="sr-only">Loading...</span>
                                     </div>
                                 ) : "No Data Available"}
-                                rowEvents={{
-                                    onClick: (e, row, rowIndex) => handleRowClick(row),
-                                }}
                             />
                         </div>
 
@@ -150,7 +169,7 @@ const TaskTable = () => {
 
             {/* Modal for Task Details */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -167,7 +186,7 @@ const TaskTable = () => {
                                     <tr key={index}>
                                         <td>{taskDetail.name}</td>
                                         <td>
-                                            <span className={`badge ${taskDetail.status === "Completed" ? "bg-success" : "bg-danger"}`}>
+                                            <span className={`badge text-white ${taskDetail.status === "Completed" ? "bg-success" : "bg-danger"}`}>
                                                 {taskDetail.status}
                                             </span>
                                         </td>
@@ -180,9 +199,9 @@ const TaskTable = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
                         Close
-                    </Button>
+                    </button>
                 </Modal.Footer>
             </Modal>
         </div>
