@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
+import { officeTypeOptions } from "../../../FormJSON/AddLoan";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
@@ -24,6 +25,7 @@ const TaskManagementConfigTable = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sizePerPage, setSizePerPage] = useState(10);
+    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [info, setInfo] = useState({ sizePerPage: 10 });
@@ -78,6 +80,12 @@ const TaskManagementConfigTable = () => {
     useEffect(() => {
         fetchLoggedInUserOffices();
     }, [fetchLoggedInUserOffices]);
+
+    const handleOfficeTypeChange = (e) => {
+
+        setOfficeType(e?.label);
+        setIsOfficeTypeSelected(true);
+    };
 
     // Function to handle activation/deactivation of a task config
     const handleToggle = (id) => {
@@ -179,6 +187,22 @@ const TaskManagementConfigTable = () => {
                             </ExportCSVButton> */}
 
                             <div className="col-md-4">
+                                <div className="form-group">
+                                    <label>Office Type</label>
+                                    <Select
+                                        options={officeTypeOptions}
+                                        value={{
+                                            label: officeType,
+                                            value: officeType
+                                        }}
+                                        style={{ display: "inline-block" }}
+                                        onChange={(e) => handleOfficeTypeChange(e)}
+                                    />
+                                </div>
+                            </div>
+
+                            {isOfficeTypeSelected && (
+                            <div className="col-md-4">
                                 {!loadingOfficeType ? (
                                     <label htmlFor="officeType">
                                         {officeType?.replace(/\b\w/g, (char) =>
@@ -214,7 +238,7 @@ const TaskManagementConfigTable = () => {
                                     }
                                     style={{ display: "inline-block" }}
                                 />
-                            </div>
+                            </div>)}
                         </div>
 
                         <div className="custom-table-div" style={{ marginTop: 30 }}>
