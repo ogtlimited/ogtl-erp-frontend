@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const TaskManagementDailyTasks = () => {
     const [tasks, setTasks] = useState([
@@ -46,13 +45,13 @@ const TaskManagementDailyTasks = () => {
                             <span>{task.taskName}</span>
                         </div>
                         <div className="action-buttons">
-                            <Button
-                                variant={task.confirmed ? "danger" : "success"}
-                                className="me-2"
+                            <button
+                                className={`btn btn-sm btn-${task.confirmed ? "danger" : "primary"}`}
+
                                 onClick={() => handleConfirmOrUndo(task.id)}
                             >
                                 {task.confirmed ? "Undo" : "Confirm"}
-                            </Button>
+                            </button>
                         </div>
                     </div>
                     <div className="mt-2">
