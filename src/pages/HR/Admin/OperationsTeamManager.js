@@ -8,7 +8,6 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import { Tab, Tabs } from "react-bootstrap";
 
 const OperationsTeamManager = () => {
     const [key, setKey] = useState("teamLeads");
@@ -113,45 +112,97 @@ const OperationsTeamManager = () => {
                     <div className="col">
                         <h3 className="page-title">Operations Team Manager</h3>
                         <ul className="breadcrumb">
-                            <li className="breadcrumb-item">Operations</li>
-                            <li className="breadcrumb-item active">Team Manager</li>
+                            {/* <li className="breadcrumb-item">Operations</li>
+                            <li className="breadcrumb-item active">Team Manager</li> */}
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <Tabs activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
-                <Tab eventKey="teamLeads" title="Team Leads">
-                    <div>
-                        <h4>Team Leads Reportees</h4>
-                        {renderTable()}
+            <div className="page-menu">
+                <div className="row">
+                    <div className="col-sm-12">
+                        <ul className="nav nav-tabs nav-tabs-bottom">
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link active"
+                                    data-toggle="tab"
+                                    href="#tab_team_leads"
+                                >
+                                    Team Leads
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    data-toggle="tab"
+                                    href="#tab_supervisors"
+                                >
+                                    Supervisors
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    data-toggle="tab"
+                                    href="#tab_managers"
+                                >
+                                    Managers
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    data-toggle="tab"
+                                    href="#tab_operational_managers"
+                                >
+                                    Operational Managers
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    data-toggle="tab"
+                                    href="#tab_coo"
+                                >
+                                    COO
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                </Tab>
-                <Tab eventKey="supervisor" title="Supervisor">
-                    <div>
-                        <h4>Supervisors Reportees</h4>
-                        {renderTable()}
-                    </div>
-                </Tab>
-                <Tab eventKey="managers" title="Managers">
-                    <div>
-                        <h4>Managers Reportees</h4>
-                        {renderTable()}
-                    </div>
-                </Tab>
-                <Tab eventKey="operationalManagers" title="Operational Managers">
-                    <div>
-                        <h4>Operational Managers Reportees</h4>
-                        {renderTable()}
-                    </div>
-                </Tab>
-                <Tab eventKey="coo" title="COO">
-                    <div>
-                        <h4>COO Reportees</h4>
-                        {renderTable()}
-                    </div>
-                </Tab>
-            </Tabs>
+                </div>
+            </div>
+
+            <div className="row tab-content">
+                <div id="tab_team_leads" className="col-12 tab-pane show active">
+
+                    {renderTable()}
+                </div>
+
+
+
+                <div id="tab_supervisors" className="col-12 tab-pane">
+                    {renderTable()}
+
+                </div>
+
+
+                <div id="tab_managers" className="col-12 tab-pane ">
+                    {renderTable()}
+                </div>
+
+
+                <div id="tab_operational_managers" className="col-12 tab-pane">
+                    {renderTable()}
+                </div>
+
+
+                <div id="tab_coo" className="col-12 tab-pane">
+                    {renderTable()}
+                </div>
+            </div>
+
+
         </>
     );
 };

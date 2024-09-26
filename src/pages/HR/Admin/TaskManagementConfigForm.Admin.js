@@ -13,9 +13,13 @@ const TaskManagementConfigForm = () => {
 
     // Dummy user data
     const dummyUsers = [
-        { label: "John Doe", value: "user_1" },
-        { label: "Jane Smith", value: "user_2" },
-        { label: "Michael Brown", value: "user_3" },
+        { label: "Team Lead", value: "user_1" },
+        { label: "Supervisor", value: "user_2" },
+        { label: "Manager", value: "user_3" },
+        { label: "Operations Director", value: "user_4" },
+        { label: "COO", value: "user_5" },
+        { label: "CEO", value: "user_6" },
+
     ];
 
     // Open modal to assign/edit tasks for a selected user
@@ -32,6 +36,15 @@ const TaskManagementConfigForm = () => {
     };
 
     // Add or edit task for the selected user
+
+    // Function to handle task deletion for a specific user
+    const handleDeleteTask = (userId, taskToDelete) => {
+        setTasksByUser((prevTasks) => ({
+            ...prevTasks,
+            [userId]: prevTasks[userId].filter((task) => task !== taskToDelete), // Remove the task
+        }));
+    };
+
     const handleAddTask = (userId, newTask) => {
         setTasksByUser((prevTasks) => ({
             ...prevTasks,
@@ -90,7 +103,7 @@ const TaskManagementConfigForm = () => {
                     options={dummyUsers}
                     value={selectedUsers}
                     onChange={setSelectedUsers}
-                    placeholder="Select Users..."
+                    placeholder="Select Actors..."
                 />
             </div>
 
@@ -109,20 +122,39 @@ const TaskManagementConfigForm = () => {
                                     <ul className="list-group">
                                         {(tasksByUser[userId] || []).map((task, index) => (
                                             <li key={index} className="list-group-item">
-                                                <strong>Task Title:</strong> {task.title}, <strong>Report
-                                                    Time:</strong> {task.reportTime}, <strong>Leave Note:</strong>{" "}
-                                                {task.leaveNote ? "Yes" : "No"}
-                                                <button
-                                                    className="btn btn-sm btn-link"
-                                                    onClick={() => openModal(user, task)}
-                                                >
-                                                    Edit
-                                                </button>
+                                                <div>
+                                                    <div>
+                                                        <strong>Task Title:</strong> {task.title}
+                                                    </div>
+
+                                                    <div className="pt-3">
+                                                        <div> <strong className="">Report
+                                                            Time:</strong> {task.reportTime} </div>
+                                                        <div><strong>Leave Note:</strong>{" "}
+                                                            {task.leaveNote ? "Yes" : "No"}
+                                                        </div>
+
+                                                    </div>
+
+                                                    <button
+                                                        className="edit_form_builder_field"
+                                                        onClick={() => openModal(user, task)}
+                                                    >
+                                                        <i className="fa fa-pencil"></i>
+                                                    </button>
+                                                    <button
+                                                        className="delete_form_builder_field"
+                                                        onClick={() => handleDeleteTask(userId, task)}
+
+                                                    >
+                                                        <i className="fa fa-trash"></i>
+                                                    </button>
+
+                                                </div>
+
                                             </li>
                                         ))}
                                     </ul>
-
-                                    {/* Button to Add More Tasks to this User */}
                                     <button
                                         className="btn btn-secondary mt-3"
                                         onClick={() => openModal(user)}
