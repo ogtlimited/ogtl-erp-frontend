@@ -18,7 +18,9 @@ const OperationsTeamManager = () => {
 
     // Sample data for reportees
     const reportees = [
-        { id: 1, name: "John Doe", position: "Team Lead", }
+        { id: 1, name: "John Doe", position: "Team Lead" },
+        { id: 2, name: "Jane Smith", position: "Supervisor" },
+        { id: 3, name: "Bob Johnson", position: "Manager" },
     ];
 
     // Table columns
@@ -33,7 +35,6 @@ const OperationsTeamManager = () => {
             text: "Position",
             sort: true,
         },
-
     ];
 
     // Table search and export components
@@ -50,15 +51,26 @@ const OperationsTeamManager = () => {
         );
     };
 
+    // Handle row click to navigate to a placeholder link
+    const rowEvents = {
+        onClick: (e, row, rowIndex) => {
+            // Navigate to a placeholder link with the user's ID
+            window.location.href = `/dashboard/operations/operations-team-task-management-user/1`;
+        },
+    };
+
+    // Custom row styling to set pointer cursor
+    const rowStyle = (row, rowIndex) => {
+        return {
+            cursor: "pointer", // Set pointer cursor
+        };
+    };
+
     const renderTable = () => (
         <ToolkitProvider keyField="id" data={reportees} columns={columns} search exportCSV>
             {(props) => (
                 <>
-
-
                     <div className="row">
-
-
                         <div className="col-md-3">
                             <div className="form-group">
                                 <label htmlFor="fromDate">From</label>
@@ -96,8 +108,9 @@ const OperationsTeamManager = () => {
                             pagination={paginationFactory()}
                             noDataIndication={showNullMessage()}
                             headerClasses="header-class"
-                            classes="table "
-
+                            classes="table table-hover" // Add Bootstrap's hover effect
+                            rowEvents={rowEvents} // Add row click event
+                            rowStyle={rowStyle} // Set pointer cursor
                         />
                     </div>
                 </>
@@ -111,10 +124,6 @@ const OperationsTeamManager = () => {
                 <div className="row align-items-center">
                     <div className="col">
                         <h3 className="page-title">Operations Team Manager</h3>
-                        <ul className="breadcrumb">
-                            {/* <li className="breadcrumb-item">Operations</li>
-                            <li className="breadcrumb-item active">Team Manager</li> */}
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -175,34 +184,25 @@ const OperationsTeamManager = () => {
 
             <div className="row tab-content">
                 <div id="tab_team_leads" className="col-12 tab-pane show active">
-
                     {renderTable()}
                 </div>
-
-
 
                 <div id="tab_supervisors" className="col-12 tab-pane">
                     {renderTable()}
-
                 </div>
-
 
                 <div id="tab_managers" className="col-12 tab-pane ">
                     {renderTable()}
                 </div>
 
-
                 <div id="tab_operational_managers" className="col-12 tab-pane">
                     {renderTable()}
                 </div>
-
 
                 <div id="tab_coo" className="col-12 tab-pane">
                     {renderTable()}
                 </div>
             </div>
-
-
         </>
     );
 };

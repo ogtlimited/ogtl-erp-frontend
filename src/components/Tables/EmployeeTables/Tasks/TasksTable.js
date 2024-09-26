@@ -88,7 +88,7 @@ const TaskTable = () => {
 
     return (
         <div>
-            <h3>Task Table</h3>
+            <h4>Task Table</h4>
             <ToolkitProvider keyField="id" data={loading ? [] : tasks} columns={columns} search>
                 {(props) => (
                     <div className="col-12">

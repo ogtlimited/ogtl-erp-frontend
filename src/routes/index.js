@@ -828,6 +828,14 @@ export default function Router() {
               )
             },
             {
+              path: "operations-team-task-management-user/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TasksTableViewUser />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="operations">
@@ -1643,7 +1651,10 @@ const TaskManagementConfigForm = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementConfigForm.Admin.js"))
 );
 const TasksTableView = Loadable(
-  lazy(() => import("../pages/HR/Admin/OperationTasksView.js"))
+  lazy(() => import("../pages/HR/Admin/OperationsTasksView.js"))
+)
+const TasksTableViewUser = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTaskViewUser.js"))
 )
 const TaskManagementDailyTasks = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementDailyTasks.Admin.js"))
