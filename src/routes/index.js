@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Suspense, lazy } from "react";
-import { Navigate, useRoutes } from "react-router-dom";
+import { Navigate, Route, useRoutes } from "react-router-dom";
 import { AppProvider } from "../Context/AppContext";
 import { NoAuthContextProvider } from "../Context/NoAuthContext";
 import AuthGuard from "../guards/AuthGuard";
@@ -807,6 +807,15 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="super">
                   <TaskManagementDailyTasks />
+                </GuardedRoute>
+              )
+            },
+
+            {
+              path: "operation-team-manager",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <OperationsTeamManager />
                 </GuardedRoute>
               )
             },
@@ -1638,6 +1647,9 @@ const TasksTableView = Loadable(
 )
 const TaskManagementDailyTasks = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementDailyTasks.Admin.js"))
+);
+const OperationsTeamManager = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTeamManager.js"))
 );
 const ResignationStatusAnalytics = Loadable(
   lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))
