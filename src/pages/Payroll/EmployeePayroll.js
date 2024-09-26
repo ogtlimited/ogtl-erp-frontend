@@ -292,9 +292,11 @@ const EmployeePayroll = () => {
           .replace(/^./, (str) => str.toUpperCase()),
         DESIGNATION: data?.user?.designation,
         EMAIL: data?.user?.email,
-        "BANK DETAILS": data?.user?.bank_account_number
-          ? data?.user?.bank_account_number + ` (${data?.user?.bank_name})`
-          : "Not Available",
+        "BANK NAME": data?.user?.bank_name || "",
+        "ACCOUNT NUMBER": data?.user?.bank_account_number || "",
+        // "BANK DETAILS": data?.user?.bank_account_number
+        //   ? data?.user?.bank_account_number + ` (${data?.user?.bank_name})`
+        //   : "Not Available",
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
