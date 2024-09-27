@@ -10,11 +10,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
+import { HR_ADD_LOAN, officeTypeOptions } from "../../../FormJSON/AddLoan";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
 
-    // Initialize task configs, all inactive by default
     const [taskConfigs, setTaskConfigs] = useState([
         { id: 1, name: "Task Config 1", active: false },
         { id: 2, name: "Task Config 2", active: true },
@@ -24,6 +24,7 @@ const TaskManagementConfigTable = () => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sizePerPage, setSizePerPage] = useState(10);
+    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [info, setInfo] = useState({ sizePerPage: 10 });
@@ -33,7 +34,14 @@ const TaskManagementConfigTable = () => {
     const [officeType, setOfficeType] = useState(null);
     const [loadingOfficeType, setLoadingOfficeType] = useState(false);
     const { ErrorHandler, getAvatarColor } = useAppContext();
+    const [data, setData] = useState(HR_ADD_LOAN);
+    const {
+        selectDepartments,
+        selectCampaigns,
+        selectTeams,
+    } = useAppContext();
 
+    // Fetch logged-in user's offices
     const fetchLoggedInUserOffices = useCallback(async () => {
         setLoadingOfficeType(true);
         try {
@@ -79,15 +87,28 @@ const TaskManagementConfigTable = () => {
         fetchLoggedInUserOffices();
     }, [fetchLoggedInUserOffices]);
 
-    // Function to handle activation/deactivation of a task config
+    // Handle changes when the office type (Department/Campaign/Team) is selected
+    const handleOfficeTypeChange = (e) => {
+        setOfficeType(e?.label);
+        setIsOfficeTypeSelected(true);
+    };
+
+    // Handle the second select (Department/Campaign/Team selection)
+    const handleOfficeChange = (e) => {
+        setData({
+            ...data,
+            officeName: e.label, // Update selected office name
+            operation_office_id: e.value, // Update selected office ID
+        });
+    };
+
     const handleToggle = (id) => {
         setTaskConfigs(prevConfigs =>
             prevConfigs.map(config => ({
                 ...config,
-                active: config.id === id ? true : false, // Only the selected task config becomes active
+                active: config.id === id ? true : false,
             }))
         );
-        // API call to update the backend can go here if necessary
     };
 
     const columns = [
@@ -174,46 +195,49 @@ const TaskManagementConfigTable = () => {
                 {(props) => (
                     <div className="col-12">
                         <div className="col-12 p-0" style={{ marginTop: 30 }}>
-                            {/* <ExportCSVButton className="float-right btn export-csv" {...props.csvProps}>
-                                Export CSV
-                            </ExportCSVButton> */}
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label>Office Type</label>
+                                        <Select
+                                            options={officeTypeOptions}
+                                            value={{
+                                                label: officeType,
+                                                value: officeType,
+                                            }}
+                                            style={{ display: "inline-block" }}
+                                            onChange={(e) => handleOfficeTypeChange(e)}
+                                        />
+                                    </div>
+                                </div>
 
-                            <div className="col-md-4">
-                                {!loadingOfficeType ? (
-                                    <label htmlFor="officeType">
-                                        {officeType?.replace(/\b\w/g, (char) =>
-                                            char.toUpperCase()
-                                        ) || "Office"}
-                                    </label>
-                                ) : (
-                                    <label htmlFor="officeType">
-                                        <>
-                                            <FontAwesomeIcon
-                                                icon={faSpinner}
-                                                spin
-                                                pulse
-                                                style={{ marginRight: "10px" }}
-                                            />{" "}
-                                            Fetching offices...
-                                        </>
-                                    </label>
+                                {isOfficeTypeSelected && (
+                                    <div className="col-md-4">
+                                        {officeType === "Department" ? (
+                                            <label>Department</label>
+                                        ) : officeType === "Campaign" ? (
+                                            <label>Campaign</label>
+                                        ) : (
+                                            <label>Team</label>
+                                        )}
+                                        <Select
+                                            options={
+                                                officeType === "Department"
+                                                    ? selectDepartments
+                                                    : officeType === "Campaign"
+                                                        ? selectCampaigns
+                                                        : selectTeams
+                                            }
+                                            isSearchable={true}
+                                            value={{
+                                                label: data?.officeName,
+                                                value: data?.operation_office_id,
+                                            }}
+                                            onChange={(e) => handleOfficeChange(e)}
+                                            style={{ display: "inline-block" }}
+                                        />
+                                    </div>
                                 )}
-                                <Select
-                                    options={offices}
-                                    isSearchable={true}
-                                    value={{
-                                        value: selectedOffice?.id,
-                                        label: selectedOffice?.title.toUpperCase(),
-                                    }}
-                                    onChange={(e) =>
-                                        setSelectedOffice({
-                                            id: e?.value,
-                                            title: e?.label,
-                                            office_type: officeType,
-                                        })
-                                    }
-                                    style={{ display: "inline-block" }}
-                                />
                             </div>
                         </div>
 
@@ -223,11 +247,15 @@ const TaskManagementConfigTable = () => {
                                 bordered={false}
                                 headerClasses="header-class"
                                 classes={mobileView ? "table table-responsive" : "table"}
-                                noDataIndication={loading ? (
-                                    <div className="spinner-border text-primary" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                ) : "No Data Available"}
+                                noDataIndication={
+                                    loading ? (
+                                        <div className="spinner-border text-primary" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    ) : (
+                                        "No Data Available"
+                                    )
+                                }
                             />
                         </div>
 
