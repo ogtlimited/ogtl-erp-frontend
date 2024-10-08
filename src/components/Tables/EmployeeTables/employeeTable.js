@@ -283,6 +283,18 @@ const EmployeesTable = ({
       )
     },
     {
+      dataField: "tenure",
+      text: "Tenure",
+      sort: true,
+      headerStyle: { width: "100%" }
+    },
+    {
+      dataField: "date_of_joining",
+      text: "Date Of Joining",
+      sort: true,
+      headerStyle: { width: "100%" }
+    },
+    {
       dataField: "",
       text:
         CurrentUserRoles.includes("hr_manager") ||
@@ -497,7 +509,8 @@ const EmployeesTable = ({
       });
 
       const responseData = response?.data?.data?.employees;
-
+      console.log(response);
+      
       const formatted = responseData.map((data) => ({
         "EMPLOYEE NAME": data?.full_name,
         STATUS: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
@@ -514,7 +527,9 @@ const EmployeesTable = ({
         DESIGNATION: data?.designation?.toUpperCase(),
         EMAIL: data?.email,
         PENSIONABLE: data?.pensionable ? "Yes" : "No",
-        TAXABLE: data?.taxable ? "Yes" : "No"
+        TAXABLE: data?.taxable ? "Yes" : "No",
+        "TENURE": data?.tenure,
+        "DATE_OF_JOiNING": data?.date_of_joining
       }));
 
       const dataToConvert = {
