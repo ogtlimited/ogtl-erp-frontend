@@ -517,7 +517,6 @@ const EmployeesTable = ({
       });
 
       const responseData = response?.data?.data?.employees;
-      console.log(response);
       
       const formatted = responseData.map((data) => ({
         "EMPLOYEE NAME": data?.full_name,
