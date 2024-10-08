@@ -238,19 +238,22 @@ const TeamMembers = () => {
               ) : null}
             </div>
           )}
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateAndEdit ? (
-              <a
-                href="/"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#TeamMembersFormModal"
-                onClick={handleCreate}
-              >
-                <i className="fa fa-plus"></i> Add Team Member
-              </a>
-            ) : null}
-          </div>
+          {teamLead.length > 0 && (
+            <div className="col-auto float-right ml-auto">
+              {CurrentUserCanCreateAndEdit ? (
+                <a
+                  href="/"
+                  className="btn add-btn"
+                  data-toggle="modal"
+                  data-target="#TeamMembersFormModal"
+                  onClick={handleCreate}
+                >
+                  <i className="fa fa-plus"></i> Add Team Member
+                </a>
+              ) : null}
+            </div>
+          )}
+
         </div>
       </div>
 
