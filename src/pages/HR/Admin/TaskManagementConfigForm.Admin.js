@@ -39,7 +39,7 @@ const TaskManagementConfigForm = () => {
     // Open modal to assign/edit tasks for a selected user
     const openModal = (user, task = null) => {
         setSelectedUser(user);
-        setCurrentTask(task);
+        setCurrentTask(task); // Set the task if editing
         setIsModalOpen(true);
     };
 
@@ -68,15 +68,14 @@ const TaskManagementConfigForm = () => {
         setCurrentTask(null);
         setIsModalOpen(false);
     }
-    // Add or edit task for the selected user
     const handleAddTask = (userId, newTask) => {
         setTasksByUser((prevTasks) => ({
             ...prevTasks,
             [userId]: currentTask
                 ? prevTasks[userId].map((task) =>
-                    task === currentTask ? newTask : task
+                    task === currentTask ? newTask : task // Update the task
                 )
-                : [...(prevTasks[userId] || []), newTask],
+                : [...(prevTasks[userId] || []), newTask], // Add new task
         }));
         closeModal();
     };
