@@ -6,120 +6,83 @@ import Stack from "@mui/material/Stack";
 import Select from "react-select";
 import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
-import { HR_ADD_LOAN, officeTypeOptions } from "../../../FormJSON/AddLoan";
+import { officeTypeOptions } from "../../../FormJSON/AddLoan";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
 
-    const [taskConfigs, setTaskConfigs] = useState([
-        { id: 1, name: "Task Config 1", active: false },
-        { id: 2, name: "Task Config 2", active: true },
-        { id: 3, name: "Task Config 3", active: false },
-    ]);
-
+    const [taskConfigs, setTaskConfigs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [sizePerPage, setSizePerPage] = useState(10);
-    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [info, setInfo] = useState({ sizePerPage: 10 });
-    const [mobileView, setMobileView] = useState(false);
+    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
     const [selectedOffice, setSelectedOffice] = useState(null);
-    const [offices, setOffices] = useState([]);
     const [officeType, setOfficeType] = useState(null);
-    const [loadingOfficeType, setLoadingOfficeType] = useState(false);
-    const { ErrorHandler, getAvatarColor } = useAppContext();
-    const [data, setData] = useState(HR_ADD_LOAN);
-    const {
-        selectDepartments,
-        selectCampaigns,
-        selectTeams,
-    } = useAppContext();
+    const [loadingOffices, setLoadingOffices] = useState(false);
+    const { ErrorHandler, selectDepartments, selectCampaigns, selectTeams } = useAppContext();
 
-    // Fetch logged-in user's offices
-    const fetchLoggedInUserOffices = useCallback(async () => {
-        setLoadingOfficeType(true);
+    // Fetch task configs from API based on selected office and type
+    const fetchTaskConfigs = useCallback(async () => {
+        if (!selectedOffice || !officeType) return; // Ensure both are selected before calling API
+
+        setLoading(true);
         try {
-            const response = await axiosInstance.get("/api/v1/leaders_offices.json", {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "ngrok-skip-browser-warning": "69420",
-                },
+            const response = await axiosInstance.get("/api/v1/office_task_configs", {
+                params: {
+                    office_id: selectedOffice.value, // Use the selected office ID
+                    office_type: officeType.toLowerCase(), // Convert officeType to lowercase
+                }
             });
-
-            const resData = response?.data?.data?.office_details;
-
-            if (resData?.office_type === "campaign") {
-                setOfficeType(resData?.office_type);
-
-                const formattedOffice = resData?.offices.map((office) => ({
-                    label: office?.title?.toUpperCase(),
-                    value: office?.id,
-                }));
-
-                setOffices(formattedOffice);
-            } else if (resData?.office_type === "department") {
-                setOfficeType(resData?.office_type);
-                setSelectedOffice({
-                    id: resData?.office?.id,
-                    title: resData?.office?.title,
-                    office_type: resData?.office_type,
-                });
-            } else {
-                return null;
-            }
-
-            setLoadingOfficeType(false);
+            const fetchedData = response?.data?.config_data || [];
+            console.log(response?.data)
+            setTaskConfigs(fetchedData);
+            setTotalPages(Math.ceil(fetchedData.length / sizePerPage)); // Calculate total pages based on response
+            setLoading(false);
         } catch (error) {
-            const component = "Staff Offices Error | ";
+            const component = "Task Configs Fetch Error | ";
             ErrorHandler(error, component);
-            setLoadingOfficeType(false);
+            setLoading(false);
         }
-    }, [ErrorHandler]);
+    }, [selectedOffice, officeType, sizePerPage, ErrorHandler]);
 
+    // Trigger data fetching when selectedOffice or officeType changes
     useEffect(() => {
-        fetchLoggedInUserOffices();
-    }, [fetchLoggedInUserOffices]);
+        fetchTaskConfigs();
+    }, [fetchTaskConfigs]);
 
-    // Handle changes when the office type (Department/Campaign/Team) is selected
+    // Handle office type change (e.g., "Department", "Campaign")
     const handleOfficeTypeChange = (e) => {
-        setOfficeType(e?.label);
+        setOfficeType(e.label);
         setIsOfficeTypeSelected(true);
+        setSelectedOffice(null); // Reset office selection on type change
     };
 
-    // Handle the second select (Department/Campaign/Team selection)
+    // Handle office selection based on the selected office type
     const handleOfficeChange = (e) => {
-        setData({
-            ...data,
-            officeName: e.label, // Update selected office name
-            operation_office_id: e.value, // Update selected office ID
-        });
+        setSelectedOffice(e); // Set selected office
     };
 
     const handleToggle = (id) => {
         setTaskConfigs(prevConfigs =>
             prevConfigs.map(config => ({
                 ...config,
-                active: config.id === id ? true : false,
+                active: config.id === id ? !config.active : config.active,
             }))
         );
     };
 
     const columns = [
         {
-            dataField: "name",
+            dataField: "title",
             text: "Task Config Name",
             sort: true,
             formatter: (val, row) => (
                 <p>
                     <Link
-                        to={`/dashboard/operations/operation-team-task-management/1`}
+                        to={`/dashboard/operations/operation-team-task-management/${row.id}`}
                         className="attendance-record-for-office"
                     >
                         {val?.toUpperCase()}
@@ -159,16 +122,6 @@ const TaskManagementConfigTable = () => {
         },
     ];
 
-    const resizeTable = () => {
-        setMobileView(window.innerWidth <= 768 || columns.length > 7);
-    };
-
-    useEffect(() => {
-        resizeTable();
-        window.addEventListener("resize", resizeTable);
-        return () => window.removeEventListener("resize", resizeTable);
-    }, [columns]);
-
     const editTask = (id) => {
         alert(`Editing task with id: ${id}`);
     };
@@ -201,25 +154,15 @@ const TaskManagementConfigTable = () => {
                                         <label>Office Type</label>
                                         <Select
                                             options={officeTypeOptions}
-                                            value={{
-                                                label: officeType,
-                                                value: officeType,
-                                            }}
-                                            style={{ display: "inline-block" }}
-                                            onChange={(e) => handleOfficeTypeChange(e)}
+                                            value={officeType ? { label: officeType, value: officeType } : null}
+                                            onChange={handleOfficeTypeChange}
                                         />
                                     </div>
                                 </div>
 
                                 {isOfficeTypeSelected && (
                                     <div className="col-md-4">
-                                        {officeType === "Department" ? (
-                                            <label>Department</label>
-                                        ) : officeType === "Campaign" ? (
-                                            <label>Campaign</label>
-                                        ) : (
-                                            <label>Team</label>
-                                        )}
+                                        <label>{officeType}</label>
                                         <Select
                                             options={
                                                 officeType === "Department"
@@ -229,24 +172,21 @@ const TaskManagementConfigTable = () => {
                                                         : selectTeams
                                             }
                                             isSearchable={true}
-                                            value={{
-                                                label: data?.officeName,
-                                                value: data?.operation_office_id,
-                                            }}
-                                            onChange={(e) => handleOfficeChange(e)}
-                                            style={{ display: "inline-block" }}
+                                            value={selectedOffice}
+                                            onChange={handleOfficeChange}
                                         />
                                     </div>
                                 )}
                             </div>
                         </div>
 
+                        {/* Table for displaying task configs */}
                         <div className="custom-table-div" style={{ marginTop: 30 }}>
                             <BootstrapTable
                                 {...props.baseProps}
                                 bordered={false}
                                 headerClasses="header-class"
-                                classes={mobileView ? "table table-responsive" : "table"}
+                                classes="table"
                                 noDataIndication={
                                     loading ? (
                                         <div className="spinner-border text-primary" role="status">
@@ -259,10 +199,10 @@ const TaskManagementConfigTable = () => {
                             />
                         </div>
 
+                        {/* Pagination and size per page controls */}
                         <select
                             className="application-table-sizePerPage"
-                            name="sizePerPage"
-                            value={info.sizePerPage}
+                            value={sizePerPage}
                             onChange={handleSizePerPageChange}
                         >
                             <option value={10}>10</option>
@@ -270,6 +210,7 @@ const TaskManagementConfigTable = () => {
                             <option value={30}>30</option>
                             <option value={50}>50</option>
                         </select>
+
                         <div className="application-table-pagination">
                             <Stack className="application-table-pagination-stack">
                                 <Pagination

@@ -1,43 +1,86 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import TaskAssignmentModal from "../../../components/Modal/TaskAssignmentModal";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import { officeTypeOptions } from "../../../components/FormJSON/AddLoan";
+
+
+
 
 const TaskManagementConfigForm = () => {
+    const {
+        selectDepartments,
+        selectCampaigns,
+        selectTeams,
+        showAlert,
+        loadingSelect,
+        ErrorHandler
+    } = useAppContext();
     const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState(""); // Configuration title
-    const [tasksByUser, setTasksByUser] = useState({}); // Tasks mapped to users
-    const [selectedUser, setSelectedUser] = useState(null); // Currently selected user
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-    const [selectedUsers, setSelectedUsers] = useState([]); // Store selected users
-    const [currentTask, setCurrentTask] = useState(null); // For editing a task
+    const [title, setTitle] = useState("");
+    const [tasksByUser, setTasksByUser] = useState({});
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [currentTask, setCurrentTask] = useState(null);
+    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
+    const [selectedOffice, setSelectedOffice] = useState(null);
+    const [officeType, setOfficeType] = useState(null);
+
 
     // Dummy user data
     const dummyUsers = [
-        { label: "Team Lead", value: "user_1" },
-        { label: "Supervisor", value: "user_2" },
-        { label: "Manager", value: "user_3" },
-        { label: "Operations Director", value: "user_4" },
-        { label: "COO", value: "user_5" },
-        { label: "CEO", value: "user_6" },
-
+        { label: "Team Lead", value: "team_lead" },
+        { label: "Supervisor", value: "supervisor" },
+        { label: "COO", value: "coo" },
     ];
 
     // Open modal to assign/edit tasks for a selected user
     const openModal = (user, task = null) => {
         setSelectedUser(user);
-        setCurrentTask(task); // If editing a task, set it as the current task
+        setCurrentTask(task);
         setIsModalOpen(true);
     };
 
     // Close the modal
     const closeModal = () => {
         setIsModalOpen(false);
-        setCurrentTask(null); // Reset task after closing modal
+        setCurrentTask(null);
+    };
+    // Handle office type change (e.g., "Department", "Campaign")
+    const handleOfficeTypeChange = (e) => {
+        setOfficeType(e.label);
+        setIsOfficeTypeSelected(true);
+        setSelectedOffice(null); // Reset office selection on type change
     };
 
-    // Add or edit task for the selected user
+    // Handle office selection based on the selected office type
+    const handleOfficeChange = (e) => {
+        setSelectedOffice(e); // Set selected office
+    };
 
-    // Function to handle task deletion for a specific user
+    const resetForm = () => {
+        setSelectedUser(null);
+        setTitle("");
+        setSelectedUsers([]);
+        setTasksByUser({});
+        setCurrentTask(null);
+        setIsModalOpen(false);
+    }
+    // Add or edit task for the selected user
+    const handleAddTask = (userId, newTask) => {
+        setTasksByUser((prevTasks) => ({
+            ...prevTasks,
+            [userId]: currentTask
+                ? prevTasks[userId].map((task) =>
+                    task === currentTask ? newTask : task
+                )
+                : [...(prevTasks[userId] || []), newTask],
+        }));
+        closeModal();
+    };
+
     const handleDeleteTask = (userId, taskToDelete) => {
         setTasksByUser((prevTasks) => ({
             ...prevTasks,
@@ -45,31 +88,51 @@ const TaskManagementConfigForm = () => {
         }));
     };
 
-    const handleAddTask = (userId, newTask) => {
-        setTasksByUser((prevTasks) => ({
-            ...prevTasks,
-            [userId]: currentTask
-                ? prevTasks[userId].map((task) =>
-                    task === currentTask ? newTask : task
-                ) // Edit existing task
-                : [...(prevTasks[userId] || []), newTask], // Add new task
+    // Function to handle submitting the task configuration
+    const handleSubmitTaskConfig = async () => {
+
+        const configData = Object.keys(tasksByUser).map((userId) => ({
+            actor: userId,
+            tasks: tasksByUser[userId].map((task) => ({
+                report_time: task.reportTime,
+                leaves_note: task.leaveNote,
+                title: task.title,
+            })),
         }));
-        closeModal();
-    };
 
-    // Submit the task configuration (dummy functionality)
-    const handleSubmitTaskConfig = () => {
-        console.log("Submitting configuration", { title, tasksByUser });
-        setLoading(true);
+        const payload = {
+            payload: {
+                config: {
+                    title,
+                    office_id: selectedOffice.value,
+                    office_type: officeType.toLowerCase(),
+                    config_data: configData,
+                }
+            }
 
-        // Dummy timeout to simulate an API call
-        setTimeout(() => {
-            alert("Task configuration submitted successfully!");
+        };
+
+        console.log(payload)
+        try {
+            setLoading(true);
+            const response = await axiosInstance.post(`/api/v1/office_task_configs`, payload, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            });
+
+            showAlert(
+                true,
+                `${response.data.message}`,
+                "alert alert-success"
+            );
+        } catch (error) {
+            console.error("Error submitting configuration", error);
+            showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        } finally {
             setLoading(false);
-            setTitle("");
-            setTasksByUser({});
-            setSelectedUsers([]);
-        }, 1000);
+        }
     };
 
     return (
@@ -81,6 +144,40 @@ const TaskManagementConfigForm = () => {
                     </div>
                 </div>
             </div>
+
+
+            <div className="row px-3">
+                <div className="col-md-4">
+                    <div className="form-group">
+                        <label>Office Type</label>
+                        <Select
+                            options={officeTypeOptions}
+                            value={officeType ? { label: officeType, value: officeType } : null}
+                            onChange={handleOfficeTypeChange}
+                        />
+                    </div>
+                </div>
+
+                {isOfficeTypeSelected && (
+                    <div className="col-md-4">
+                        <label>{officeType}</label>
+                        <Select
+                            options={
+                                officeType === "Department"
+                                    ? selectDepartments
+                                    : officeType === "Campaign"
+                                        ? selectCampaigns
+                                        : selectTeams
+                            }
+                            isSearchable={true}
+                            value={selectedOffice}
+                            onChange={handleOfficeChange}
+                        />
+                    </div>
+                )}
+            </div>
+
+
 
             {/* Configuration Title Input */}
             <div className="form-group col-md-6">
@@ -128,12 +225,8 @@ const TaskManagementConfigForm = () => {
                                                     </div>
 
                                                     <div className="pt-3">
-                                                        <div> <strong className="">Report
-                                                            Time:</strong> {task.reportTime} </div>
-                                                        <div><strong>Leave Note:</strong>{" "}
-                                                            {task.leaveNote ? "Yes" : "No"}
-                                                        </div>
-
+                                                        <div><strong>Report Time:</strong> {task.reportTime}</div>
+                                                        <div><strong>Leave Note:</strong> {task.leaveNote ? "Yes" : "No"}</div>
                                                     </div>
 
                                                     <button
@@ -145,13 +238,10 @@ const TaskManagementConfigForm = () => {
                                                     <button
                                                         className="delete_form_builder_field"
                                                         onClick={() => handleDeleteTask(userId, task)}
-
                                                     >
                                                         <i className="fa fa-trash"></i>
                                                     </button>
-
                                                 </div>
-
                                             </li>
                                         ))}
                                     </ul>
@@ -178,7 +268,6 @@ const TaskManagementConfigForm = () => {
                     {loading ? "Saving..." : "Submit Task Configuration"}
                 </button>
             </div>
-
 
             {/* Modal for Task Assignment */}
             {isModalOpen && selectedUser && (
