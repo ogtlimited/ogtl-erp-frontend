@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
-    const [taskTitle, setTaskTitle] = useState("");
-    const [reportTime, setReportTime] = useState("daily");
-    const [leaveNote, setLeaveNote] = useState(false);
+const TaskAssignmentModal = ({ user, task, onAddTask, closeModal }) => {
+    // Initialize state with existing task values if editing, otherwise use default values
+    const [taskTitle, setTaskTitle] = useState(task?.title || "");
+    const [reportTime, setReportTime] = useState(task?.reportTime || "daily");
+    const [leaveNote, setLeaveNote] = useState(task?.leaveNote || false);
+
+    // Optional: useEffect to handle task prop changes (if modal is reused for multiple tasks)
+    useEffect(() => {
+        if (task) {
+            setTaskTitle(task.title);
+            setReportTime(task.reportTime);
+            setLeaveNote(task.leaveNote);
+        }
+    }, [task]);
 
     const handleSaveTask = () => {
         const newTask = {
@@ -11,7 +21,7 @@ const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
             reportTime,
             leaveNote,
         };
-        onAddTask(user.value, newTask);
+        onAddTask(user.value, newTask); // Pass the new task data to parent
     };
 
     return (
@@ -24,7 +34,7 @@ const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title">Assign Task to {user.label}</h5>
+                            <h5 className="modal-title">{task ? "Edit" : "Assign"} Task to {user.label}</h5>
                             <button type="button" className="close" onClick={closeModal}>
                                 <span>&times;</span>
                             </button>
@@ -76,7 +86,5 @@ const TaskAssignmentModal = ({ user, onAddTask, closeModal }) => {
         </>
     );
 };
-
-
 
 export default TaskAssignmentModal;

@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import TaskAssignmentModal from "../../../components/Modal/TaskAssignmentModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { officeTypeOptions } from "../../../components/FormJSON/AddLoan";
+import { useParams } from "react-router-dom";
 
-const TaskManagementConfigForm = () => {
+const EditTaskManagementConfigForm = () => {
     const {
         selectDepartments,
         selectCampaigns,
         selectTeams,
         showAlert,
         loadingSelect,
-        ErrorHandler
+        ErrorHandler,
     } = useAppContext();
+
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
     const [tasksByUser, setTasksByUser] = useState({});
@@ -28,46 +30,58 @@ const TaskManagementConfigForm = () => {
 
     // Dummy user data
     const dummyUsers = [
-        { label: "Team Lead", value: 'Team Lead', },
-        { label: "Supervisor", value: "Supervisor" },
-        { label: "Operations Manager", value: "Operations Manager'" },
-        // { label: "Manager", value: "Manager'" },
-        { label: "COO", value: "Chief Operations Officer" },
-        { label: "CEO", value: "Chief Executive Officer" },
+        { label: "Team Lead", value: "team_lead" },
+        { label: "Supervisor", value: "supervisor" },
+        { label: "Operations Director", value: "operations_director" },
+        { label: "COO", value: "coo" },
+        { label: "CEO", value: "ceo" },
     ];
 
-    // Open modal to assign/edit tasks for a selected user
+    const { configId } = useParams();
+
+    useEffect(() => {
+        // Fetch existing configuration when component mounts
+        const fetchConfig = async () => {
+            try {
+                const response = await axiosInstance.get(`/api/v1/office_task_configs/${configId}`);
+                const configData = response.data.config_data[0];
+
+                // Populate form fields with the fetched data
+                setTitle(configData.title);
+                setOfficeType(configData.office_type.charAt(0).toUpperCase() + configData.office_type.slice(1));
+                setIsOfficeTypeSelected(true);
+                setSelectedOffice({ value: configData.office_id, label: configData.office_type });
+
+                // Additional logic to fetch and populate tasks and users could go here
+                // For example: setSelectedUsers(dummyUsers.filter(user => condition));
+            } catch (error) {
+                console.error("Error fetching configuration", error);
+                showAlert(true, "Error fetching configuration data", "alert alert-warning");
+            }
+        };
+
+        fetchConfig();
+    }, [configId]);
+
     const openModal = (user, task = null) => {
         setSelectedUser(user);
         setCurrentTask(task); // Set the task if editing
         setIsModalOpen(true);
     };
 
-    // Close the modal
     const closeModal = () => {
         setIsModalOpen(false);
         setCurrentTask(null);
     };
 
-    // Handle office type change (e.g., "Department", "Campaign")
     const handleOfficeTypeChange = (e) => {
         setOfficeType(e.label);
         setIsOfficeTypeSelected(true);
         setSelectedOffice(null); // Reset office selection on type change
     };
 
-    // Handle office selection based on the selected office type
     const handleOfficeChange = (e) => {
         setSelectedOffice(e); // Set selected office
-    };
-
-    const resetForm = () => {
-        setSelectedUser(null);
-        setTitle("");
-        setSelectedUsers([]);
-        setTasksByUser({});
-        setCurrentTask(null);
-        setIsModalOpen(false);
     };
 
     const handleAddTask = (userId, newTask) => {
@@ -89,7 +103,6 @@ const TaskManagementConfigForm = () => {
         }));
     };
 
-    // Validation function
     const validateForm = () => {
         const errors = {};
         if (!title) errors.title = "Title is required.";
@@ -104,7 +117,6 @@ const TaskManagementConfigForm = () => {
         return Object.keys(errors).length === 0;
     };
 
-    // Function to handle submitting the task configuration
     const handleSubmitTaskConfig = async () => {
         if (!validateForm()) return; // Stop if validation fails
 
@@ -124,15 +136,13 @@ const TaskManagementConfigForm = () => {
                     office_id: selectedOffice.value,
                     office_type: officeType.toLowerCase(),
                     config_data: configData,
-                }
-            }
+                },
+            },
         };
-
-        console.log(payload);
 
         try {
             setLoading(true);
-            const response = await axiosInstance.post(`/api/v1/office_task_configs`, payload, {
+            const response = await axiosInstance.put(`/api/v1/office_task_configs/${configId}`, payload, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
@@ -153,7 +163,7 @@ const TaskManagementConfigForm = () => {
             <div className="page-header">
                 <div className="row align-items-center">
                     <div className="col">
-                        <h3 className="page-title">Create Task Configuration</h3>
+                        <h3 className="page-title">Edit Task Configuration</h3>
                     </div>
                 </div>
             </div>
@@ -304,4 +314,4 @@ const TaskManagementConfigForm = () => {
     );
 };
 
-export default TaskManagementConfigForm;
+export default EditTaskManagementConfigForm;
