@@ -800,7 +800,6 @@ const AppProvider = (props) => {
           value: e?.ogid
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
-
       setSelectLeaders(formattedLeaders);
       setLoadingSelect(false);
     } catch (error) {
