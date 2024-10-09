@@ -48,6 +48,25 @@ const TaskManagementConfigTable = () => {
         }
     }, [selectedOffice, officeType, sizePerPage, ErrorHandler]);
 
+    const activateTaskConfig = async (id) => {
+        try {
+            const response = await axiosInstance.put(`/api/v1/office_task_configs/${id}/activate`)
+        }
+        catch (error) {
+            const component = "Activate Task Config Error | ";
+            ErrorHandler(error, component);
+        }
+    }
+
+    const deactivateTaskConfig = async (id) => {
+        try {
+            const response = await axiosInstance.put(`/api/v1/office_task_configs/${id}/deactivate`)
+        }
+        catch (error) {
+            const component = "Deactivate Task Config Error | ";
+            ErrorHandler(error, component);
+        }
+    }
     // Trigger data fetching when selectedOffice or officeType changes
     useEffect(() => {
         fetchTaskConfigs();
@@ -65,13 +84,23 @@ const TaskManagementConfigTable = () => {
         setSelectedOffice(e); // Set selected office
     };
 
-    const handleToggle = (id) => {
+    const handleToggle = (config, id) => {
+
         setTaskConfigs(prevConfigs =>
             prevConfigs.map(config => ({
                 ...config,
                 active: config.id === id ? !config.active : config.active,
-            }))
+            })
+            )
+
+
         );
+        if (!config.status) {
+            activateTaskConfig(id);
+        } else {
+            deactivateTaskConfig(id);
+        }
+
     };
 
     const columns = [
@@ -97,7 +126,7 @@ const TaskManagementConfigTable = () => {
                 <div>
                     <Switch
                         checked={cell}
-                        onChange={() => handleToggle(row.id)}
+                        onChange={() => handleToggle(row, row.id)}
                         color="primary"
                     />
                     <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger"}`}>
@@ -123,7 +152,7 @@ const TaskManagementConfigTable = () => {
     ];
 
     const editTask = (id) => {
-        alert(`Editing task with id: ${id}`);
+        window.location.href = (`/dashboard/operations/operation-team-task-management/Edit/${id}`);
     };
 
     const handlePageChange = (event, newPage) => {

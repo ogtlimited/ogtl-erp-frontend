@@ -803,6 +803,14 @@ export default function Router() {
               )
             },
             {
+              path: "operation-team-task-management/edit/:configId",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TaskManagementConfigFormEdit />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "operation-team-task-management/:id/daily-tasks",
               element: (
                 <GuardedRoute title="" dept="super">
@@ -1649,6 +1657,9 @@ const OperationsTeamTaskManagement = Loadable(
 );
 const TaskManagementConfigForm = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementConfigForm.Admin.js"))
+);
+const TaskManagementConfigFormEdit = Loadable(
+  lazy(() => import("../pages/HR/Admin/TaskManagementConfigFormEdit.Admin.js"))
 );
 const TasksTableView = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTasksView.js"))
