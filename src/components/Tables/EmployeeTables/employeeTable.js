@@ -283,6 +283,26 @@ const EmployeesTable = ({
       )
     },
     {
+      dataField: "tenure",
+      text: "Tenure",
+      sort: true,
+      headerStyle: { width: "100%" }
+    },
+    {
+      dataField: "date_of_joining",
+      text: "Date Of Joining",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value) => {
+        if (!value) return ""; // Return empty if no date
+        const date = new Date(value);
+        const day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit day
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensures 2-digit month
+        const year = String(date.getFullYear()).slice(-2); // Extract last two digits of the year
+        return `${day}/${month}/${year}`; // Returns formatted date
+      }
+    },
+    {
       dataField: "",
       text:
         CurrentUserRoles.includes("hr_manager") ||
@@ -497,7 +517,7 @@ const EmployeesTable = ({
       });
 
       const responseData = response?.data?.data?.employees;
-
+      
       const formatted = responseData.map((data) => ({
         "EMPLOYEE NAME": data?.full_name,
         STATUS: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
@@ -514,7 +534,15 @@ const EmployeesTable = ({
         DESIGNATION: data?.designation?.toUpperCase(),
         EMAIL: data?.email,
         PENSIONABLE: data?.pensionable ? "Yes" : "No",
-        TAXABLE: data?.taxable ? "Yes" : "No"
+        TAXABLE: data?.taxable ? "Yes" : "No",
+        "TENURE": data?.tenure,
+        "DATE_OF_JOINING": data?.date_of_joining 
+        ? new Date(data?.date_of_joining).toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit'
+        })
+        : null // Formats the date to 'dd/mm/yy'
       }));
 
       const dataToConvert = {
