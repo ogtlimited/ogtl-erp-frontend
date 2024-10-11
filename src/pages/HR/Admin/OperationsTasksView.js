@@ -32,16 +32,8 @@ const OperationTasksView = () => {
 
 
     return <div>
-        <div className="col-auto float-right ml-auto">
-            <button
 
-                className="btn add-btn m-r-5"
-                onClick={startDailyTask}
-            >
-                Start Daily Task
-            </button>
-        </div>
-        <TaskTable /></div>
+        <TaskTable startDailyTask={startDailyTask} /></div>
 }
 
 export default OperationTasksView
