@@ -138,7 +138,7 @@ const TaskManagementConfigForm = () => {
                     "Access-Control-Allow-Origin": "*",
                 },
             });
-
+            resetForm()
             showAlert(true, `${response.data.message}`, "alert alert-success");
         } catch (error) {
             console.error("Error submitting configuration", error);
