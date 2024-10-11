@@ -38,7 +38,7 @@ const TaskTable = () => {
             text: "Status",
             formatter: (cell, row) => (
                 <div>
-                    <span className={`badge text-white w-50 p-2 ${row.completed_tasks === row.total_tasks ? "bg-success" : "bg-warning"}`}>
+                    <span className={`badge text-white w-100 p-2 ${row.completed_tasks === row.total_tasks ? "bg-success" : "bg-warning"}`}>
                         {row.completed_tasks === row.total_tasks ? "Completed" : "Pending"}
                     </span>
                 </div>
