@@ -23,6 +23,9 @@ const AttendanceRecord = () => {
   const [dateColumns, setDateColumns] = useState([]);
 
   const [page, setPage] = useState(1);
+  const [clockin, setClockin] = useState(0);
+  const [clockn, setClockn] = useState(0);
+
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
@@ -55,6 +58,10 @@ const AttendanceRecord = () => {
   const lastWeekDay = moment().local().endOf("week").format("YYYY-MM-DD");
 
   const [attendanceAverage, setAttendanceAverage] = useState([]);
+  const [attendanceAv, setAttendanceAv] = useState([]);
+  const [attendanceAvi, setAttendanceAvi] = useState([]);
+
+
   const [loadingAttendanceAverage, setLoadingAttendanceAverage] =
     useState(false);
   const [attendanceAverageFromDate, setAttendanceAverageFromDate] =
@@ -63,6 +70,17 @@ const AttendanceRecord = () => {
     useState(lastWeekDay);
 
   const { FontAwesomeIcon, faSpinner } = useAppContext();
+  
+
+
+
+
+
+//Todays clockin percentage
+
+
+
+
 
   useEffect(() => {
     const allDates = Array.from(
@@ -357,9 +375,8 @@ const AttendanceRecord = () => {
       );
 
       const resData = response?.data?.data?.average_attendance;
-
+      //console.log('me',resData)
       setAttendanceAverage(resData);
-      console.log("resData", resData);
       setLoadingAttendanceAverage(false);
     } catch (error) {
       const component = "Attendance Average error | ";
@@ -368,6 +385,82 @@ const AttendanceRecord = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attendanceAverageFromDate, attendanceAverageToDate]);
+
+
+  const fetchAttendanceAvi = useCallback(async () => {
+    setLoadingAttendanceAverage(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/hr_dashboard/attendance_average_calculations.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            from: date,
+            to: date,
+            percentage_type:'clockin_percentage'
+          }
+        }
+      );
+
+      const resData = response?.data?.data?.average_attendance;
+      const neww = response?.data?.data?.average_attendance?.percentage_average;      ;
+      //console.log('me',neww)
+      setClockn(neww);
+      setAttendanceAvi(resData);
+      setLoadingAttendanceAverage(false);
+    } catch (error) {
+      const component = "Attendance Average error | ";
+      ErrorHandler(error, component);
+      setLoadingAttendanceAverage(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
+
+
+
+  const fetchAttendanceAv = useCallback(async () => {
+    setLoadingAttendanceAverage(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/hr_dashboard/attendance_average_calculations.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            from: moment(attendanceAverageFromDate).format("DD-MM-YYYY"),
+            to: moment(attendanceAverageToDate).format("DD-MM-YYYY"),
+            percentage_type:'clockin_percentage'
+
+          }
+        }
+      );
+
+      const resData = response?.data?.data?.average_attendance;
+      const neww = response?.data?.data?.average_attendance?.percentage_average;      ;
+      setClockin(neww)
+      setAttendanceAv(resData);
+      //console.log("resData", resData);
+      setLoadingAttendanceAverage(false);
+    } catch (error) {
+      const component = "Attendance Average error | ";
+      ErrorHandler(error, component);
+      setLoadingAttendanceAverage(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attendanceAverageFromDate, attendanceAverageToDate]);
+
+
+
+
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -461,6 +554,14 @@ const AttendanceRecord = () => {
   useEffect(() => {
     fetchAttendanceAverage();
   }, [fetchAttendanceAverage]);
+ 
+  useEffect(() => {
+    fetchAttendanceAv();
+  }, [fetchAttendanceAv]);
+  useEffect(() => {
+    fetchAttendanceAvi();
+  }, [fetchAttendanceAvi]);
+
 
   const columns = [
     {
@@ -646,7 +747,8 @@ const AttendanceRecord = () => {
       headerStyle: { width: "20%" }
     }
   ];
-
+  
+ 
   return (
     <>
       <div className="page-header">
@@ -749,7 +851,7 @@ const AttendanceRecord = () => {
                 style={{ marginTop: "5px", fontSize: "20px" }}
               />
             ) : (
-              <VictoryDougnutChart percent={attendanceAverage?.percentage_average || 0} />
+              <VictoryDougnutChart percent={clockn || 0} />
             )}
           </div>
         </div>
@@ -853,6 +955,7 @@ const AttendanceRecord = () => {
               toDate={attendanceAverageToDate}
               setToDate={setAttendanceAverageToDate}
               data={attendanceAverage}
+              clockin={clockin}
               loading={loadingAttendanceAverage}
             />
           </div>
