@@ -19,6 +19,10 @@ const OfficeAttendanceAdmin = () => {
   const [date, setDate] = useState(today_date);
 
   // Attendance Average:
+  const [attendanceAv, setAttendanceAv] = useState([]);
+  const [clockin, setClockin] = useState(0);
+
+
   const firstweekDay = moment().utc().startOf("week").format("YYYY-MM-DD");
   const lastWeekDay = moment().local().endOf("week").format("YYYY-MM-DD");
 
@@ -112,6 +116,7 @@ const OfficeAttendanceAdmin = () => {
           },
         }
       );
+      
 
       const resData = response?.data?.data?.average_attendance;
 
@@ -196,6 +201,48 @@ const OfficeAttendanceAdmin = () => {
       headerStyle: { width: "15%" },
     },
   ];
+//for getting percentage clockin
+  const fetchAttendanceAv = useCallback(async () => {
+    setLoadingAttendanceAverage(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/hr_dashboard/office_attendance_average.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            office_type:office_type,
+            office_id:id,
+            from: moment(attendanceAverageFromDate).format("DD-MM-YYYY"),
+            to: moment(attendanceAverageToDate).format("DD-MM-YYYY"),
+            percentage_type:'clockin_percentage'
+
+          }
+        }
+      );
+
+      const resData = response?.data?.data?.average_attendance;
+      const neww = response?.data?.data?.average_attendance?.percentage_average;  
+      setClockin(neww)
+      setAttendanceAv(resData);
+      setLoadingAttendanceAverage(false);
+    } catch (error) {
+      const component = "Attendance Average error | ";
+      ErrorHandler(error, component);
+      setLoadingAttendanceAverage(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attendanceAverageFromDate, attendanceAverageToDate]);
+
+  useEffect(() => {
+    fetchAttendanceAv();
+  }, [fetchAttendanceAv]);
+
+
 
   return (
     <>
@@ -221,6 +268,7 @@ const OfficeAttendanceAdmin = () => {
         toDate={attendanceAverageToDate}
         setToDate={setAttendanceAverageToDate}
         data={attendanceAverage}
+        clockin={clockin}
         loading={loadingAttendanceAverage}
       />
 
