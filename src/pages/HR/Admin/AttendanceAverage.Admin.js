@@ -27,10 +27,10 @@ const AttendanceAverageAdmin = ({
   toDate,
   setToDate,
   data,
+  clockin,
   loading,
 }) => {
   const { FontAwesomeIcon, faSpinner } = useAppContext();
-
   return (
     <>
       <div className="column page_container" style={{ marginTop: "2rem" }}>
@@ -131,7 +131,7 @@ const AttendanceAverageAdmin = ({
                     style={{ marginTop: "5px", fontSize: "20px" }}
                   />
                 ) : (
-                  <VictoryDougnutChart percent={data?.percentage_clock_ins || 0} />
+                  <VictoryDougnutChart percent={clockin || 0} />
                 )}
               </div>
             </div>
