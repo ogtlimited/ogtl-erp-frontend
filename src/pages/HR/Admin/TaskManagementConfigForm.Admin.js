@@ -132,7 +132,7 @@ const TaskManagementConfigForm = () => {
 
         try {
             setLoading(true);
-            const response = await axiosInstance.post(`/api/v1/office_task_configs`, payload, {
+            const response = await axiosInstance.post(`/api/v1/office_task_configs.json`, payload, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",

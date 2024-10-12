@@ -93,10 +93,11 @@ const TaskTable = ({ startDailyTask }) => {
         // Clear any previous daily tasks
         setDailyTasks([]);
 
+        console.log(task.task_date)
         // If the task is for the current day, fetch the daily task list
         if (isToday(task.task_date)) {
             try {
-                const response = await axiosInstance.get(`/api/v1/employee_daily_task_list`);
+                const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}`);
                 setDailyTasks(response.data || []);
             } catch (error) {
                 console.error("Error fetching daily tasks:", error);
@@ -108,7 +109,7 @@ const TaskTable = ({ startDailyTask }) => {
     const fetchTasks = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}/employee_tasks`);
+            const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}/employee_tasks.json`);
             const fetchedData = response?.data || [];
 
             // Process the fetched data to fit into the table structure
