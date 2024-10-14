@@ -163,7 +163,7 @@ const TaskManagementConfigTable = () => {
         setSizePerPage(Number(event.target.value));
         setPage(1);
     };
-
+console.log()
     return (
         <div>
             <h3>Operation Task Management</h3>
