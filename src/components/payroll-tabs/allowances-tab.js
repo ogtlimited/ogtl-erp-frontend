@@ -46,6 +46,18 @@ const AllowancesTab = () => {
         canCreateAndEdit.includes(role)
     );
 
+    const downloadTemplate = () => {
+        const csvContent = "OGID,Amount,Effective Date,Allowance Type\n"; // CSV header row
+    
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Employee-Allowance-Template.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link);
+      };
+
     const fetchAllowances = useCallback(async () => {
         setLoading(true);
         try {
@@ -158,6 +170,12 @@ const AllowancesTab = () => {
     return (
         <div className="tab-pane" id="tab_allowances">
             <div style={{ marginBottom: "50px",display:'flex', justifyContent:'right' }}>
+                <div className="col-auto float-right ml-auto">
+                    <a href="#" className="btn add-btn" onClick={downloadTemplate}>
+                        <i className="fa fa-download"></i> Download Template
+                    </a>
+                </div>
+                
                 <div className="row">
                     {CurrentUserCanCreateAndEdit && (
                         <div className="col-auto float-right ml-auto">

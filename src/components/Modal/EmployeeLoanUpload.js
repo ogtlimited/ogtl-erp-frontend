@@ -72,11 +72,11 @@ const EmployeeLoanUpload = ({
       const formatted = data.map((e) => {
         console.log(e)
         return {
-          ogid: e["ogid"],
-          amount: Number(e["amount"]),
-          start_date: e["start_date"],
-          end_date: e["end_date"],
-          number_of_installment: Number(e["number_of_installment"])
+          ogid: e["OGID"],
+          amount: Number(e["Amount"]),
+          start_date: e["Start Date"],
+          end_date: e["End Date"],
+          number_of_installment: Number(e["Number Of Installment"])
         }
       });
 

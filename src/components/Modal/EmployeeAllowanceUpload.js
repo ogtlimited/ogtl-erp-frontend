@@ -72,10 +72,10 @@ const EmployeeAllowanceUpload = ({
       const formatted = data.map((e) => {
         console.log(e)
         return {
-          ogid: e["ogid"],
-          amount: e["amount"],
-          effective_date: e["effective_date"],
-          allowance_type: e["allowance_type"]
+          ogid: e["OGID"],
+          amount: e["Amount"],
+          effective_date: e["Effective Date"],
+          allowance_type: e["Allowance Type"]
         }
       });
 

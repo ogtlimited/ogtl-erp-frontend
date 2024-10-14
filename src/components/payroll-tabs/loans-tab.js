@@ -10,7 +10,17 @@ import EmployeeLoanUpload from "../../components/Modal/EmployeeLoanUpload";
 const LoansTab = () => {
     const [toggleModal, settoggleModal] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
-
+    const downloadTemplate = () => {
+        const csvContent = "OGID,Amount,Start Date,End Date,Number Of Installment\n"; // CSV header row
+    
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Employee-Loan-Template.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link);
+      };
 
     const {
         ErrorHandler,
@@ -178,6 +188,11 @@ const LoansTab = () => {
     return (
         <div className="tab-pane" id="tab_loans"> {/* Renamed tab id */}
             <div style={{ marginBottom: "50px",display:'flex', justifyContent:'right' }}>
+                <div className="col-auto float-right ml-auto">
+                    <a href="#" className="btn add-btn" onClick={downloadTemplate}>
+                        <i className="fa fa-download"></i> Download Template
+                    </a>
+                </div>
                 <div className="row">
                     {CurrentUserCanCreateAndEdit && (
                         <div className="col-auto float-right ml-auto">
