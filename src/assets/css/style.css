@@ -9820,3 +9820,85 @@ ul.comment-list li ul.children {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
 }
 
+.viewconfig-page-header {
+  padding: 30px;
+}
+
+.viewconfig-page-title {
+  font-size: 2em;
+  color: #2c3e50;
+}
+
+.viewconfig-container {
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f4f7fc;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.viewconfig-title {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 3px solid #00b7ed;
+  padding-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.viewconfig-office-info {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.viewconfig-subtitle {
+  font-size: 1.6em;
+  color: #34495e;
+  margin-bottom: 25px;
+  text-align: center;
+  border-bottom: 1px solid #ecf0f1;
+  padding-bottom: 12px;
+}
+
+.viewconfig-card {
+  margin-bottom: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 10px;
+  padding: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.viewconfig-card:hover{
+  color: #00b7ed;
+  box-shadow : 0 6px 12px rgba(0,0,0,0.1);
+  border: 1px solid #00b7ed;
+
+}
+
+.viewconfig-card-header {
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.viewconfig-task-list {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.viewconfig-task-item {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #7f8c8d;
+  line-height: 1.6;
+}
