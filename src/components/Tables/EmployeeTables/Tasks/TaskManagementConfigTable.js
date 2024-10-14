@@ -128,7 +128,7 @@ const TaskManagementConfigTable = () => {
             formatter: (val, row) => (
                 <p>
                     <Link
-                        to={`/dashboard/operations/operation-team-task-management/${row.id}`}
+                        to={`/dashboard/operations/operation-team-task-management/view`}
                         className="attendance-record-for-office"
                     >
                         {val?.toUpperCase()}
@@ -180,7 +180,7 @@ const TaskManagementConfigTable = () => {
         setSizePerPage(Number(event.target.value));
         setPage(1);
     };
-console.log()
+    console.log()
     return (
         <div>
             <h3>Operation Task Management</h3>
