@@ -138,7 +138,7 @@ const TaskManagementConfigForm = () => {
                     "Access-Control-Allow-Origin": "*",
                 },
             });
-            resetForm()
+            window.location.href = "/dashboard/operations/operation-team-task-management";
             showAlert(true, `${response.data.message}`, "alert alert-success");
         } catch (error) {
             console.error("Error submitting configuration", error);
