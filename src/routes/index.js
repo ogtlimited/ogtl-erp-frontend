@@ -18,7 +18,6 @@ import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
 
-
 const user = tokenService.getUser();
 const CurrentUserIsCOO = user?.employee_info?.roles.includes("coo");
 
@@ -810,6 +809,19 @@ export default function Router() {
                 </GuardedRoute>
               )
             },
+
+
+            {
+              path: "operation-team-task-management/view",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <ViewTaskManagementConfigForm />
+                </GuardedRoute>
+              )
+            },
+
+
+
             {
               path: "operation-team-task-management/:id/daily-tasks",
               element: (
@@ -1660,6 +1672,9 @@ const TaskManagementConfigForm = Loadable(
 );
 const TaskManagementConfigFormEdit = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementConfigFormEdit.Admin.js"))
+);
+const ViewTaskManagementConfigForm = Loadable(
+  lazy(() => import("../pages/HR/Admin/TaskManagerConfigFormView.Admin.js"))
 );
 const TasksTableView = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTasksView.js"))
