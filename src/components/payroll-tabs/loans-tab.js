@@ -5,8 +5,13 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddLoanModal } from "../Modal/AddLoanModal";
 import helper from "../../services/helper";
+import EmployeeLoanUpload from "../../components/Modal/EmployeeLoanUpload";
 
 const LoansTab = () => {
+    const [toggleModal, settoggleModal] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
+
     const {
         ErrorHandler,
         user,
@@ -172,7 +177,7 @@ const LoansTab = () => {
 
     return (
         <div className="tab-pane" id="tab_loans"> {/* Renamed tab id */}
-            <div style={{ marginBottom: "50px" }}>
+            <div style={{ marginBottom: "50px",display:'flex', justifyContent:'right' }}>
                 <div className="row">
                     {CurrentUserCanCreateAndEdit && (
                         <div className="col-auto float-right ml-auto">
@@ -186,6 +191,21 @@ const LoansTab = () => {
                             </a>
                         </div>
                     )}
+                </div>
+                <div className="row">
+                    {CurrentUserCanCreateAndEdit && (
+                            <div className="col-auto float-right ml-auto">
+                                <a
+                                    href="#"
+                                    className="btn add-btn m-l-15"
+                                    data-toggle="modal"
+                                    data-target="#EmployeeSalaryUploadModal"
+                                    onClick={() => settoggleModal(true)}
+                                >
+                                    Upload Loans
+                                </a>
+                            </div>
+                        )}
                 </div>
             </div>
 
@@ -203,7 +223,18 @@ const LoansTab = () => {
                     loadingPayday={loadingPayday}
                 />
             </div>
-
+            {toggleModal && (
+        <div>
+          <EmployeeLoanUpload
+            settoggleModal={settoggleModal}
+            title="Upload Loans"
+            url="/api/v1/bulk_loans.json"
+            uploadSuccess={uploadSuccess}
+            setUploadSuccess={setUploadSuccess}
+            fetchAllSalaries={fetchLoans}
+          />
+        </div>
+      )}
             <AddLoanModal fetchLoans={fetchLoans} />
         </div>
     );
