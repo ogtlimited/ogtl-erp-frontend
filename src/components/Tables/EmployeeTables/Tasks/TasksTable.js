@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
 import moment from "moment"; // Import moment for date handling
-
+import TaskDetailModal from "../../../Modal/TaskDetailModal";
 const TaskTable = ({ startDailyTask }) => {
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState(null);
@@ -40,6 +40,7 @@ const TaskTable = ({ startDailyTask }) => {
                     <span
                         className={`badge text-white w-100 p-2 ${row.completed_tasks === row.total_tasks ? "bg-success" : "bg-warning"
                             }`}
+
                     >
                         {row.completed_tasks === row.total_tasks ? "Completed" : "Pending"}
                     </span>
@@ -88,27 +89,30 @@ const TaskTable = ({ startDailyTask }) => {
     // Handle row click event
     const handleRowClick = async (task) => {
         setSelectedTask(task);
-        setShowModal(true);
+
 
         // Clear any previous daily tasks
-        setDailyTasks([]);
+        // setDailyTasks([]);
 
+        console.log(task.task_date)
         // If the task is for the current day, fetch the daily task list
-        if (isToday(task.task_date)) {
-            try {
-                const response = await axiosInstance.get(`/api/v1/employee_daily_task_list`);
-                setDailyTasks(response.data || []);
-            } catch (error) {
-                console.error("Error fetching daily tasks:", error);
-            }
+        // if (isToday(task.task_date)) {
+        try {
+            const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}`);
+            setDailyTasks(response.data || []);
+        } catch (error) {
+            console.error("Error fetching daily tasks:", error);
         }
+        // }
+
+        setShowModal(true);
     };
 
     // Fetch tasks for the given employee using the API
     const fetchTasks = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}/employee_tasks`);
+            const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}/employee_tasks.json`);
             const fetchedData = response?.data || [];
 
             // Process the fetched data to fit into the table structure
@@ -230,65 +234,7 @@ const TaskTable = ({ startDailyTask }) => {
                 )}
             </ToolkitProvider>
 
-            {/* Modal for Task Details */}
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header>
-                    <Modal.Title>Task Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedTask && dailyTasks.length > 0 ? (
-                        // Render daily task details if available
-                        <div>
-                            <h5>Daily Tasks for Today</h5>
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Task</th>
-                                        <th>Created At</th>
-                                        <th>Notes</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dailyTasks.map((task, index) => (
-                                        <tr key={index}>
-                                            <td>{task.task}</td>
-                                            <td>{task.created_at}</td>
-                                            <td>{task.note || "No notes"}</td>
-                                            <td>{task.completed ? "Completed" : "Pending"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : selectedTask ? (
-                        // Render standard task details
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Task Date</th>
-                                    <th>Total Tasks</th>
-                                    <th>Completed Tasks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{selectedTask.task_date}</td>
-                                    <td>{selectedTask.total_tasks}</td>
-                                    <td>{selectedTask.completed_tasks}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No Task Details Available</p>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </button>
-                </Modal.Footer>
-            </Modal>
+            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} />
         </div>
     );
 };

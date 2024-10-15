@@ -84,24 +84,41 @@ const TaskManagementConfigTable = () => {
         setSelectedOffice(e); // Set selected office
     };
 
-    const handleToggle = (config, id) => {
+    const handleToggle = async (config, id) => {
+        try {
+            if (!config.active) {
+                // If the clicked config is being activated
+                // Deactivate all other configs before activating the clicked one
+                const deactivateOthers = taskConfigs.map(taskConfig => {
+                    if (taskConfig.id !== id && taskConfig.active) {
+                        return axiosInstance.put(`/api/v1/office_task_configs/${taskConfig.id}/deactivate`);
+                    }
+                    return null;
+                });
 
-        setTaskConfigs(prevConfigs =>
-            prevConfigs.map(config => ({
-                ...config,
-                active: config.id === id ? !config.active : config.active,
-            })
-            )
+                // Wait for all deactivations to complete
+                await Promise.all(deactivateOthers);
 
+                // Now activate the selected config
+                await activateTaskConfig(id);
+            } else {
+                // If the clicked config is being deactivated
+                await deactivateTaskConfig(id);
+            }
 
-        );
-        if (!config.status) {
-            activateTaskConfig(id);
-        } else {
-            deactivateTaskConfig(id);
+            // Update the local state after successful API call
+            setTaskConfigs(prevConfigs =>
+                prevConfigs.map(taskConfig => ({
+                    ...taskConfig,
+                    active: taskConfig.id === id ? !taskConfig.active : false, // Set the clicked one as active and others as inactive
+                }))
+            );
+        } catch (error) {
+            const component = "Toggle Task Config Error | ";
+            ErrorHandler(error, component);
         }
-
     };
+
 
     const columns = [
         {
@@ -111,7 +128,7 @@ const TaskManagementConfigTable = () => {
             formatter: (val, row) => (
                 <p>
                     <Link
-                        to={`/dashboard/operations/operation-team-task-management/${row.id}`}
+                        to={`/dashboard/operations/operation-team-task-management/view`}
                         className="attendance-record-for-office"
                     >
                         {val?.toUpperCase()}
@@ -163,7 +180,7 @@ const TaskManagementConfigTable = () => {
         setSizePerPage(Number(event.target.value));
         setPage(1);
     };
-console.log()
+    console.log()
     return (
         <div>
             <h3>Operation Task Management</h3>

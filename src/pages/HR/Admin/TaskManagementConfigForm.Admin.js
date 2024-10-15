@@ -133,13 +133,13 @@ const TaskManagementConfigForm = () => {
 
         try {
             setLoading(true);
-            const response = await axiosInstance.post(`/api/v1/office_task_configs`, payload, {
+            const response = await axiosInstance.post(`/api/v1/office_task_configs.json`, payload, {
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                 },
             });
-            resetForm()
+            window.location.href = "/dashboard/operations/operation-team-task-management";
             showAlert(true, `${response.data.message}`, "alert alert-success");
         } catch (error) {
             console.error("Error submitting configuration", error);
