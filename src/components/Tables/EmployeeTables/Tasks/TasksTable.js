@@ -89,21 +89,23 @@ const TaskTable = ({ startDailyTask }) => {
     // Handle row click event
     const handleRowClick = async (task) => {
         setSelectedTask(task);
-        setShowModal(true);
+
 
         // Clear any previous daily tasks
-        setDailyTasks([]);
+        // setDailyTasks([]);
 
         console.log(task.task_date)
         // If the task is for the current day, fetch the daily task list
-        if (isToday(task.task_date)) {
-            try {
-                const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}`);
-                setDailyTasks(response.data || []);
-            } catch (error) {
-                console.error("Error fetching daily tasks:", error);
-            }
+        // if (isToday(task.task_date)) {
+        try {
+            const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}`);
+            setDailyTasks(response.data || []);
+        } catch (error) {
+            console.error("Error fetching daily tasks:", error);
         }
+        // }
+
+        setShowModal(true);
     };
 
     // Fetch tasks for the given employee using the API
