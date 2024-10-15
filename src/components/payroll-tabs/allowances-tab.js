@@ -6,8 +6,14 @@ import { useAppContext } from "../../Context/AppContext";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
 import { AddAllowanceModal } from "../Modal/AddAllowancesModal";
+import EmployeeAllowanceUpload from "../Modal/EmployeeAllowanceUpload";
+
 
 const AllowancesTab = () => {
+    const [toggleModal, settoggleModal] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
+
     const navigate = useNavigate();
     const {
         ErrorHandler,
@@ -39,6 +45,18 @@ const AllowancesTab = () => {
     const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
         canCreateAndEdit.includes(role)
     );
+
+    const downloadTemplate = () => {
+        const csvContent = "OGID,Amount,Effective Date,Allowance Type\n"; // CSV header row
+    
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Employee-Allowance-Template.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link);
+      };
 
     const fetchAllowances = useCallback(async () => {
         setLoading(true);
@@ -151,7 +169,13 @@ const AllowancesTab = () => {
 
     return (
         <div className="tab-pane" id="tab_allowances">
-            <div style={{ marginBottom: "50px" }}>
+            <div style={{ marginBottom: "50px",display:'flex', justifyContent:'right' }}>
+                <div className="col-auto float-right ml-auto">
+                    <a href="#" className="btn add-btn" onClick={downloadTemplate}>
+                        <i className="fa fa-download"></i> Download Template
+                    </a>
+                </div>
+                
                 <div className="row">
                     {CurrentUserCanCreateAndEdit && (
                         <div className="col-auto float-right ml-auto">
@@ -162,6 +186,21 @@ const AllowancesTab = () => {
                                 data-target="#AddAllowanceModal" // Updated to AddAllowanceModal
                             >
                                 Add Allowances
+                            </a>
+                        </div>
+                    )}
+                </div>
+                <div className="row">
+                    {CurrentUserCanCreateAndEdit && (
+                        <div className="col-auto float-right ml-auto">
+                            <a
+                                href="#"
+                                className="btn add-btn m-l-15"
+                                data-toggle="modal"
+                                data-target="#EmployeeSalaryUploadModal" // Updated to AddAllowanceModal
+                                onClick={() => settoggleModal(true)}
+                            >
+                                Upload Allowances
                             </a>
                         </div>
                     )}
@@ -182,7 +221,18 @@ const AllowancesTab = () => {
                     loadingPayday={loadingPayday}
                 />
             </div>
-
+            {toggleModal && (
+                <div>
+                <EmployeeAllowanceUpload
+                    settoggleModal={settoggleModal}
+                    title="Upload Allowance"
+                    url="/api/v1/bulk_allowances.json"
+                    uploadSuccess={uploadSuccess}
+                    setUploadSuccess={setUploadSuccess}
+                    fetchAllSalaries={fetchAllowances}
+                />
+                </div>
+            )}
             <AddAllowanceModal fetchAllowances={fetchAllowances} />
         </div>
     );
