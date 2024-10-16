@@ -7,11 +7,23 @@ import Select from "react-select";
 import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
 import Switch from "@mui/material/Switch";
-import { Link } from "react-router-dom";
-import { officeTypeOptions } from "../../../FormJSON/AddLoan";
+import { useNavigate } from "react-router-dom";
 
 const TaskManagementConfigTable = () => {
     const { ExportCSVButton } = CSVExport;
+
+    // Get global state and setters from the context
+    const {
+        ErrorHandler,
+        selectDepartments,
+        selectCampaigns,
+        selectTeams,
+        officeType,
+        setOfficeType,
+        selectedOffice,
+        setSelectedOffice,
+        officeTypeOptions
+    } = useAppContext();
 
     const [taskConfigs, setTaskConfigs] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -19,10 +31,7 @@ const TaskManagementConfigTable = () => {
     const [sizePerPage, setSizePerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
-    const [selectedOffice, setSelectedOffice] = useState(null);
-    const [officeType, setOfficeType] = useState(null);
-    const [loadingOffices, setLoadingOffices] = useState(false);
-    const { ErrorHandler, selectDepartments, selectCampaigns, selectTeams } = useAppContext();
+    const route = useNavigate();
 
     // Fetch task configs from API based on selected office and type
     const fetchTaskConfigs = useCallback(async () => {
@@ -37,7 +46,6 @@ const TaskManagementConfigTable = () => {
                 }
             });
             const fetchedData = response?.data?.config_data || [];
-            console.log(response?.data)
             setTaskConfigs(fetchedData);
             setTotalPages(Math.ceil(fetchedData.length / sizePerPage)); // Calculate total pages based on response
             setLoading(false);
@@ -50,38 +58,46 @@ const TaskManagementConfigTable = () => {
 
     const activateTaskConfig = async (id) => {
         try {
-            const response = await axiosInstance.put(`/api/v1/office_task_configs/${id}/activate`)
-        }
-        catch (error) {
+            await axiosInstance.put(`/api/v1/office_task_configs/${id}/activate`);
+        } catch (error) {
             const component = "Activate Task Config Error | ";
             ErrorHandler(error, component);
         }
-    }
+    };
 
     const deactivateTaskConfig = async (id) => {
         try {
-            const response = await axiosInstance.put(`/api/v1/office_task_configs/${id}/deactivate`)
-        }
-        catch (error) {
+            await axiosInstance.put(`/api/v1/office_task_configs/${id}/deactivate`);
+        } catch (error) {
             const component = "Deactivate Task Config Error | ";
             ErrorHandler(error, component);
         }
-    }
+    };
+
     // Trigger data fetching when selectedOffice or officeType changes
     useEffect(() => {
-        fetchTaskConfigs();
-    }, [fetchTaskConfigs]);
+        if (selectedOffice && officeType) {
+            fetchTaskConfigs(); // Only fetch when both are available
+        }
+    }, [fetchTaskConfigs, selectedOffice, officeType]);
 
+
+    useEffect(() => {
+        if (officeType) {
+            setIsOfficeTypeSelected(true);
+            setSelectedOffice(selectedOffice || null);
+        }
+    }, [])
     // Handle office type change (e.g., "Department", "Campaign")
     const handleOfficeTypeChange = (e) => {
-        setOfficeType(e.label);
+        setOfficeType(e.label); // Update global state for office type
         setIsOfficeTypeSelected(true);
-        setSelectedOffice(null); // Reset office selection on type change
+
     };
 
     // Handle office selection based on the selected office type
     const handleOfficeChange = (e) => {
-        setSelectedOffice(e); // Set selected office
+        setSelectedOffice(e); // Update global state for selected office
     };
 
     const handleToggle = async (config, id) => {
@@ -119,18 +135,13 @@ const TaskManagementConfigTable = () => {
         }
     };
 
-
     const columns = [
         {
             dataField: "title",
             text: "Task Config Name",
             sort: true,
-            formatter: (val, row) => (
-                <p>
-
-                    {val?.toUpperCase()}
-
-                </p>
+            formatter: (val) => (
+                <p>{val?.toUpperCase()}</p>
             ),
         },
         {
@@ -152,13 +163,13 @@ const TaskManagementConfigTable = () => {
         {
             dataField: "edit",
             text: "Actions",
-            formatter: (cellContent, row) => (
+            formatter: (_, row) => (
                 <>
                     <button
                         className="btn btn-sm btn-primary me-2 p-2"
                         onClick={() => viewTask(row.id)}
                     >
-                        view
+                        View
                     </button>
                 </>
             ),
@@ -166,7 +177,7 @@ const TaskManagementConfigTable = () => {
     ];
 
     const viewTask = (id) => {
-        window.location.href = (`/dashboard/operations/operation-team-task-management/view/${id}`);
+        route(`/dashboard/operations/operation-team-task-management/view/${id}`);
     };
 
     const handlePageChange = (event, newPage) => {
@@ -177,7 +188,7 @@ const TaskManagementConfigTable = () => {
         setSizePerPage(Number(event.target.value));
         setPage(1);
     };
-    console.log()
+
     return (
         <div>
             <h3>Operation Task Management</h3>

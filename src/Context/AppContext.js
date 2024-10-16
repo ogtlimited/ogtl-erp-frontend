@@ -108,6 +108,30 @@ const AppProvider = (props) => {
 
   const today_date = moment.utc().format("yyyy-MM-DD");
 
+  const [selectedOffice, setSelectedOffice] = useState(() => {
+    const savedOffice = localStorage.getItem("selectedOffice");
+    return savedOffice ? JSON.parse(savedOffice) : null;
+  });
+
+  const [officeType, setOfficeType] = useState(() => {
+    const savedType = localStorage.getItem("officeType");
+    return savedType ? JSON.parse(savedType) : null;
+  });
+
+  useEffect(() => {
+    // Save to localStorage when state changes
+    if (selectedOffice) {
+      secureLocalStorage.setItem("selectedOffice", JSON.stringify(selectedOffice));
+    }
+  }, [selectedOffice]);
+
+  useEffect(() => {
+    // Save to localStorage when state changes
+    if (officeType) {
+      secureLocalStorage.setItem("officeType", JSON.stringify(officeType));
+    }
+  }, [officeType]);
+
   const goToTop = () => {
     window.scrollTo({
       top: 0,
@@ -1228,6 +1252,12 @@ const AppProvider = (props) => {
         selectCampaigns,
         setSelectCampaigns,
         fetchAllCampaigns,
+
+        selectedOffice,
+        setSelectedOffice,
+        officeType,
+        setOfficeType,
+
 
         selectTeams,
         setSelectTeams,
