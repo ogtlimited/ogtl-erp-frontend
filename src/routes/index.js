@@ -812,7 +812,7 @@ export default function Router() {
 
 
             {
-              path: "operation-team-task-management/view",
+              path: "operation-team-task-management/view/:configId",
               element: (
                 <GuardedRoute title="" dept="super">
                   <ViewTaskManagementConfigForm />

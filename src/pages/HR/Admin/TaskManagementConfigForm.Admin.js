@@ -31,7 +31,7 @@ const TaskManagementConfigForm = () => {
     const dummyUsers = [
         { label: "Team Lead", value: 'Team Lead', },
         { label: "Supervisor", value: "Supervisor" },
-        { label: "Operations Manager", value: "Operations Manager'" },
+        { label: "Operations Manager", value: "Operations Manager" },
         // { label: "Manager", value: "Manager'" },
         { label: "COO", value: "Chief Operations Officer" },
         { label: "CEO", value: "Chief Executive Officer" },

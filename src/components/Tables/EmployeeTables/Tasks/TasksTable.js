@@ -144,17 +144,17 @@ const TaskTable = ({ startDailyTask }) => {
             <h4>Task Table for Employee</h4>
             <div className="col-auto float-right ml-auto">
 
-                {(!loading && !tasks.length) && (
-                    <div className="col-auto float-right ml-auto">
-                        <button
 
-                            className="btn add-btn m-r-5"
-                            onClick={startDailyTask}
-                        >
-                            Start Daily Task
-                        </button>
-                    </div>
-                )}
+                <div className="col-auto float-right ml-auto">
+                    <button
+
+                        className="btn add-btn m-r-5 pointer"
+                        onClick={startDailyTask}
+                    >
+                        Start Daily Task
+                    </button>
+                </div>
+
             </div>
             <ToolkitProvider keyField="id" data={loading ? [] : tasks} columns={columns} search>
                 {(props) => (
