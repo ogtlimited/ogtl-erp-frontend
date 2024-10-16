@@ -127,12 +127,9 @@ const TaskManagementConfigTable = () => {
             sort: true,
             formatter: (val, row) => (
                 <p>
-                    <Link
-                        to={`/dashboard/operations/operation-team-task-management/view`}
-                        className="attendance-record-for-office"
-                    >
-                        {val?.toUpperCase()}
-                    </Link>
+
+                    {val?.toUpperCase()}
+
                 </p>
             ),
         },
@@ -158,18 +155,18 @@ const TaskManagementConfigTable = () => {
             formatter: (cellContent, row) => (
                 <>
                     <button
-                        className="btn btn-sm btn-warning me-2"
-                        onClick={() => editTask(row.id)}
+                        className="btn btn-sm btn-primary me-2 p-2"
+                        onClick={() => viewTask(row.id)}
                     >
-                        Edit
+                        view
                     </button>
                 </>
             ),
         },
     ];
 
-    const editTask = (id) => {
-        window.location.href = (`/dashboard/operations/operation-team-task-management/Edit/${id}`);
+    const viewTask = (id) => {
+        window.location.href = (`/dashboard/operations/operation-team-task-management/view/${id}`);
     };
 
     const handlePageChange = (event, newPage) => {
