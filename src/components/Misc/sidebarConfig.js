@@ -773,7 +773,7 @@ const sidebarConfig = [
           },
           {
             canView: "operations",
-            title: "Tasks",
+            title: "My Tasks",
             path: PATH_DASHBOARD.operations.operationsTasks
           },
           {
