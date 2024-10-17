@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import TaskTable from '../../../components/Tables/EmployeeTables/Tasks/TasksTable'
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
+import moment from 'moment';
 
 const OperationTasksView = () => {
     const {
@@ -17,8 +18,13 @@ const OperationTasksView = () => {
     const [page, setPage] = useState(1);
     const [sizePerPage, setSizePerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
+    const [isTask, setIsTask] = useState(false);
 
 
+    const isToday = (date) => {
+        const today = moment().format("YYYY-MM-DD");
+        return moment(date).isSame(today, "day");
+    };
     // Fetch tasks for the given employee using the API
     const fetchTasks = useCallback(async () => {
         setLoading(true);
@@ -47,8 +53,22 @@ const OperationTasksView = () => {
     useEffect(() => {
         if (employeeOgid) {
             fetchTasks();
+            availableTask()
         }
     }, [fetchTasks, employeeOgid]);
+
+    const availableTask = () => {
+        if (tasks?.length === 0 || tasks === null) {
+            setIsTask(false)
+            return
+        }
+        if (isToday(tasks[0]?.task_date)) {
+            setIsTask(true)
+        }
+
+    }
+
+
 
     const startDailyTask = async () => {
 
@@ -66,24 +86,26 @@ const OperationTasksView = () => {
         }
         catch (error) {
             console.error("Error submitting configuration", error);
-            showAlert(true, error?.response?.data?.message, "alert alert-warning");
+            showAlert(true, error?.response?.data?.error, "alert alert-warning");
         }
         setLoading(false);
     }
 
 
     return <div>
+        {
+            (!isTask && !loading) && <button
+                className="btn add-btn m-r-5 cursor-pointer"
+                onClick={() => {
+
+                    startDailyTask();
+                }}
+            >
+                Start Daily Task
+            </button>
+        }
 
 
-        <button
-            className="btn add-btn m-r-5 cursor-pointer"
-            onClick={() => {
-
-                startDailyTask();
-            }}
-        >
-            Start Daily Task
-        </button>
 
         <TaskTable loading={loading} tasks={tasks} sizePerPage={sizePerPage} totalPages={totalPages} page={page} setPage={setPage} setSizePerPage={setSizePerPage} fetchData={fetchTasks} /></div>
 }

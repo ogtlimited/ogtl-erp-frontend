@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import axiosInstance from '../../services/api';
 
 
-function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fetchdata }) {
+function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fetchData }) {
     const [tasks, setTasks] = useState(
         dailyTasks?.map((task, index) => ({
             id: task.id, // Use the task's actual ID
@@ -16,7 +16,7 @@ function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fe
 
     const closeModal = async () => {
         setShowModal(false);
-        await fetchdata()
+        fetchData()
 
     }
     // Function to update the task on the server

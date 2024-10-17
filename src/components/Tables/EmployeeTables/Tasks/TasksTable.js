@@ -94,7 +94,7 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
         // Clear any previous daily tasks
         // setDailyTasks([]);
 
-        console.log(task.task_date)
+        // console.log(task.task_date)
         // If the task is for the current day, fetch the daily task list
         // if (isToday(task.task_date)) {
         try {
