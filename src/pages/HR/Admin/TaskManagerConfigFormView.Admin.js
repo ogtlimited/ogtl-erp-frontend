@@ -1,120 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axiosInstance from "../../../services/api";
 
 const ViewTaskManagementConfigForm = () => {
-  const resData = {
-    payload: {
-      config: {
-        title: "Office Task Config Example",
-        office_id: "dep_office.id",
-        office_type: "department",
-        config_data: [
-          {
-            actor: "coo",
-            tasks: [
-              {
-                report_time: "daily",
-                leaves_note: true,
-                title: "Daily Report",
-              },
-              {
-                report_time: "weekly",
-                leaves_note: false,
-                title: "Weekly Overview",
-              },
-            ],
-          },
-          {
-            actor: "team_lead",
-            tasks: [
-              {
-                report_time: "monthly",
-                leaves_note: true,
-                title: "Monthly Summary",
-              },
-            ],
-          },
-          {
-            actor: "supervisor",
-            tasks: [
-              {
-                report_time: "monthly",
-                leaves_note: false,
-                title: "Quarterly Review",
-              },
-              {
-                report_time: "annual",
-                leaves_note: true,
-                title: "Annual Report",
-              },
-            ],
-          },
-        ],
-      },
-    },
+  const [configData, setConfigData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [openCards, setOpenCards] = useState({});
+
+  const { configId } = useParams();
+
+  // Fetch data from the API
+  useEffect(() => {
+    const fetchConfigData = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/v1/office_task_configs/${configId}/tasks`);
+        const data = response.data.data; // Get the response data
+        setConfigData(data); // Assuming data contains the actor-task mapping directly
+        // Initialize open cards as closed for each actor
+        setOpenCards(Object.keys(data).reduce((acc, actor) => ({ ...acc, [actor]: false }), {}));
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch task configuration data.");
+        setLoading(false);
+      }
+    };
+
+    fetchConfigData();
+  }, [configId]);
+
+  // Toggle the card view for each actor
+  const toggleCard = (actor) => {
+    setOpenCards((prevOpenCards) => ({
+      ...prevOpenCards,
+      [actor]: !prevOpenCards[actor],
+    }));
   };
 
-  const configData = resData?.payload?.config;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-  const [openCards, setOpenCards] = useState(
-    Array(configData.config_data.length).fill(false) // Initialize all cards as collapsed
-  );
-
-  const toggleCard = (index) => {
-    setOpenCards((prevOpenCards) =>
-      prevOpenCards.map((isOpen, i) => (i === index ? !isOpen : isOpen))
-    );
-  };
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <>
       <div className="viewconfig-page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="viewconfig-page-title">View Task Configuration</h3>
+            <h3 className="viewconfig-page-title">Task Configuration</h3>
           </div>
         </div>
       </div>
 
-      <div className="viewconfig-container">
-        <h3 className="viewconfig-title">{configData.title}</h3>
+      {Object.keys(configData).length > 0 ? (
+        <div className="viewconfig-container">
+          <h2 className="viewconfig-subtitle">Configurations</h2>
 
-        <p className="viewconfig-office-info">
-          <strong>Office ID:</strong> {configData.office_id}
-        </p>
-        <p className="viewconfig-office-info">
-          <strong>Office Type:</strong> {configData.office_type}
-        </p>
+          {Object.keys(configData).map((actor, index) => (
+            <div
+              key={index}
+              className="viewconfig-card"
+              onClick={() => toggleCard(actor)}
+            >
+              <p className="viewconfig-card-header">
+                <span>Actor: {actor}</span>
+                <span>{openCards[actor] ? "▲" : "▼"}</span>
+              </p>
 
-        <h2 className="viewconfig-subtitle">Configurations</h2>
-
-        {configData.config_data.map((configItem, index) => (
-          <div
-            key={index}
-            className="viewconfig-card"
-            onClick={() => toggleCard(index)} // Click event on the entire card
-            
-          >
-            <p className="viewconfig-card-header">
-              <span>Actor: {configItem.actor}</span>
-              <span>{openCards[index] ? "▲" : "▼"}</span>
-            </p>
-
-            {openCards[index] && (
-              <ul className="viewconfig-task-list">
-                {configItem.tasks.map((task, taskIndex) => (
-                  <li key={taskIndex} className="viewconfig-task-item">
-                    <strong>Title:</strong> {task.title}
-                    <br />
-                    <strong>Report Time:</strong> {task.report_time}
-                    <br />
-                    <strong>Leaves Note:</strong> {task.leaves_note ? "Yes" : "No"}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </div>
+              {openCards[actor] && (
+                <ul className="viewconfig-task-list">
+                  {configData[actor].map((task, taskIndex) => (
+                    <li key={taskIndex} className="viewconfig-task-item">
+                      <strong>Title:</strong> {task.title}
+                      <br />
+                      <strong>Report Time:</strong> {task.report_time}
+                      <br />
+                      <strong>Leaves Note:</strong> {task.leaves_note ? "Yes" : "No"}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No configuration data available.</p>
+      )}
     </>
   );
 };

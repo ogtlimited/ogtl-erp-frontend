@@ -10,21 +10,17 @@ import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
 import moment from "moment"; // Import moment for date handling
 import TaskDetailModal from "../../../Modal/TaskDetailModal";
-const TaskTable = ({ startDailyTask }) => {
-    const [tasks, setTasks] = useState([]);
+const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, setSizePerPage, fetchData }) => {
+
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [dailyTasks, setDailyTasks] = useState([]); // Store daily tasks
     const [toDate, setToDate] = useState("");
     const [fromDate, setFromDate] = useState("");
-    const [page, setPage] = useState(1);
-    const [sizePerPage, setSizePerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
+
     const [mobileView, setMobileView] = useState(false);
 
-    const { showAlert, ErrorHandler, user } = useAppContext();
-    const employeeOgid = user?.employee_info?.ogid;
+
 
     // Define columns for the table based on the new API structure
     const columns = [
@@ -40,7 +36,6 @@ const TaskTable = ({ startDailyTask }) => {
                     <span
                         className={`badge text-white w-100 p-2 ${row.completed_tasks === row.total_tasks ? "bg-success" : "bg-warning"
                             }`}
-
                     >
                         {row.completed_tasks === row.total_tasks ? "Completed" : "Pending"}
                     </span>
@@ -52,13 +47,18 @@ const TaskTable = ({ startDailyTask }) => {
             text: "Actions",
             formatter: (cell, row) => (
                 <div className="form-group">
-                    <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
-                        View Task
-                    </button>
+                    {isToday(row.task_date) ? (
+                        <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
+                            View Task
+                        </button>
+                    ) : (
+                        <span></span>
+                    )}
                 </div>
             ),
         },
     ];
+
 
     // Resize the table for mobile views
     const resizeTable = () => {
@@ -108,58 +108,22 @@ const TaskTable = ({ startDailyTask }) => {
         setShowModal(true);
     };
 
-    // Fetch tasks for the given employee using the API
-    const fetchTasks = useCallback(async () => {
-        setLoading(true);
-        try {
-            const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}/employee_tasks.json`);
-            const fetchedData = response?.data || [];
 
-            // Process the fetched data to fit into the table structure
-            const processedTasks = fetchedData.map((task, index) => ({
-                id: index + 1, // Assign an index as task ID
-                task_date: task.task_date,
-                total_tasks: task.total_tasks,
-                completed_tasks: task.completed_tasks,
-                status: task.completed_tasks === task.total_tasks ? "Completed" : "Pending",
-            }));
-
-            setTasks(processedTasks);
-            setTotalPages(Math.ceil(fetchedData.length / sizePerPage));
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching tasks", error);
-            setLoading(false);
-        }
-    }, [employeeOgid, sizePerPage]);
-
-    useEffect(() => {
-        if (employeeOgid) {
-            fetchTasks(); // Fetch tasks when the component mounts or the employeeOgid changes
-        }
-    }, [fetchTasks, employeeOgid]);
 
     return (
         <div>
             <h4>Task Table for Employee</h4>
-            <div className="col-auto float-right ml-auto">
 
-                {(!loading && !tasks.length) && (
-                    <div className="col-auto float-right ml-auto">
-                        <button
 
-                            className="btn add-btn m-r-5"
-                            onClick={startDailyTask}
-                        >
-                            Start Daily Task
-                        </button>
-                    </div>
-                )}
-            </div>
+
+
             <ToolkitProvider keyField="id" data={loading ? [] : tasks} columns={columns} search>
+
+
                 {(props) => (
                     <div className="col-12">
-                        <div className="row">
+                        <div className="p-10"></div>
+                        {/* <div className="row">
                             <div className="col-md-3">
                                 <div className="form-group">
                                     <label htmlFor="fromDate">From</label>
@@ -188,9 +152,9 @@ const TaskTable = ({ startDailyTask }) => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="custom-table-div" style={{ marginTop: 30 }}>
+                        <div className="custom-table-div pt-5" style={{ marginTop: 30 }}>
                             <BootstrapTable
                                 {...props.baseProps}
                                 bordered={false}
@@ -234,7 +198,7 @@ const TaskTable = ({ startDailyTask }) => {
                 )}
             </ToolkitProvider>
 
-            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} />
+            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} />
         </div>
     );
 };
