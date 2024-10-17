@@ -840,7 +840,7 @@ export default function Router() {
               )
             },
             {
-              path: "operation-team-task-management/:id",
+              path: "operation-team-task-management/my-tasks",
               element: (
                 <GuardedRoute title="" dept="super">
                   <TasksTableView />

@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import TaskAssignmentModal from "../../../components/Modal/TaskAssignmentModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { officeTypeOptions } from "../../../components/FormJSON/AddLoan";
+import { useNavigate } from "react-router-dom";
 
 const TaskManagementConfigForm = () => {
     const {
-        selectDepartments,
-        selectCampaigns,
-        selectTeams,
+        officeType, selectedOffice,
         showAlert,
-        loadingSelect,
-        ErrorHandler
     } = useAppContext();
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState("");
@@ -22,17 +19,14 @@ const TaskManagementConfigForm = () => {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [currentTask, setCurrentTask] = useState(null);
     const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
-    const [selectedOffice, setSelectedOffice] = useState(null);
-    const [officeType, setOfficeType] = useState(null);
     const [validationErrors, setValidationErrors] = useState({});
-
+    const route = useNavigate();
 
     // Dummy user data
     const dummyUsers = [
         { label: "Team Lead", value: 'Team Lead', },
         { label: "Supervisor", value: "Supervisor" },
         { label: "Operations Manager", value: "Operations Manager" },
-        // { label: "Manager", value: "Manager'" },
         { label: "COO", value: "Chief Operations Officer" },
         { label: "CEO", value: "Chief Executive Officer" },
     ];
@@ -44,6 +38,12 @@ const TaskManagementConfigForm = () => {
         setIsModalOpen(true);
     };
 
+    useEffect(() => {
+        if (!selectedOffice) {
+            route("/dashboard/operations/operation-team-task-management");
+        }
+    }, [selectedOffice]);
+
     // Close the modal
     const closeModal = () => {
         setIsModalOpen(false);
@@ -51,25 +51,17 @@ const TaskManagementConfigForm = () => {
     };
 
     // Handle office type change (e.g., "Department", "Campaign")
-    const handleOfficeTypeChange = (e) => {
-        setOfficeType(e.label);
-        setIsOfficeTypeSelected(true);
-        setSelectedOffice(null); // Reset office selection on type change
-    };
+    // const handleOfficeTypeChange = (e) => {
+    //     setOfficeType(e.label);
+    //     setIsOfficeTypeSelected(true);
+    //     setSelectedOffice(null); // Reset office selection on type change
+    // };
 
     // Handle office selection based on the selected office type
-    const handleOfficeChange = (e) => {
-        setSelectedOffice(e); // Set selected office
-    };
+    // const handleOfficeChange = (e) => {
+    //     setSelectedOffice(e); // Set selected office
+    // };
 
-    const resetForm = () => {
-        setSelectedUser(null);
-        setTitle("");
-        setSelectedUsers([]);
-        setTasksByUser({});
-        setCurrentTask(null);
-        setIsModalOpen(false);
-    };
 
     const handleAddTask = (userId, newTask) => {
         setTasksByUser((prevTasks) => ({
@@ -94,7 +86,7 @@ const TaskManagementConfigForm = () => {
     const validateForm = () => {
         const errors = {};
         if (!title) errors.title = "Title is required.";
-        if (!selectedOffice) errors.office = "Office selection is required.";
+        // if (!selectedOffice) errors.office = "Office selection is required.";
         if (selectedUsers.length === 0) errors.users = "At least one user must be selected.";
         if (
             selectedUsers.some((user) => !(tasksByUser[user.value] && tasksByUser[user.value].length))
@@ -122,8 +114,8 @@ const TaskManagementConfigForm = () => {
             payload: {
                 config: {
                     title,
-                    office_id: selectedOffice.value,
-                    office_type: officeType.toLowerCase(),
+                    office_id: selectedOffice?.value,
+                    office_type: officeType?.toLowerCase(),
                     config_data: configData,
                 }
             }
@@ -139,7 +131,7 @@ const TaskManagementConfigForm = () => {
                     "Access-Control-Allow-Origin": "*",
                 },
             });
-            window.location.href = "/dashboard/operations/operation-team-task-management";
+            route("/dashboard/operations/operation-team-task-management");
             showAlert(true, `${response.data.message}`, "alert alert-success");
         } catch (error) {
             console.error("Error submitting configuration", error);
@@ -159,7 +151,7 @@ const TaskManagementConfigForm = () => {
                 </div>
             </div>
 
-            <div className="row px-3">
+            {/* <div className="row px-3">
                 <div className="col-md-4">
                     <div className="form-group">
                         <label>Office Type</label>
@@ -191,7 +183,7 @@ const TaskManagementConfigForm = () => {
                         />
                     </div>
                 )}
-            </div>
+            </div> */}
 
             {/* Configuration Title Input */}
             <div className="form-group col-md-6">
