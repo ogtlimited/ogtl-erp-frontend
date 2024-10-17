@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 
 const ViewTaskManagementConfigForm = () => {
@@ -57,6 +57,7 @@ const ViewTaskManagementConfigForm = () => {
 
       {Object.keys(configData).length > 0 ? (
         <div className="viewconfig-container">
+          <Link className="row align-items-right justify-content-end w-100 cursor-pointer" to={"/dashboard/operations/operation-team-task-management/edit/" + configId}>Edit</Link>
           <h2 className="viewconfig-subtitle">Configurations</h2>
 
           {Object.keys(configData).map((actor, index) => (
