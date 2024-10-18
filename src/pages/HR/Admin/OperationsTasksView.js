@@ -79,7 +79,7 @@ const OperationTasksView = () => {
 
             if (response.status === 200) {
 
-                fetchTasks();
+                await fetchTasks();
                 showAlert(true, response?.data?.message, "alert alert-success");
             }
 
@@ -107,7 +107,7 @@ const OperationTasksView = () => {
 
 
 
-        <TaskTable loading={loading} tasks={tasks} sizePerPage={sizePerPage} totalPages={totalPages} page={page} setPage={setPage} setSizePerPage={setSizePerPage} fetchData={fetchTasks} /></div>
+        <TaskTable loading={loading} tasks={tasks} sizePerPage={sizePerPage} totalPages={totalPages} page={page} setPage={setPage} setSizePerPage={setSizePerPage} fetchData={fetchTasks} ogId={employeeOgid} /></div>
 }
 
 export default OperationTasksView

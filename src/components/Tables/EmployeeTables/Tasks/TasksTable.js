@@ -10,16 +10,17 @@ import axiosInstance from "../../../../services/api";
 import { useAppContext } from "../../../../Context/AppContext";
 import moment from "moment"; // Import moment for date handling
 import TaskDetailModal from "../../../Modal/TaskDetailModal";
-const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, setSizePerPage, fetchData }) => {
+const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, setSizePerPage, fetchData, ogId }) => {
 
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [dailyTasks, setDailyTasks] = useState([]); // Store daily tasks
     const [toDate, setToDate] = useState("");
     const [fromDate, setFromDate] = useState("");
-
+    const [header, setHeader] = useState("")
     const [mobileView, setMobileView] = useState(false);
-
+    const { user } = useAppContext();
+    const employeeOgId = user?.employee_info?.ogid;
 
 
     // Define columns for the table based on the new API structure
@@ -91,22 +92,19 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
         setSelectedTask(task);
 
 
-        // Clear any previous daily tasks
-        // setDailyTasks([]);
 
-        // console.log(task.task_date)
-        // If the task is for the current day, fetch the daily task list
-        // if (isToday(task.task_date)) {
+
         try {
-            const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}`);
+            const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}&ogid=${ogId}`);
             setDailyTasks(response.data || []);
         } catch (error) {
             console.error("Error fetching daily tasks:", error);
         }
-        // }
+
 
         setShowModal(true);
     };
+
 
 
 
@@ -198,7 +196,7 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
                 )}
             </ToolkitProvider>
 
-            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} />
+            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} ogId={ogId} />
         </div>
     );
 };
