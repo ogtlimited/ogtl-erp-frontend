@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import axiosInstance from '../../services/api';
+import { useAppContext } from '../../Context/AppContext';
 
 
-function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fetchData }) {
+function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fetchData, ogId }) {
+    const { user } = useAppContext();
+
+    const employeeOgId = user?.employee_info?.ogid;
+
     const [tasks, setTasks] = useState(
         dailyTasks?.map((task, index) => ({
             id: task.id, // Use the task's actual ID
@@ -45,8 +50,7 @@ function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fe
             task.id === taskId ? { ...task, notes } : task
         ));
 
-        // Call the API to update the notes
-        updateTask(taskId, { notes });
+
     };
 
     // Handle Confirm or Undo button click to toggle task confirmation
@@ -59,7 +63,7 @@ function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fe
         ));
 
         // Call the API to update the "confirmed" status
-        updateTask(taskId, { complete: newConfirmedStatus });
+        updateTask(taskId, { notes: updatedTask.notes, confirmed: newConfirmedStatus });
     };
 
     useEffect(() => {
@@ -89,33 +93,44 @@ function TaskDetailModal({ showModal, setShowModal, selectedTask, dailyTasks, fe
                             <div key={task.id} className="task-item mb-3 p-3 border rounded">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div>
-                                        <input
-                                            type="checkbox"
-                                            checked={task.completed || false} // Use task.completed for checkbox
-                                            onChange={(e) => handleCheckboxChange(task.id, e.target.checked)}
-                                            className="me-2 mr-4"
-                                        />
+                                        {
+                                            ogId === employeeOgId &&
+
+                                            <input
+                                                type="checkbox"
+                                                checked={task.confirmed || false} // Use task.completed for checkbox
+                                                onChange={(e) => handleCheckboxChange(task.id, e.target.checked)}
+                                                className="me-2 mr-4"
+                                                disabled
+                                            />
+                                        }
+
+
                                         <span>{task.taskName}</span>
                                     </div>
                                     <div className="task-date">
                                         <small>{task.taskDate}</small>
                                     </div>
                                     <div className="action-buttons">
-                                        <button
-                                            className={`btn btn-sm btn-${task.confirmed ? "danger" : "primary"}`}
-                                            onClick={() => handleConfirmOrUndo(task.id)}
-                                        >
-                                            {task.confirmed ? "Undo" : "Confirm"}
-                                        </button>
+                                        {
+                                            ogId === employeeOgId && <button
+                                                className={`btn btn-sm btn-${task.confirmed ? "danger" : "primary"}`}
+                                                onClick={() => handleConfirmOrUndo(task.id)}
+                                            >
+                                                {task.confirmed ? "Undo" : "Confirm"}
+                                            </button>
+                                        }
+
                                     </div>
                                 </div>
                                 <div className="mt-2">
                                     <textarea
                                         className="form-control"
-                                        placeholder="Add notes here"
+                                        placeholder=""
                                         value={task.notes}
                                         onChange={(e) => handleNotesChange(task.id, e.target.value)}
                                         rows={3}
+                                        disabled={!ogId || ogId !== employeeOgId || task.confirmed}
                                     />
                                 </div>
                             </div>
