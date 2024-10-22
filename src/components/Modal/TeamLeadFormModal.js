@@ -8,8 +8,43 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const TeamLeadFormModal = ({ mode, data, teamLead, fetchTeamLead }) => {
-  const { selectLeaders, selectTeams, showAlert, goToTop, leadershipTypes } =
+  const { selectTeams, showAlert, goToTop, leadershipTypes } =
     useAppContext();
+
+  const [selectLeaders, setSelectLeaders] = useState([]);
+
+  useEffect(() => {
+    const fetchAllLeaders = async () => {
+      try {
+        const response = await axiosInstance.get("/api/v1/leaders.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            pages: 1,
+            limit: 1000
+          }
+        });
+
+        const resData = response?.data?.data?.leaders;
+
+        const formattedLeaders = resData
+          .map((e) => ({
+            label: e?.first_name + " " + e?.last_name,
+            value: e?.ogid
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setSelectLeaders(formattedLeaders);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllLeaders();
+  }, []);
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);

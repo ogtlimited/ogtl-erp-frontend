@@ -766,14 +766,25 @@ const sidebarConfig = [
             title: "Leave Applications",
             path: PATH_DASHBOARD.operations.operationTeamLeaveApplications
           },
+        ]
+      },
+      {
+        canView: CurrentUserRoles.includes("operation_team")
+          ? "operations"
+          : "none",
+        title: "Task Management",
+        path: PATH_DASHBOARD.operations.root,
+        icon: ICONS.users,
+        navIcon: ICONS.baseball,
+        children: [
           {
             canView: "operations",
-            title: "Task Management",
+            title: "Config",
             path: PATH_DASHBOARD.operations.operationTeamTaskManagement
           },
           {
             canView: "operations",
-            title: "Tasks",
+            title: "My Tasks",
             path: PATH_DASHBOARD.operations.operationsTasks
           },
           {
@@ -783,7 +794,6 @@ const sidebarConfig = [
           },
         ]
       },
-
       // Exit Management:
       {
         canView: "operations",

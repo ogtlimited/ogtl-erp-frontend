@@ -18,7 +18,6 @@ import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
 
-
 const user = tokenService.getUser();
 const CurrentUserIsCOO = user?.employee_info?.roles.includes("coo");
 
@@ -803,6 +802,27 @@ export default function Router() {
               )
             },
             {
+              path: "operation-team-task-management/edit/:configId",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TaskManagementConfigFormEdit />
+                </GuardedRoute>
+              )
+            },
+
+
+            {
+              path: "operation-team-task-management/view/:configId",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <ViewTaskManagementConfigForm />
+                </GuardedRoute>
+              )
+            },
+
+
+
+            {
               path: "operation-team-task-management/:id/daily-tasks",
               element: (
                 <GuardedRoute title="" dept="super">
@@ -820,10 +840,18 @@ export default function Router() {
               )
             },
             {
-              path: "operation-team-task-management/:id",
+              path: "operation-team-task-management/my-tasks",
               element: (
                 <GuardedRoute title="" dept="super">
                   <TasksTableView />
+                </GuardedRoute>
+              )
+            },
+            {
+              path: "operations-team-task-management/tasks/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TasksTableViewUser />
                 </GuardedRoute>
               )
             },
@@ -1642,8 +1670,17 @@ const OperationsTeamTaskManagement = Loadable(
 const TaskManagementConfigForm = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementConfigForm.Admin.js"))
 );
+const TaskManagementConfigFormEdit = Loadable(
+  lazy(() => import("../pages/HR/Admin/TaskManagementConfigFormEdit.Admin.js"))
+);
+const ViewTaskManagementConfigForm = Loadable(
+  lazy(() => import("../pages/HR/Admin/TaskManagerConfigFormView.Admin.js"))
+);
 const TasksTableView = Loadable(
-  lazy(() => import("../pages/HR/Admin/OperationTasksView.js"))
+  lazy(() => import("../pages/HR/Admin/OperationsTasksView.js"))
+)
+const TasksTableViewUser = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTaskViewUser.js"))
 )
 const TaskManagementDailyTasks = Loadable(
   lazy(() => import("../pages/HR/Admin/TaskManagementDailyTasks.Admin.js"))

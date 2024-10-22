@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for API calls
 import axiosInstance from "../../../services/api";
 
-const TaskManagementDailyTasks = () => {
+const TaskManagementViewTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -97,4 +97,4 @@ const TaskManagementDailyTasks = () => {
     );
 };
 
-export default TaskManagementDailyTasks;
+export default TaskManagementViewTasks;

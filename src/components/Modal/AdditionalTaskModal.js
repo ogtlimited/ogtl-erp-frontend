@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-const TaskAssignmentModal = ({ user, task, onAddTask, closeModal }) => {
+const AdditionalTaskModal = ({ user, task, onAddTask, closeModal }) => {
     // Initialize state with existing task values if editing, otherwise use default values
     const [taskTitle, setTaskTitle] = useState(task?.title || "");
-    const [reportTime, setReportTime] = useState(task?.reportTime || "daily");
     const [leaveNote, setLeaveNote] = useState(task?.leaveNote || false);
-
+    const [date , setDate] = useState()
     // Optional: useEffect to handle task prop changes (if modal is reused for multiple tasks)
     useEffect(() => {
         if (task) {
             setTaskTitle(task.title);
-            setReportTime(task.reportTime);
             setLeaveNote(task.leaveNote);
         }
     }, [task]);
@@ -18,9 +16,10 @@ const TaskAssignmentModal = ({ user, task, onAddTask, closeModal }) => {
     const handleSaveTask = () => {
         const newTask = {
             title: taskTitle,
-            reportTime,
+            date: date,
             leaveNote,
         };
+        console.log(newTask)
         onAddTask(user.value, newTask); // Pass the new task data to parent
     };
 
@@ -50,15 +49,16 @@ const TaskAssignmentModal = ({ user, task, onAddTask, closeModal }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Report Time</label>
-                                <select
-                                    className="form-control"
-                                    value={reportTime}
-                                    onChange={(e) => setReportTime(e.target.value)}
-                                >
-                                    <option value="daily">Daily</option>
-                                    <option value="weekly">Weekly</option>
-                                </select>
+                                <label>Task Date</label>
+                                <input
+                                    type="date"
+                                    name="fromDate"
+                                    value={date}
+                                    onChange={(e) => {
+                                        setDate(e.target.value);
+                                    }}
+                                    className="form-control "
+                                />
                             </div>
                             <div className="form-group">
                                 <label>Leave Note</label>
@@ -87,4 +87,4 @@ const TaskAssignmentModal = ({ user, task, onAddTask, closeModal }) => {
     );
 };
 
-export default TaskAssignmentModal;
+export default AdditionalTaskModal;

@@ -1,57 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Modal from "react-bootstrap/Modal";
+import axios from "axios"; // Ensure axios is imported
+import { useParams } from "react-router-dom";
+import axiosInstance from "../../../../services/api";
+import { useAppContext } from "../../../../Context/AppContext";
+import moment from "moment"; // Import moment for date handling
+import TaskDetailModal from "../../../Modal/TaskDetailModal";
+const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, setSizePerPage, fetchData, ogId }) => {
 
-
-const TaskTable = () => {
-    const [tasks, setTasks] = useState([
-        { id: 1, date: "2023-09-01", status: true, completed: 5, taskDetails: [{ name: "Subtask 1", status: "Completed" }, { name: "Subtask 2", status: "Failed" }] },
-        { id: 2, date: "2023-09-02", status: false, completed: 3, taskDetails: [{ name: "Subtask 1", status: "Completed" }, { name: "Subtask 2", status: "Failed" }] },
-        { id: 3, date: "2023-09-03", status: true, completed: 8, taskDetails: [{ name: "Subtask 1", status: "Completed" }, { name: "Subtask 2", status: "Failed" }] },
-    ]);
     const [selectedTask, setSelectedTask] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [dailyTasks, setDailyTasks] = useState([]); // Store daily tasks
     const [toDate, setToDate] = useState("");
     const [fromDate, setFromDate] = useState("");
-    const [page, setPage] = useState(1);
-    const [sizePerPage, setSizePerPage] = useState(10);
-    const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [header, setHeader] = useState("")
     const [mobileView, setMobileView] = useState(false);
+    const { user } = useAppContext();
+    const employeeOgId = user?.employee_info?.ogid;
 
+
+    // Define columns for the table based on the new API structure
     const columns = [
         { dataField: "id", text: "Task ID", sort: true },
-        { dataField: "date", text: "Date of Task", sort: true },
+        { dataField: "task_date", text: "Task Date", sort: true },
+        { dataField: "total_tasks", text: "Total Tasks", sort: true },
+        { dataField: "completed_tasks", text: "Completed Tasks", sort: true },
         {
             dataField: "status",
             text: "Status",
             formatter: (cell, row) => (
                 <div>
                     <span
-                        className={`badge text-white w-50 p-2 ${cell ? "bg-success" : "bg-danger"}`}
+                        className={`badge text-white w-100 p-2 ${row.completed_tasks === row.total_tasks ? "bg-success" : "bg-warning"
+                            }`}
                     >
-                        {cell ? "Active" : "Inactive"}
+                        {row.completed_tasks === row.total_tasks ? "Completed" : "Pending"}
                     </span>
                 </div>
             ),
         },
-        { dataField: "completed", text: "Number Completed", sort: true },
         {
             dataField: "view",
             text: "Actions",
             formatter: (cell, row) => (
                 <div className="form-group">
-                    <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
-                        View Task
-                    </button>
+                    {isToday(row.task_date) ? (
+                        <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
+                            View Task
+                        </button>
+                    ) : (
+                        <span></span>
+                    )}
                 </div>
             ),
         },
     ];
 
+
+    // Resize the table for mobile views
     const resizeTable = () => {
         setMobileView(window.innerWidth <= 768 || columns.length > 7);
     };
@@ -71,28 +81,47 @@ const TaskTable = () => {
         setPage(1);
     };
 
-    const handleRowClick = (task) => {
+    // Check if the selected task date is today's date
+    const isToday = (date) => {
+        const today = moment().format("YYYY-MM-DD");
+        return moment(date).isSame(today, "day");
+    };
+
+    // Handle row click event
+    const handleRowClick = async (task) => {
         setSelectedTask(task);
+
+
+
+
+        try {
+            const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}&ogid=${ogId}`);
+            setDailyTasks(response.data || []);
+        } catch (error) {
+            console.error("Error fetching daily tasks:", error);
+        }
+
+
         setShowModal(true);
     };
 
-    // Function to handle status change
-    const handleStatusChange = (taskId) => {
-        const updatedTasks = tasks.map((task) =>
-            task.id === taskId
-                ? { ...task, status: true } // Set clicked task to active
-                : { ...task, status: false } // Set other tasks to inactive
-        );
-        setTasks(updatedTasks);
-    };
+
+
 
     return (
         <div>
-            <h3>Task Table</h3>
+            <h4>Task Table for Employee</h4>
+
+
+
+
             <ToolkitProvider keyField="id" data={loading ? [] : tasks} columns={columns} search>
+
+
                 {(props) => (
                     <div className="col-12">
-                        <div className="row">
+                        <div className="p-10"></div>
+                        {/* <div className="row">
                             <div className="col-md-3">
                                 <div className="form-group">
                                     <label htmlFor="fromDate">From</label>
@@ -121,9 +150,9 @@ const TaskTable = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="custom-table-div" style={{ marginTop: 30 }}>
+                        <div className="custom-table-div pt-5" style={{ marginTop: 30 }}>
                             <BootstrapTable
                                 {...props.baseProps}
                                 bordered={false}
@@ -167,43 +196,7 @@ const TaskTable = () => {
                 )}
             </ToolkitProvider>
 
-            {/* Modal for Task Details */}
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header>
-                    <Modal.Title>Task Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedTask ? (
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Task Name</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {selectedTask.taskDetails.map((taskDetail, index) => (
-                                    <tr key={index}>
-                                        <td>{taskDetail.name}</td>
-                                        <td>
-                                            <span className={`badge text-white ${taskDetail.status === "Completed" ? "bg-success" : "bg-danger"}`}>
-                                                {taskDetail.status}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No Task Details Available</p>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </button>
-                </Modal.Footer>
-            </Modal>
+            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} ogId={ogId} />
         </div>
     );
 };
