@@ -128,10 +128,10 @@ const PaySlip = () => {
             // Total Deductions:
             case "totalDeductions":
               totalDeductions["Total Deductions"] =
-                employeeSalarySlip.monthly_income_tax +
-                employeeSalarySlip.monthly_pension +
-                employeeSalarySlip.attendance_deduction +
-                employeeSalarySlip.disciplinary_deductions;
+                employeeSalarySlip.monthly_income_tax || 0 +
+                employeeSalarySlip.monthly_pension || 0 +
+                employeeSalarySlip.attendance_deduction || 0 +
+                employeeSalarySlip.disciplinary_deductions || 0;
               break;
 
             // Net Salary:
@@ -247,7 +247,7 @@ const PaySlip = () => {
                                 <td>
                                   <strong>{earning}</strong>{" "}
                                   {typeof earnings[earning] === "number" &&
-                                  earnings[earning] !== 0 ? (
+                                    earnings[earning] !== 0 ? (
                                     <span
                                       className="float-right"
                                       style={{ color: "green" }}
@@ -314,7 +314,7 @@ const PaySlip = () => {
                                 <td>
                                   <strong>{deduction}</strong>{" "}
                                   {typeof deductions[deduction] === "number" &&
-                                  deductions[deduction] !== 0 ? (
+                                    deductions[deduction] !== 0 ? (
                                     <span
                                       className="float-right"
                                       style={{ color: "red" }}
