@@ -186,7 +186,7 @@ const Login = () => {
         } else {
           setErrorMsg(
             e?.response?.data?.errors ||
-              "Error accessing the server, please try again later."
+            "Error accessing the server, please try again later."
           );
         }
       }
