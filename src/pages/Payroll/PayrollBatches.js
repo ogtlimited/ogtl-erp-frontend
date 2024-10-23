@@ -29,6 +29,7 @@ const PayrollBatches = () => {
   const [isRegenerating, setisRegenerating] = useState(false);
   const [mode, setMode] = useState("Create");
   const [dates, setDates] = useState([]);
+  const [hideBtn, setHideBtn]= useState(false);
 
   const [poolingData, setPoolingData] = useState({
     processedPayslips: null,
@@ -72,7 +73,14 @@ const PayrollBatches = () => {
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = dataPages;
-
+        //hide generate payroll button
+        const batchMonth=AllBatches[0]?.batch.month
+        const batchYear=AllBatches[0]?.batch.year
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        if(batchMonth==currentMonth && batchYear==currentYear){
+          setHideBtn(true)
+        }
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -440,7 +448,7 @@ const PayrollBatches = () => {
           <div className="col-auto float-right ml-auto">
             {!data?.length ||
             (data?.length &&
-              user?.role?.title !== "CEO") ? (
+              user?.role?.title !== "CEO") ? ( hideBtn?'':
               <a
                 href="#"
                 className="btn add-btn"
