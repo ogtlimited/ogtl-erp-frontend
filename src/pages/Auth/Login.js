@@ -84,16 +84,16 @@ const Login = () => {
 
       await fetchMsGraph(e.accessToken, userData);
 
-      const activeUser = e?.account?.username;
+      // const activeUser = e?.account?.username;
 
       const obj = {
         company_email: data.company_email.trim(),
       };
 
-      if (obj.company_email !== activeUser) {
-        setErrorMsg("There is an active user on this device");
-        return;
-      }
+      // if (obj.company_email !== activeUser) {
+      //   setErrorMsg("There is an active user on this device");
+      //   return;
+      // }
 
       setErrorMsg("");
 
@@ -131,16 +131,16 @@ const Login = () => {
 
           await fetchMsGraph(e.accessToken);
 
-          const activeUser = e?.account?.username;
+          // const activeUser = e?.account?.username;
 
           const obj = {
             company_email: data.company_email.trim(),
           };
 
-          if (obj.company_email !== activeUser) {
-            setErrorMsg("Please login with your credentials");
-            return;
-          }
+          // if (obj.company_email !== activeUser) {
+          //   setErrorMsg("Please login with your credentials");
+          //   return;
+          // }
 
           setErrorMsg("");
 
@@ -186,7 +186,7 @@ const Login = () => {
         } else {
           setErrorMsg(
             e?.response?.data?.errors ||
-              "Error accessing the server, please try again later."
+            "Error accessing the server, please try again later."
           );
         }
       }
