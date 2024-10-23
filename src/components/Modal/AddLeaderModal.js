@@ -16,9 +16,10 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
   const [leader, setLeader] = useState(LeaderForm);
   const [loading, setLoading] = useState(false);
   const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
-  const [isOfficeSelected, setIsOfficeSelected] = useState(false);
+  const [isOfficeSelected, setIsOfficeSelected] = useState(false); 
   const [allLeaders, setAllLeaders] = useState([]);
   const [officeType, setOfficeType] = useState("");
+
 
   const cancelEvent = () => {
     setLeader(LeaderForm);
@@ -115,38 +116,48 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
   };
 
   const handleLeaderAction = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const leaderData = {
-      operation_office_id: leader.operation_office_id,
-      hr_employee_id: leader.hr_employee_id,
-      title: leader.title,
-    };
-
-    setLoading(true);
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/leaders.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: leaderData,
-      });
-
-      showAlert(true, `Leader successfully created`, "alert alert-success");
-
-      $("#LeaderFormModal").modal("toggle");
-      cancelEvent();
-      fetchLeaders();
-      setLoading(false);
-    } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
-    }
+  const leaderDeptData = {
+    operation_department_id: leader.operation_office_id,
+    hr_employee_id: leader.hr_employee_id,
+    title: leader.title,
   };
+  
+  const leaderCampaignData = {
+    operation_campaign_id: leader.operation_office_id,
+    hr_employee_id: leader.hr_employee_id,
+    title: leader.title,
+  };
+
+  const payload = officeType === "Department" ? leaderDeptData : leaderCampaignData;
+
+  console.log(payload);
+
+  setLoading(true);
+
+  try {
+    const response = await axiosInstance.post(`/api/v1/leaders.json`,{
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      payload:payload
+    });
+
+    showAlert(true, `Leader successfully created`, "alert alert-success");
+    $("#LeaderFormModal").modal("toggle");
+    cancelEvent();
+    fetchLeaders();
+    setLoading(false);
+  } catch (error) {
+    const errorMsg = error?.response?.data?.errors || 'An error occurred';
+    showAlert(true, errorMsg, "alert alert-warning");
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
