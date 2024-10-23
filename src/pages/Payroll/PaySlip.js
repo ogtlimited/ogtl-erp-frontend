@@ -1,5 +1,3 @@
-// *IN USE
-
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/img/outsource.png";
 import { useParams } from "react-router-dom";
@@ -24,7 +22,6 @@ const PaySlip = () => {
   const [deductionsBreakDown, setDeductionsBreakDown] = useState([]);
 
   useEffect(() => {
-    // Payslip Breakdown:
     const fetchPaySlip = async () => {
       try {
         const res = await axiosInstance.get(`/api/v1/salary_slips/${id}.json`, {
@@ -38,7 +35,7 @@ const PaySlip = () => {
         const earnings = {};
         const grossSalary = {};
         const deductions = {};
-        const totalDeductions = {};
+        let totalDeductions = 0;
         const netSalary = {};
 
         const payslip = res?.data?.data?.slip;
@@ -124,14 +121,16 @@ const PaySlip = () => {
             case "monthly_pension":
               deductions["Employee Pension"] = employeeSalarySlip[e];
               break;
+            case "disciplinary_deductions":
+              deductions["Disciplinary Deductions"] = employeeSalarySlip[e];
+              break;
+            case "attendance_deduction":
+              deductions["Attendance Deductions"] = employeeSalarySlip[e];
+              break;
 
             // Total Deductions:
-            case "totalDeductions":
-              totalDeductions["Total Deductions"] =
-                employeeSalarySlip.monthly_income_tax || 0 +
-                employeeSalarySlip.monthly_pension || 0 +
-                employeeSalarySlip.attendance_deduction || 0 +
-                employeeSalarySlip.disciplinary_deductions || 0;
+            case "total_deductions":
+              totalDeductions = employeeSalarySlip["total_deductions"]; // Set total deductions from the data directly
               break;
 
             // Net Salary:
@@ -146,7 +145,7 @@ const PaySlip = () => {
         setEarnings(earnings);
         setGrossSalary(grossSalary);
         setDeductions(deductions);
-        setTotalDeductions(totalDeductions);
+        setTotalDeductions({ "Total Deductions": totalDeductions }); // Set total deductions correctly
         setNetSalary(netSalary);
 
         setFetched(true);
@@ -159,7 +158,6 @@ const PaySlip = () => {
     };
 
     fetchPaySlip();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
@@ -336,43 +334,6 @@ const PaySlip = () => {
                         </tbody>
                       </table>
                     </div>
-
-                    {/* Deduction Breakdown */}
-                    {deductionsBreakDown.length ? (
-                      <div>
-                        {paySlip.net_pay ? (
-                          <h5 className="m-b-10" style={{ color: "#808080" }}>
-                            Other Deductions
-                          </h5>
-                        ) : null}
-                        <table className="table table-bordered">
-                          <tbody>
-                            {fetched &&
-                              deductionsBreakDown.map(
-                                (breakdownItem, index) => (
-                                  <tr key={index}>
-                                    <td>
-                                      <strong>
-                                        {breakdownItem.deduction_type[0]?.title.replace(/_/g, " ").replace(/^./, str => str.toUpperCase())}
-                                      </strong>{" "}
-                                      {
-                                        <span
-                                          className="float-right"
-                                          style={{ color: "red" }}
-                                        >
-                                          {helper.handleMoneyFormat(
-                                            breakdownItem.deduction.amount
-                                          )}
-                                        </span>
-                                      }
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                          </tbody>
-                        </table>
-                      </div>
-                    ) : null}
 
                     {/* Total Deductions */}
                     <div>
