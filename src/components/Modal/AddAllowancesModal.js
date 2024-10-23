@@ -213,7 +213,7 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
             });
             showAlert(
                 true,
-                `${data.employeeName} has been added to Allowances.`,
+                `${data?.employeeName} has been added to Allowances.`,
                 "alert alert-success"
             );
             fetchAllowances();
