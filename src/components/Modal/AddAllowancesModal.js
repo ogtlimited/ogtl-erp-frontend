@@ -36,12 +36,26 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
     }, [data?.hr_allowance_title, data?.hr_user_id]);
 
     const cancelEvent = () => {
-        setData(HR_ADD_ALLOWANCE);
-        setOfficeType("");
-        setIsOfficeTypeSelected(false);
-        setIsOfficeSelected(false);
-        selectAllowanceTypeRef.current.select.clearValue();
+        // Resetting form data to initial values
+        setData(HR_ADD_ALLOWANCE);  // Reset the form data to initial state
+        setOfficeType("");  // Reset office type
+        setIsOfficeTypeSelected(false);  // Reset the office type selection status
+        setIsOfficeSelected(false);  // Reset the office selection status
+    
+        // Clear React Select dropdown value (if using React Select)
+        if (selectAllowanceTypeRef.current) {
+            selectAllowanceTypeRef.current.clearValue();  // Clear the value for the select dropdown
+        } else {
+            console.error("selectAllowanceTypeRef is not defined");
+        }
+    
+        // If there are other form inputs (e.g., text inputs, checkboxes), reset them here
+        // Example: resetting an input field (if applicable)
+        // document.getElementById('your-input-id').value = '';  // Clear specific input if using regular HTML input
+    
+        // Optionally reset any other custom state or form element that needs to be cleared
     };
+    
 
     const handleDateChange = (e) => {
         e.preventDefault();
@@ -244,7 +258,7 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <div className="form-group">
-                                                <label htmlFor="">Start Date</label>
+                                                <label htmlFor="">Effective Date</label>
                                                 <input
                                                     type="date"
                                                     name="start_date"
@@ -256,21 +270,6 @@ export const AddAllowanceModal = ({ fetchAllowances }) => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
-                                            <div className="form-group">
-                                                <label htmlFor="">End Date</label>
-                                                <input
-                                                    type="date"
-                                                    name="end_date"
-                                                    value={data?.end_date}
-                                                    onChange={handleDateChange}
-                                                    className="form-control "
-                                                    id="dateInput"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-
                                         {/* Office Type */}
                                         <div className="col-md-6">
                                             <div className="form-group">
