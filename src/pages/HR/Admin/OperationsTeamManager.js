@@ -10,14 +10,12 @@ import { Link, useNavigate } from "react-router-dom";
 
 const OperationsTeamManager = () => {
     const [key, setKey] = useState("teamLeads"); // Track active tab
-    const [fromDate, setFromDate] = useState("");
-    const [toDate, setToDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [reportees, setReportees] = useState([]);
-    const [page, setPage] = useState(1); // Added pagination handling
+    const [page, setPage] = useState(1); // Pagination handling
     const [sizePerPage, setSizePerPage] = useState(10); // For pagination
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null); // Track hovered row index
-    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
+    const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(true);
 
     const {
         ErrorHandler,
@@ -34,10 +32,18 @@ const OperationsTeamManager = () => {
 
     const route = useNavigate();
 
+    // Set default values for officeType and selectedOffice when undefined
+    useEffect(() => {
+        if (!selectedOffice && !officeType) {
+            setOfficeType("Department"); // Default office type
+            setSelectedOffice({ label: "HR", value: 1 }); // Default office ID = 1
+        }
+    }, [selectedOffice, officeType, setOfficeType, setSelectedOffice]);
+
     // Define the API endpoints based on the key/tab selected
     const endpoints = {
         teamLeads: `/api/v1/employee_task_reportees/team_leaders?office=${officeType?.toLowerCase()}&office_id=${selectedOffice?.value}.json`,
-        supervisors: `/api/v1/employee_task_reportees/supervisors?office=${officeType?.toLowerCase()}&office_id=${selectedOffice?.value}.json`, // Adjust campaign or department id dynamically
+        supervisors: `/api/v1/employee_task_reportees/supervisors?office=${officeType?.toLowerCase()}&office_id=${selectedOffice?.value}.json`,
         managers: "/api/v1/employee_task_reportees/managers.json",
         operationalManagers: "/api/v1/employee_task_reportees/operations_manager.json",
         coo: "/api/v1/employee_task_reportees/chief_operation_officers.json",
@@ -45,7 +51,7 @@ const OperationsTeamManager = () => {
 
     // Fetch data dynamically based on the selected tab (key)
     const fetchReportees = useCallback(async () => {
-        console.log("Fetching data for tab:", key);  // Log the current tab for debug
+        console.log("Fetching data for tab:", key);  // Log the current tab for debugging
         setLoading(true); // Set loading to true before fetching
 
         try {
@@ -62,12 +68,14 @@ const OperationsTeamManager = () => {
         } finally {
             setLoading(false); // Stop loading when data is fetched or failed
         }
-    }, [key, page, sizePerPage]); // Added pagination as dependencies
+    }, [key, page, sizePerPage, selectedOffice, officeType]); // Add selectedOffice and officeType to dependencies
 
-    // Fetch data on tab key or pagination change
+    // Fetch data when tab key, office, or pagination change
     useEffect(() => {
-        fetchReportees(); // Trigger data fetching based on current key (tab) and pagination
-    }, [fetchReportees]);
+        if (officeType && selectedOffice) {
+            fetchReportees(); // Trigger data fetching when office type or selected office changes
+        }
+    }, [fetchReportees, officeType, selectedOffice]);
 
     // Table columns configuration
     const columns = [
@@ -114,18 +122,11 @@ const OperationsTeamManager = () => {
         return hoveredRowIndex === rowIndex ? "text-primary" : "";
     };
 
-    useEffect(() => {
-        if (officeType) {
-            setIsOfficeTypeSelected(true);
-            fetchReportees();
-            setSelectedOffice(selectedOffice || null);
-        }
-    }, [officeType, selectedOffice]);
-
     // Handle office type change (e.g., "Department", "Campaign")
     const handleOfficeTypeChange = (e) => {
         setOfficeType(e.label); // Update global state for office type
         setIsOfficeTypeSelected(true);
+        setSelectedOffice(null); // Reset selected office when type changes
     };
 
     // Handle office selection based on the selected office type
@@ -137,36 +138,40 @@ const OperationsTeamManager = () => {
     const renderTable = () => (
         <div>
             <div className="w-100 mt-5">
-                <div className="row">
-                    <div className="col-md-4">
-                        <div className="form-group">
-                            <label>Office Type</label>
-                            <Select
-                                options={officeTypeOptions}
-                                value={officeType ? { label: officeType, value: officeType } : null}
-                                onChange={handleOfficeTypeChange}
-                            />
-                        </div>
-                    </div>
 
-                    {isOfficeTypeSelected && (
+                {
+                    (key === "teamLeads" || key === "supervisors") && <div className="row">
                         <div className="col-md-4">
-                            <label>{officeType}</label>
-                            <Select
-                                options={
-                                    officeType === "Department"
-                                        ? selectDepartments
-                                        : officeType === "Campaign"
-                                            ? selectCampaigns
-                                            : selectTeams
-                                }
-                                isSearchable={true}
-                                value={selectedOffice}
-                                onChange={handleOfficeChange}
-                            />
+                            <div className="form-group">
+                                <label>Office Type</label>
+                                <Select
+                                    options={officeTypeOptions}
+                                    value={officeType ? { label: officeType, value: officeType } : null}
+                                    onChange={handleOfficeTypeChange}
+                                />
+                            </div>
                         </div>
-                    )}
-                </div>
+
+                        {isOfficeTypeSelected && (
+                            <div className="col-md-4">
+                                <label>{officeType}</label>
+                                <Select
+                                    options={
+                                        officeType === "Department"
+                                            ? selectDepartments
+                                            : officeType === "Campaign"
+                                                ? selectCampaigns
+                                                : selectTeams
+                                    }
+                                    isSearchable={true}
+                                    value={selectedOffice}
+                                    onChange={handleOfficeChange}
+                                />
+                            </div>
+                        )}
+                    </div>
+                }
+
             </div>
             <ToolkitProvider keyField="id" data={loading ? [] : reportees} columns={columns} search exportCSV>
                 {(props) => (

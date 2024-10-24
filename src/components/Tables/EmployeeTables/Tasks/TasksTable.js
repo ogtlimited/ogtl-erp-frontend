@@ -18,6 +18,7 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
     const [toDate, setToDate] = useState("");
     const [fromDate, setFromDate] = useState("");
     const [header, setHeader] = useState("")
+    const [loadingData, setLoadingData] = useState(false);
     const [mobileView, setMobileView] = useState(false);
     const { user } = useAppContext();
     const employeeOgId = user?.employee_info?.ogid;
@@ -48,13 +49,11 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
             text: "Actions",
             formatter: (cell, row) => (
                 <div className="form-group">
-                    {isToday(row.task_date) ? (
-                        <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
-                            View Task
-                        </button>
-                    ) : (
-                        <span></span>
-                    )}
+
+                    <button className="btn btn-primary" onClick={() => handleRowClick(row)}>
+                        View Task
+                    </button>
+
                 </div>
             ),
         },
@@ -81,18 +80,14 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
         setPage(1);
     };
 
-    // Check if the selected task date is today's date
-    const isToday = (date) => {
-        const today = moment().format("YYYY-MM-DD");
-        return moment(date).isSame(today, "day");
-    };
+
 
     // Handle row click event
     const handleRowClick = async (task) => {
         setSelectedTask(task);
 
-
-
+        setLoadingData(true);
+        setShowModal(true);
 
         try {
             const response = await axiosInstance.get(`/api/v1/employee_daily_task_list.json?date=${task?.task_date}&ogid=${ogId}`);
@@ -102,7 +97,8 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
         }
 
 
-        setShowModal(true);
+        setLoadingData(false);
+
     };
 
 
@@ -196,7 +192,7 @@ const TaskTable = ({ tasks, loading, totalPages, page, sizePerPage, setPage, set
                 )}
             </ToolkitProvider>
 
-            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} ogId={ogId} />
+            <TaskDetailModal showModal={showModal} setShowModal={setShowModal} selectedTask={selectedTask} dailyTasks={dailyTasks} fetchData={fetchData} ogId={ogId} loading={loadingData} />
         </div>
     );
 };
